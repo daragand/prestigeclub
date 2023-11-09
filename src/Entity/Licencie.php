@@ -34,10 +34,14 @@ class Licencie
     #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Livret::class, orphanRemoval: true)]
     private Collection $livrets;
 
+    #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Photo::class, orphanRemoval: true)]
+    private Collection $photos;
+
     public function __construct()
     {
         $this->clubs = new ArrayCollection();
         $this->livrets = new ArrayCollection();
+        $this->photos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -144,6 +148,36 @@ class Licencie
             // set the owning side to null (unless already changed)
             if ($livret->getLicencie() === $this) {
                 $livret->setLicencie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Photo>
+     */
+    public function getPhotos(): Collection
+    {
+        return $this->photos;
+    }
+
+    public function addPhoto(Photo $photo): static
+    {
+        if (!$this->photos->contains($photo)) {
+            $this->photos->add($photo);
+            $photo->setLicencie($this);
+        }
+
+        return $this;
+    }
+
+    public function removePhoto(Photo $photo): static
+    {
+        if ($this->photos->removeElement($photo)) {
+            // set the owning side to null (unless already changed)
+            if ($photo->getLicencie() === $this) {
+                $photo->setLicencie(null);
             }
         }
 

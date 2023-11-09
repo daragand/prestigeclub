@@ -23,6 +23,10 @@ class Photo
     #[ORM\Column]
     private ?bool $downloaded = null;
 
+    #[ORM\ManyToOne(inversedBy: 'photos')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Licencie $licencie = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +64,18 @@ class Photo
     public function setDownloaded(bool $downloaded): static
     {
         $this->downloaded = $downloaded;
+
+        return $this;
+    }
+
+    public function getLicencie(): ?Licencie
+    {
+        return $this->licencie;
+    }
+
+    public function setLicencie(?Licencie $licencie): static
+    {
+        $this->licencie = $licencie;
 
         return $this;
     }
