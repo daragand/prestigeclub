@@ -30,6 +30,9 @@ class Club
     #[ORM\OneToMany(mappedBy: 'club', targetEntity: PhotoGroup::class, orphanRemoval: true)]
     private Collection $photoGroups;
 
+    #[ORM\ManyToOne(inversedBy: 'clubs')]
+    private ?Address $address = null;
+
     
 
     public function __construct()
@@ -143,6 +146,18 @@ class Club
                 $photoGroup->setClub(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): static
+    {
+        $this->address = $address;
 
         return $this;
     }

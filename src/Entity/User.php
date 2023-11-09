@@ -33,6 +33,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Licencie::class, inversedBy: 'users')]
     private Collection $licencies;
 
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Address $address = null;
+
     public function __construct()
     {
         $this->licencies = new ArrayCollection();
@@ -128,6 +131,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeLicency(Licencie $licency): static
     {
         $this->licencies->removeElement($licency);
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): static
+    {
+        $this->address = $address;
 
         return $this;
     }
