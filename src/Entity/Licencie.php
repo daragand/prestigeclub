@@ -40,12 +40,16 @@ class Licencie
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'licencies')]
     private Collection $users;
 
+    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'licencies')]
+    private Collection $Groupes;
+
     public function __construct()
     {
         $this->clubs = new ArrayCollection();
         $this->livrets = new ArrayCollection();
         $this->photos = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->Groupes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -211,6 +215,30 @@ class Licencie
         if ($this->users->removeElement($user)) {
             $user->removeLicency($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getGroupes(): Collection
+    {
+        return $this->Groupes;
+    }
+
+    public function addGroupe(Group $groupe): static
+    {
+        if (!$this->Groupes->contains($groupe)) {
+            $this->Groupes->add($groupe);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupe(Group $groupe): static
+    {
+        $this->Groupes->removeElement($groupe);
 
         return $this;
     }
