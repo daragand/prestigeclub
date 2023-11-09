@@ -263,7 +263,7 @@ class AppFixtures extends Fixture
             ->setRoles($roles[$faker->numberBetween(0, 2)]);
             //s'il s'agit d'un parent, je lui ajoute un licencié
             if($objectUser->getRoles() == ['ROLE_USER']) {
-              $objectUser->addLicency($objectLicencie[$faker->numberBetween(0, (count($objectLicencie)-1))]);
+              $objectUser->addLicency($objectLicencies[$faker->numberBetween(0, (count($objectLicencies)-1))]);
             }
             //s'il s'agit d'un club, je lui ajoute un club
             if($objectUser->getRoles() == ['ROLE_CLUB']) {
