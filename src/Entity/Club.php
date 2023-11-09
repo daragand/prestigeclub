@@ -24,11 +24,15 @@ class Club
     #[ORM\ManyToMany(targetEntity: Licencie::class, inversedBy: 'clubs')]
     private Collection $licencies;
 
+    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'clubs')]
+    private Collection $groups;
+
     
 
     public function __construct()
     {
         $this->licencies = new ArrayCollection();
+        $this->groups = new ArrayCollection();
         
     }
 
@@ -81,6 +85,30 @@ class Club
     public function removeLicency(Licencie $licency): static
     {
         $this->licencies->removeElement($licency);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getGroups(): Collection
+    {
+        return $this->groups;
+    }
+
+    public function addGroup(Group $group): static
+    {
+        if (!$this->groups->contains($group)) {
+            $this->groups->add($group);
+        }
+
+        return $this;
+    }
+
+    public function removeGroup(Group $group): static
+    {
+        $this->groups->removeElement($group);
 
         return $this;
     }
