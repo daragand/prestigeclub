@@ -36,9 +36,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Address $address = null;
 
+    #[ORM\ManyToMany(targetEntity: Club::class, inversedBy: 'users')]
+    private Collection $club;
+
     public function __construct()
     {
         $this->licencies = new ArrayCollection();
+        $this->club = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,6 +147,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAddress(?Address $address): static
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Club>
+     */
+    public function getClub(): Collection
+    {
+        return $this->club;
+    }
+
+    public function addClub(Club $club): static
+    {
+        if (!$this->club->contains($club)) {
+            $this->club->add($club);
+        }
+
+        return $this;
+    }
+
+    public function removeClub(Club $club): static
+    {
+        $this->club->removeElement($club);
 
         return $this;
     }
