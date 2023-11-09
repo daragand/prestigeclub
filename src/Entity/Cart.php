@@ -21,6 +21,9 @@ class Cart
     #[ORM\ManyToMany(targetEntity: Photo::class, mappedBy: 'carts')]
     private Collection $photos;
 
+    #[ORM\ManyToOne(inversedBy: 'carts')]
+    private ?Forfait $forfait = null;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
@@ -66,6 +69,18 @@ class Cart
         if ($this->photos->removeElement($photo)) {
             $photo->removeCart($this);
         }
+
+        return $this;
+    }
+
+    public function getForfait(): ?Forfait
+    {
+        return $this->forfait;
+    }
+
+    public function setForfait(?Forfait $forfait): static
+    {
+        $this->forfait = $forfait;
 
         return $this;
     }
