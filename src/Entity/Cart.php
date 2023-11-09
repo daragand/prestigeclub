@@ -27,10 +27,14 @@ class Cart
     #[ORM\ManyToMany(targetEntity: Options::class, inversedBy: 'carts')]
     private Collection $options;
 
+    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: Order::class, orphanRemoval: true)]
+    private Collection $orders;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
         $this->options = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,6 +113,36 @@ class Cart
     public function removeOption(Options $option): static
     {
         $this->options->removeElement($option);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setCart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getCart() === $this) {
+                $order->setCart(null);
+            }
+        }
 
         return $this;
     }
