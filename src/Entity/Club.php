@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ClubRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ClubRepository::class)]
@@ -18,6 +20,17 @@ class Club
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $logo = null;
+
+    #[ORM\ManyToMany(targetEntity: Licencie::class, inversedBy: 'clubs')]
+    private Collection $licencies;
+
+    
+
+    public function __construct()
+    {
+        $this->licencies = new ArrayCollection();
+        
+    }
 
     public function getId(): ?int
     {
@@ -47,4 +60,29 @@ class Club
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Licencie>
+     */
+    public function getLicencies(): Collection
+    {
+        return $this->licencies;
+    }
+
+    public function addLicency(Licencie $licency): static
+    {
+        if (!$this->licencies->contains($licency)) {
+            $this->licencies->add($licency);
+        }
+
+        return $this;
+    }
+
+    public function removeLicency(Licencie $licency): static
+    {
+        $this->licencies->removeElement($licency);
+
+        return $this;
+    }
+
 }
