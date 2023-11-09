@@ -22,9 +22,13 @@ class Group
     #[ORM\ManyToMany(targetEntity: Club::class, mappedBy: 'groups')]
     private Collection $clubs;
 
+    #[ORM\OneToMany(mappedBy: 'groupID', targetEntity: PhotoGroup::class, orphanRemoval: true)]
+    private Collection $photoGroup;
+
     public function __construct()
     {
         $this->clubs = new ArrayCollection();
+        $this->photoGroup = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -66,6 +70,36 @@ class Group
     {
         if ($this->clubs->removeElement($club)) {
             $club->removeGroup($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PhotoGroup>
+     */
+    public function getPhotoGroup(): Collection
+    {
+        return $this->photoGroup;
+    }
+
+    public function addPhotoGroup(PhotoGroup $photoGroup): static
+    {
+        if (!$this->photoGroup->contains($photoGroup)) {
+            $this->photoGroup->add($photoGroup);
+            $photoGroup->setGroupID($this);
+        }
+
+        return $this;
+    }
+
+    public function removePhotoGroup(PhotoGroup $photoGroup): static
+    {
+        if ($this->photoGroup->removeElement($photoGroup)) {
+            // set the owning side to null (unless already changed)
+            if ($photoGroup->getGroupID() === $this) {
+                $photoGroup->setGroupID(null);
+            }
         }
 
         return $this;

@@ -16,6 +16,10 @@ class PhotoGroup
     #[ORM\Column(length: 255)]
     private ?string $path = null;
 
+    #[ORM\ManyToOne(inversedBy: 'photoGroup')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Group $groupID = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -29,6 +33,18 @@ class PhotoGroup
     public function setPath(string $path): static
     {
         $this->path = $path;
+
+        return $this;
+    }
+
+    public function getGroupID(): ?Group
+    {
+        return $this->groupID;
+    }
+
+    public function setGroupID(?Group $groupID): static
+    {
+        $this->groupID = $groupID;
 
         return $this;
     }
