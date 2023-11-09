@@ -128,7 +128,7 @@ class AppFixtures extends Fixture
         /////////////////   Club   ////////////////////////
         $objectClubs = [];
         //ajout de 50 clubs
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $objectClub = new Club();
             $objectClub->setName($faker->company)
                 ->setLogo($faker->imageUrl(640, 480, 'icon du Club'))
@@ -180,23 +180,48 @@ class AppFixtures extends Fixture
          $objectLicencies = [];
 
          for ($i = 0; $i < 100; $i++) {
+            //numéro aléatoire pour choisir un club
+            $randNumber =rand(0, count($objectClubs));
+
              $objectLicencie = new Licencie();
              $objectLicencie->setFirstname($faker->firstName)
                  ->setLastname($faker->lastName)
                  ->setBirthdate($faker->dateTimeBetween('-20 years', '-5 years'))
                  ->setSlug($faker->slug)
-                 ->addClub($objectClubs[$faker->numberBetween(0, 49)])
+                 ->addClub($objectClubs[$randNumber])
                  ;
+
+                 //selon le nom du club, récupération des groupes correspondants
+                  $groupsLicencies = $objectClubs[$randNumber]->getGroups();
+
+                    //ajout du groupe dans le licencié
+
+            $objectLicencie->addGroupe($groupsLicencies[$faker->numberBetween(0, count($groupsLicencies)-1)]);
+                 
+            //persistence de l'objet et ajout dans le tableau
+                array_push($objectLicencies, $objectLicencie);
+                $manager->persist($objectLicencie);
          }
-             /**
-              * ajout d'une quantité aléatoire de clubs dans chaque licencié
-              */
-             for ($j = 0; $j < rand(0, 7); $j++) {
-                 $objectLicencie->addClub($objectClubs[$faker->numberBetween(0, 49)]);
-             }
-             array_push($objectLicencies, $objectLicencie);
-             $manager->persist($objectLicencie);
-         
+             
+
+        //////////////////////////////  PhotoGroup  ///////////////////////////////////////
+
+        /**
+         * Ajout des photos de groupe dans les clubs
+         */
+
+         $objectPhotoGroups = [];
+
+        for ($i = 0; $i < 100; $i++) {
+            //numéro aléatoire pour choisir un club
+            $randNumber =rand(0, count($objectClubs));
+
+            $objectPhotoGroup = new PhotoGroup();
+            $objectPhotoGroup->setPhoto($faker->imageUrl(640, 480, 'photo de groupe'))
+                ->setClub($objectClubs[$randNumber])
+                ->setGroup($objectsGroups[$faker->numberBetween(0, count($objectsGroups)-1)]);
+            array_push($objectPhotoGroups, $objectPhotoGroup);
+                $manager->persist($objectPhotoGroup);
 
 
         // $product = new Product();
@@ -204,4 +229,5 @@ class AppFixtures extends Fixture
 
         $manager->flush();
     }
+}
 }
