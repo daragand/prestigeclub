@@ -20,6 +20,10 @@ class PhotoGroup
     #[ORM\JoinColumn(nullable: false)]
     private ?Group $groupID = null;
 
+    #[ORM\ManyToOne(inversedBy: 'photoGroups')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Club $club = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +49,18 @@ class PhotoGroup
     public function setGroupID(?Group $groupID): static
     {
         $this->groupID = $groupID;
+
+        return $this;
+    }
+
+    public function getClub(): ?Club
+    {
+        return $this->club;
+    }
+
+    public function setClub(?Club $club): static
+    {
+        $this->club = $club;
 
         return $this;
     }

@@ -27,12 +27,16 @@ class Club
     #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'clubs')]
     private Collection $groups;
 
+    #[ORM\OneToMany(mappedBy: 'club', targetEntity: PhotoGroup::class, orphanRemoval: true)]
+    private Collection $photoGroups;
+
     
 
     public function __construct()
     {
         $this->licencies = new ArrayCollection();
         $this->groups = new ArrayCollection();
+        $this->photoGroups = new ArrayCollection();
         
     }
 
@@ -109,6 +113,36 @@ class Club
     public function removeGroup(Group $group): static
     {
         $this->groups->removeElement($group);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PhotoGroup>
+     */
+    public function getPhotoGroups(): Collection
+    {
+        return $this->photoGroups;
+    }
+
+    public function addPhotoGroup(PhotoGroup $photoGroup): static
+    {
+        if (!$this->photoGroups->contains($photoGroup)) {
+            $this->photoGroups->add($photoGroup);
+            $photoGroup->setClub($this);
+        }
+
+        return $this;
+    }
+
+    public function removePhotoGroup(PhotoGroup $photoGroup): static
+    {
+        if ($this->photoGroups->removeElement($photoGroup)) {
+            // set the owning side to null (unless already changed)
+            if ($photoGroup->getClub() === $this) {
+                $photoGroup->setClub(null);
+            }
+        }
 
         return $this;
     }
