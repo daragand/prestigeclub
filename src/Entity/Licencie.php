@@ -37,11 +37,15 @@ class Licencie
     #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Photo::class, orphanRemoval: true)]
     private Collection $photos;
 
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'licencies')]
+    private Collection $users;
+
     public function __construct()
     {
         $this->clubs = new ArrayCollection();
         $this->livrets = new ArrayCollection();
         $this->photos = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -179,6 +183,33 @@ class Licencie
             if ($photo->getLicencie() === $this) {
                 $photo->setLicencie(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addLicency($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeLicency($this);
         }
 
         return $this;
