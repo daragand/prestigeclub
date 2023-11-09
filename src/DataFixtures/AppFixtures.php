@@ -166,7 +166,7 @@ class AppFixtures extends Fixture
              * ajout d'une quantité aléatoire de clubs dans chaque groupe
              */
             for ($i = 0; $i < rand(0, 7); $i++) {
-                $objectGroup->addClub($objectClubs[$faker->numberBetween(0, 49)]);
+                $objectGroup->addClub($objectClubs[$faker->numberBetween(0, ((count($objectClubs))-1))]);
             }
             array_push($objectsGroups, $objectGroup);
             $manager->persist($objectGroup);
@@ -181,7 +181,7 @@ class AppFixtures extends Fixture
 
          for ($i = 0; $i < 100; $i++) {
             //numéro aléatoire pour choisir un club
-            $randNumber =rand(0, count($objectClubs));
+            $randNumber =rand(0, (count($objectClubs)-1));
 
              $objectLicencie = new Licencie();
              $objectLicencie->setFirstname($faker->firstName)
@@ -193,14 +193,17 @@ class AppFixtures extends Fixture
 
                  //selon le nom du club, récupération des groupes correspondants
                   $groupsLicencies = $objectClubs[$randNumber]->getGroups();
+                //ajout du groupe dans le licencié
+                $randomGroup = $groupsLicencies[$faker->numberBetween(0, count($groupsLicencies)-1)];
+                if ($randomGroup instanceof Group) {
+                    $objectLicencie->addGroupe($randomGroup);
+                }
 
-                    //ajout du groupe dans le licencié
-
-            $objectLicencie->addGroupe($groupsLicencies[$faker->numberBetween(0, count($groupsLicencies)-1)]);
-                 
-            //persistence de l'objet et ajout dans le tableau
+                //persistence de l'objet et ajout dans le tableau
                 array_push($objectLicencies, $objectLicencie);
                 $manager->persist($objectLicencie);
+
+                  
          }
              
 
@@ -214,20 +217,62 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < 100; $i++) {
             //numéro aléatoire pour choisir un club
-            $randNumber =rand(0, count($objectClubs));
+            $randNumber =rand(0, (count($objectClubs)-1));
 
             $objectPhotoGroup = new PhotoGroup();
-            $objectPhotoGroup->setPhoto($faker->imageUrl(640, 480, 'photo de groupe'))
+            $objectPhotoGroup->setPath($faker->imageUrl(640, 480, 'photo de groupe'))
                 ->setClub($objectClubs[$randNumber])
-                ->setGroup($objectsGroups[$faker->numberBetween(0, count($objectsGroups)-1)]);
+                ->setGroupID($objectsGroups[$faker->numberBetween(0, count($objectsGroups)-1)]);
             array_push($objectPhotoGroups, $objectPhotoGroup);
                 $manager->persist($objectPhotoGroup);
 
-
-        // $product = new Product();
-        // $manager->persist($product);
-
-        $manager->flush();
     }
+
+        ///////////////////  Photo   ////////////////////////
+      $objectPhotos = [];
+
+      foreach ($objectLicencies as $licencie) {
+        //ajout pour chaque licencié de 4 photos
+        for ($i = 0; $i < 4; $i++) {
+          $objectPhoto = new Photo();
+          $objectPhoto->setPath($faker->imageUrl(640, 480, 'photo de groupe'))
+              ->setDatePublication($faker->dateTimeBetween('-1 years', 'now'))
+              ->setDownloaded($faker->boolean)
+              ->setLicencie($licencie);
+          array_push($objectPhotos, $objectPhoto);
+          $manager->persist($objectPhoto);
+        }
+      }
+
+      //////////////////////////////  User  ///////////////////////////////////////
+
+      $objectUsers = [];
+      $roles = [
+        ['ROLE_USER'],
+        ['ROLE_ADMIN'],
+        ['ROLE_CLUB'],
+      ];
+
+      for($i = 0; $i < 20; $i++) {
+        $objectUser = new User();
+        $objectUser->setEmail($faker->email)
+            ->setPassword($faker->password)
+            ->setAddress($objectAddresses[$faker->numberBetween(0, 99)])
+            ->setRoles($roles[$faker->numberBetween(0, 2)]);
+            //s'il s'agit d'un parent, je lui ajoute un licencié
+            if($objectUser->getRoles() == ['ROLE_USER']) {
+              $objectUser->addLicency($objectLicencie[$faker->numberBetween(0, (count($objectLicencie)-1))]);
+            }
+            //s'il s'agit d'un club, je lui ajoute un club
+            if($objectUser->getRoles() == ['ROLE_CLUB']) {
+              $objectUser->addClub($objectClubs[$faker->numberBetween(0, (count($objectClubs)-1))]);
+            }
+        array_push($objectUsers, $objectUser);
+        $manager->persist($objectUser);
+      }
+        
+
+
+    $manager->flush();
 }
 }
