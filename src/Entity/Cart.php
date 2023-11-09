@@ -24,9 +24,13 @@ class Cart
     #[ORM\ManyToOne(inversedBy: 'carts')]
     private ?Forfait $forfait = null;
 
+    #[ORM\ManyToMany(targetEntity: Options::class, inversedBy: 'carts')]
+    private Collection $options;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
+        $this->options = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -81,6 +85,30 @@ class Cart
     public function setForfait(?Forfait $forfait): static
     {
         $this->forfait = $forfait;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Options>
+     */
+    public function getOptions(): Collection
+    {
+        return $this->options;
+    }
+
+    public function addOption(Options $option): static
+    {
+        if (!$this->options->contains($option)) {
+            $this->options->add($option);
+        }
+
+        return $this;
+    }
+
+    public function removeOption(Options $option): static
+    {
+        $this->options->removeElement($option);
 
         return $this;
     }
