@@ -31,9 +31,13 @@ class Licencie
     #[ORM\ManyToMany(targetEntity: Club::class, mappedBy: 'licencies')]
     private Collection $clubs;
 
+    #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Livret::class, orphanRemoval: true)]
+    private Collection $livrets;
+
     public function __construct()
     {
         $this->clubs = new ArrayCollection();
+        $this->livrets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -111,6 +115,36 @@ class Licencie
     {
         if ($this->clubs->removeElement($club)) {
             $club->removeLicency($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Livret>
+     */
+    public function getLivrets(): Collection
+    {
+        return $this->livrets;
+    }
+
+    public function addLivret(Livret $livret): static
+    {
+        if (!$this->livrets->contains($livret)) {
+            $this->livrets->add($livret);
+            $livret->setLicencie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLivret(Livret $livret): static
+    {
+        if ($this->livrets->removeElement($livret)) {
+            // set the owning side to null (unless already changed)
+            if ($livret->getLicencie() === $this) {
+                $livret->setLicencie(null);
+            }
         }
 
         return $this;
