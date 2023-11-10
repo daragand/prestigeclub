@@ -166,7 +166,7 @@ class AppFixtures extends Fixture
              * ajout d'une quantité aléatoire de clubs dans chaque groupe
              */
             for ($i = 0; $i < rand(0, 7); $i++) {
-                $objectGroup->addClub($objectClubs[$faker->numberBetween(0, ((count($objectClubs))-1))]);
+                $objectGroup->addClub($objectClubs[$faker->numberBetween(0, ((count($objectClubs)) - 1))]);
             }
             array_push($objectsGroups, $objectGroup);
             $manager->persist($objectGroup);
@@ -177,35 +177,32 @@ class AppFixtures extends Fixture
         /**
          * Ajout des licenciés dans les clubs
          */
-         $objectLicencies = [];
+        $objectLicencies = [];
 
-         for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             //numéro aléatoire pour choisir un club
-            $randNumber =rand(0, (count($objectClubs)-1));
+            $randNumber = rand(0, (count($objectClubs) - 1));
 
-             $objectLicencie = new Licencie();
-             $objectLicencie->setFirstname($faker->firstName)
-                 ->setLastname($faker->lastName)
-                 ->setBirthdate($faker->dateTimeBetween('-20 years', '-5 years'))
-                 ->setSlug($faker->slug)
-                 ->addClub($objectClubs[$randNumber])
-                 ;
+            $objectLicencie = new Licencie();
+            $objectLicencie->setFirstname($faker->firstName)
+                ->setLastname($faker->lastName)
+                ->setBirthdate($faker->dateTimeBetween('-20 years', '-5 years'))
+                ->setSlug($faker->slug)
+                ->addClub($objectClubs[$randNumber]);
 
-                 //selon le nom du club, récupération des groupes correspondants
-                  $groupsLicencies = $objectClubs[$randNumber]->getGroups();
-                //ajout du groupe dans le licencié
-                $randomGroup = $groupsLicencies[$faker->numberBetween(0, count($groupsLicencies)-1)];
-                if ($randomGroup instanceof Group) {
-                    $objectLicencie->addGroupe($randomGroup);
-                }
+            //selon le nom du club, récupération des groupes correspondants
+            $groupsLicencies = $objectClubs[$randNumber]->getGroups();
+            //ajout du groupe dans le licencié
+            $randomGroup = $groupsLicencies[$faker->numberBetween(0, count($groupsLicencies) - 1)];
+            if ($randomGroup instanceof Group) {
+                $objectLicencie->addGroupe($randomGroup);
+            }
 
-                //persistence de l'objet et ajout dans le tableau
-                array_push($objectLicencies, $objectLicencie);
-                $manager->persist($objectLicencie);
+            //persistence de l'objet et ajout dans le tableau
+            array_push($objectLicencies, $objectLicencie);
+            $manager->persist($objectLicencie);
+        }
 
-                  
-         }
-             
 
         //////////////////////////////  PhotoGroup  ///////////////////////////////////////
 
@@ -213,74 +210,72 @@ class AppFixtures extends Fixture
          * Ajout des photos de groupe dans les clubs
          */
 
-         $objectPhotoGroups = [];
+        $objectPhotoGroups = [];
 
         for ($i = 0; $i < 100; $i++) {
             //numéro aléatoire pour choisir un club
-            $randNumber =rand(0, (count($objectClubs)-1));
+            $randNumber = rand(0, (count($objectClubs) - 1));
 
             $objectPhotoGroup = new PhotoGroup();
             $objectPhotoGroup->setPath($faker->imageUrl(640, 480, 'photo de groupe'))
                 ->setClub($objectClubs[$randNumber])
-                ->setGroupID($objectsGroups[$faker->numberBetween(0, count($objectsGroups)-1)]);
+                ->setGroupID($objectsGroups[$faker->numberBetween(0, count($objectsGroups) - 1)]);
             array_push($objectPhotoGroups, $objectPhotoGroup);
-                $manager->persist($objectPhotoGroup);
-
-    }
+            $manager->persist($objectPhotoGroup);
+        }
 
         ///////////////////  Photo   ////////////////////////
-      $objectPhotos = [];
+        $objectPhotos = [];
 
-      foreach ($objectLicencies as $licencie) {
-        //ajout pour chaque licencié de 4 photos
-        for ($i = 0; $i < 4; $i++) {
-          $objectPhoto = new Photo();
-          $objectPhoto->setPath($faker->imageUrl(640, 480, 'photo de groupe'))
-              ->setDatePublication($faker->dateTimeBetween('-1 years', 'now'))
-              ->setDownloaded($faker->boolean)
-              ->setLicencie($licencie);
-          array_push($objectPhotos, $objectPhoto);
-          $manager->persist($objectPhoto);
+        foreach ($objectLicencies as $licencie) {
+            //ajout pour chaque licencié de 4 photos
+            for ($i = 0; $i < 4; $i++) {
+                $objectPhoto = new Photo();
+                $objectPhoto->setPath($faker->imageUrl(640, 480, 'photo de groupe'))
+                    ->setDatePublication($faker->dateTimeBetween('-1 years', 'now'))
+                    ->setDownloaded($faker->boolean)
+                    ->setLicencie($licencie);
+                array_push($objectPhotos, $objectPhoto);
+                $manager->persist($objectPhoto);
+            }
         }
-      }
 
-      //////////////////////////////  User  ///////////////////////////////////////
+        //////////////////////////////  User  ///////////////////////////////////////
 
-      $objectUsers = [];
-      $roles = [
-        ['ROLE_USER'],
-        ['ROLE_ADMIN'],
-        ['ROLE_CLUB'],
-      ];
+        $objectUsers = [];
+        $roles = [
+            ['ROLE_USER'],
+            ['ROLE_ADMIN'],
+            ['ROLE_CLUB'],
+        ];
 
-      for($i = 0; $i < 20; $i++) {
-        $objectUser = new User();
-        $objectUser->setEmail($faker->email)
-            ->setFirstname($faker->firstName)
-            ->setLastname($faker->lastName)
-            ->setPassword($faker->password)
-            ->setAddress($objectAddresses[$faker->numberBetween(0, 99)])
-            ->setRoles($roles[$faker->numberBetween(0, 2)]);
+        for ($i = 0; $i < 20; $i++) {
+            $objectUser = new User();
+            $objectUser->setEmail($faker->email)
+                ->setFirstname($faker->firstName)
+                ->setLastname($faker->lastName)
+                ->setPassword($faker->password)
+                ->setAddress($objectAddresses[$faker->numberBetween(0, 99)])
+                ->setRoles($roles[$faker->numberBetween(0, 2)]);
             //s'il s'agit d'un parent, je lui ajoute un licencié
-            if($objectUser->getRoles() == ['ROLE_USER']) {
-              $objectUser->addLicency($objectLicencies[$faker->numberBetween(0, (count($objectLicencies)-1))]);
+            if ($objectUser->getRoles() == ['ROLE_USER']) {
+                $objectUser->addLicency($objectLicencies[$faker->numberBetween(0, (count($objectLicencies) - 1))]);
             }
             //s'il s'agit d'un club, je lui ajoute un club
-            if($objectUser->getRoles() == ['ROLE_CLUB']) {
-              $objectUser->addClub($objectClubs[$faker->numberBetween(0, (count($objectClubs)-1))]);
+            if ($objectUser->getRoles() == ['ROLE_CLUB']) {
+                $objectUser->addClub($objectClubs[$faker->numberBetween(0, (count($objectClubs) - 1))]);
             }
-        array_push($objectUsers, $objectUser);
-        $manager->persist($objectUser);
-      }
-      /////////////////////////////////  Livret  ///////////////////////////////////////
+            array_push($objectUsers, $objectUser);
+            $manager->persist($objectUser);
+        }
+        /////////////////////////////////  Livret  ///////////////////////////////////////
 
-      $objectLivrets = [];
+        $objectLivrets = [];
 
         foreach ($objectLicencies as $licencie) {
             $objectLivret = new Livret();
             $objectLivret->setLicencie($licencie)
-                ->setPath($faker->imageUrl(640, 480, 'livret'))
-                ;
+                ->setPath($faker->imageUrl(640, 480, 'livret'));
             array_push($objectLivrets, $objectLivret);
             $manager->persist($objectLivret);
         }
@@ -289,63 +284,53 @@ class AppFixtures extends Fixture
 
 
 
-    //////////////////////////////  Cart  ///////////////////////////////////////
+        //////////////////////////////  Cart  ///////////////////////////////////////
 
-    $objectCarts = [];
+        $objectCarts = [];
 
-    $parents = [];
-    foreach ($objectUsers as $user) {
-        if($user->getRoles() == ['ROLE_USER']) {
-            array_push($parents, $user);
+        $parents = [];
+        foreach ($objectUsers as $user) {
+            if ($user->getRoles() == ['ROLE_USER']) {
+                array_push($parents, $user);
+            }
         }
-    }
 
-        foreach($parents as $parent) {
+        foreach ($parents as $parent) {
             $objectCart = new Cart();
             $objectCart->setUsers($parent)
-                ->setForfait($objectsForfaits[$faker->numberBetween(0, (count($objectsForfaits)-1))]);
-
-                //gestion du forfait
-                if($objectCart->getForfait()->getName() == 'Gratuite') {
-                    $objectCart->setAmount($objectCart->getForfait()->getPrice());
-                } elseif($objectCart->getForfait()->getName() == 'Champion') {
-                    $objectCart->setAmount($objectCart->getForfait()->getPrice());
-                    foreach ($parent->getLicencies() as $licencie) {
-                        //ajout de 2 photos par licencié lié à l'utilisateur
-                        for($j=0; $j<2; $j++){
-                            foreach ($licencie->getPhotos() as $photo) {
-                                $objectCart->addPhoto($photo);
-                            }
-                            
-                        }
-                    }
-
-                       
-                        } elseif($objectCart->getForfait()->getName() == 'Prestige') {
-                            $objectCart->setAmount($objectCart->getForfait()->getPrice());
-                            /**
-                             * Pour chaque licencié, je récupère les photos et je les ajoute dans le panier
-                             */
-                            foreach ($parent->getLicencies() as $licencie) {
-                                foreach ($licencie->getPhotos() as $photo) {
-                                    $objectCart->addPhoto($photo);
-                                }
-                            }
-        
-                        }
-
-                        array_push($objectCarts, $objectCart);
-                        $manager->persist($objectCart);
-                    }
-                          
-
+                ->setForfait($objectsForfaits[$faker->numberBetween(0, (count($objectsForfaits) - 1))]);
             
-            
-                    $manager->flush();
 
+            //gestion des photos en fonction du forfait
+            if ($objectCart->getForfait()->getName() == 'Gratuite') {
+                $objectCart->setAmount(0);
+            } elseif ($objectCart->getForfait()->getName() == 'Champion') {
+                //gestion des options
+           
+                $objectCart->addOption($objectsOptions[$faker->numberBetween(0, (count($objectsOptions) - 1))]);
+                $objectCart->setAmount($objectCart->getForfait()->getPrice() + $objectCart->getOptions()[0]->getPrice());
+                //ajout de 2 photos individuelles prises aléatoirement. Je ne prends pas de photos lié à l'utilisateur par gain de temps
+                
+                for ($i = 0; $i < 2; $i++) {
+                    $objectCart->addPhoto($objectPhotos[$faker->numberBetween(0, (count($objectPhotos) - 1))]);
+                }
+            } elseif ($objectCart->getForfait()->getName() == 'Prestige') {
+                $objectCart->addOption($objectsOptions[$faker->numberBetween(0, (count($objectsOptions) - 1))]);
+                $objectCart->setAmount($objectCart->getForfait()->getPrice() + $objectCart->getOptions()[0]->getPrice());
+           
+                //ajout de 4 photos individuelles prises aléatoirement. Je ne prends pas de photos lié à l'utilisateur par gain de temps
+                for ($i = 0; $i < 4; $i++) {
+                    $objectCart->addPhoto($objectPhotos[$faker->numberBetween(0, (count($objectPhotos) - 1))]);
+                }
+            }
+                array_push($objectCarts, $objectCart);
+                $manager->persist($objectCart);
         }
 
 
+        $manager->flush();
+    }
 
 
 }
+
