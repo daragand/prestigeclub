@@ -29,6 +29,10 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private ?OrderStatus $orderStatus = null;
 
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $users = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -78,6 +82,18 @@ class Order
     public function setOrderStatus(?OrderStatus $orderStatus): static
     {
         $this->orderStatus = $orderStatus;
+
+        return $this;
+    }
+
+    public function getUsers(): ?User
+    {
+        return $this->users;
+    }
+
+    public function setUsers(?User $users): static
+    {
+        $this->users = $users;
 
         return $this;
     }
