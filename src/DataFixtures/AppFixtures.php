@@ -302,15 +302,50 @@ class AppFixtures extends Fixture
 
         foreach($parents as $parent) {
             $objectCart = new Cart();
-            $objectCart->setUser($parent);
-            array_push($objectCarts, $objectCart);
-            $manager->persist($objectCart);
+            $objectCart->setUsers($parent)
+                ->setForfait($objectsForfaits[$faker->numberBetween(0, (count($objectsForfaits)-1))]);
+
+                //gestion du forfait
+                if($objectCart->getForfait()->getName() == 'Gratuite') {
+                    $objectCart->setAmount($objectCart->getForfait()->getPrice());
+                } elseif($objectCart->getForfait()->getName() == 'Champion') {
+                    $objectCart->setAmount($objectCart->getForfait()->getPrice());
+                    foreach ($parent->getLicencies() as $licencie) {
+                        //ajout de 2 photos par licencié lié à l'utilisateur
+                        for($j=0; $j<2; $j++){
+                            foreach ($licencie->getPhotos() as $photo) {
+                                $objectCart->addPhoto($photo);
+                            }
+                            
+                        }
+                    }
+
+                       
+                        } elseif($objectCart->getForfait()->getName() == 'Prestige') {
+                            $objectCart->setAmount($objectCart->getForfait()->getPrice());
+                            /**
+                             * Pour chaque licencié, je récupère les photos et je les ajoute dans le panier
+                             */
+                            foreach ($parent->getLicencies() as $licencie) {
+                                foreach ($licencie->getPhotos() as $photo) {
+                                    $objectCart->addPhoto($photo);
+                                }
+                            }
+        
+                        }
+
+                        array_push($objectCarts, $objectCart);
+                        $manager->persist($objectCart);
+                    }
+                          
+
+            
+            
+                    $manager->flush();
 
         }
 
 
 
 
-    $manager->flush();
-}
 }
