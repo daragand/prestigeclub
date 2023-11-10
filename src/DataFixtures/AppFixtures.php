@@ -272,7 +272,43 @@ class AppFixtures extends Fixture
         array_push($objectUsers, $objectUser);
         $manager->persist($objectUser);
       }
-        
+      /////////////////////////////////  Livret  ///////////////////////////////////////
+
+      $objectLivrets = [];
+
+        foreach ($objectLicencies as $licencie) {
+            $objectLivret = new Livret();
+            $objectLivret->setLicencie($licencie)
+                ->setPath($faker->imageUrl(640, 480, 'livret'))
+                ;
+            array_push($objectLivrets, $objectLivret);
+            $manager->persist($objectLivret);
+        }
+
+
+
+
+
+    //////////////////////////////  Cart  ///////////////////////////////////////
+
+    $objectCarts = [];
+
+    $parents = [];
+    foreach ($objectUsers as $user) {
+        if($user->getRoles() == ['ROLE_USER']) {
+            array_push($parents, $user);
+        }
+    }
+
+        foreach($parents as $parent) {
+            $objectCart = new Cart();
+            $objectCart->setUser($parent);
+            array_push($objectCarts, $objectCart);
+            $manager->persist($objectCart);
+
+        }
+
+
 
 
     $manager->flush();
