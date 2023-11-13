@@ -7,6 +7,7 @@ use App\Entity\Photo;
 use App\Entity\Livret;
 use App\Entity\Address;
 use App\Entity\Forfait;
+use App\Entity\Order;
 use App\Entity\PhotoGroup;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -47,18 +48,24 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::section('Menu', 'fas fa-bars');
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Adresses', 'fas fa-map-marker-alt', Address::class);
+        yield MenuItem::section('Menu');
+        yield MenuItem::linkToCrud('Commandes', 'fas fa-map-marker-alt', Order::class);
+        
+        // ->setCssClass('nav nav-pills nav-sidebar flex-column')
+       
 
-        yield MenuItem::section('Photos','');
+        yield MenuItem::section('Photos')->setCssClass('border-bottom border-2');
         yield MenuItem::linkToCrud('Photos individuelles', 'fas fa-images', Photo::class);
         yield MenuItem::linkToCrud('Photos de groupes', 'fa-solid fa-image-portrait', PhotoGroup::class);
         yield MenuItem::linkToCrud('Livrets', 'fa-solid fa-file', Livret::class);
+       
+        
 
-        yield MenuItem::section('Gestion');
+        yield MenuItem::section('Gestion')->setCssClass('border-bottom border-2');
+        yield MenuItem::linkToCrud('Adresses', 'fas fa-map-marker-alt', Address::class);
         yield MenuItem::linkToCrud('Forfaits', 'fas fa-money-bill-wave', Forfait::class);
         yield MenuItem::linkToCrud('Clubs','fa-solid fa-landmark', Club::class);
-        // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
+        ;
+       
     }
 }
