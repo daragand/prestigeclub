@@ -2,12 +2,18 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Club;
+use App\Entity\Photo;
+use App\Entity\Livret;
 use App\Entity\Address;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
-use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use App\Entity\Forfait;
+use App\Entity\PhotoGroup;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -41,9 +47,18 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::section('Menu');
+        yield MenuItem::section('Menu', 'fas fa-bars');
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Adresses', 'fas fa-map-marker-alt', Address::class);
+
+        yield MenuItem::section('Photos','');
+        yield MenuItem::linkToCrud('Photos individuelles', 'fas fa-images', Photo::class);
+        yield MenuItem::linkToCrud('Photos de groupes', 'fa-solid fa-image-portrait', PhotoGroup::class);
+        yield MenuItem::linkToCrud('Livrets', 'fa-solid fa-file', Livret::class);
+
+        yield MenuItem::section('Gestion');
+        yield MenuItem::linkToCrud('Forfaits', 'fas fa-money-bill-wave', Forfait::class);
+        yield MenuItem::linkToCrud('Clubs','fa-solid fa-landmark', Club::class);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }
