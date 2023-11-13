@@ -30,6 +30,12 @@ class Cart
     #[ORM\OneToMany(mappedBy: 'cart', targetEntity: Order::class, orphanRemoval: true)]
     private Collection $orders;
 
+    #[ORM\ManyToOne(inversedBy: 'carts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $users = null;
+
+    
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
@@ -146,4 +152,18 @@ class Cart
 
         return $this;
     }
+
+    public function getUsers(): ?User
+    {
+        return $this->users;
+    }
+
+    public function setUsers(?User $users): static
+    {
+        $this->users = $users;
+
+        return $this;
+    }
+
+   
 }

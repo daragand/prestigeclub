@@ -25,10 +25,14 @@ class Group
     #[ORM\OneToMany(mappedBy: 'groupID', targetEntity: PhotoGroup::class, orphanRemoval: true)]
     private Collection $photoGroup;
 
+    #[ORM\ManyToMany(targetEntity: Licencie::class, mappedBy: 'Groupes')]
+    private Collection $licencies;
+
     public function __construct()
     {
         $this->clubs = new ArrayCollection();
         $this->photoGroup = new ArrayCollection();
+        $this->licencies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,6 +104,33 @@ class Group
             if ($photoGroup->getGroupID() === $this) {
                 $photoGroup->setGroupID(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Licencie>
+     */
+    public function getLicencies(): Collection
+    {
+        return $this->licencies;
+    }
+
+    public function addLicency(Licencie $licency): static
+    {
+        if (!$this->licencies->contains($licency)) {
+            $this->licencies->add($licency);
+            $licency->addGroupe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLicency(Licencie $licency): static
+    {
+        if ($this->licencies->removeElement($licency)) {
+            $licency->removeGroupe($this);
         }
 
         return $this;
