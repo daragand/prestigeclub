@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Forfait;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
@@ -14,8 +15,20 @@ class ForfaitCrudController extends AbstractCrudController
     {
         return Forfait::class;
     }
+public function configureCrud(Crud $crud): Crud
+{
+    return $crud
+        ->setPageTitle('index', 'Forfaits')
+        ->setPageTitle('new', 'Ajouter un forfait')
+        ->setPageTitle('edit', 'Modifier un forfait')
+        ->setPageTitle('detail', 'Détail du forfait')
+        ->setSearchFields(['name', 'price'])
+        ->setDefaultSort(['id' => 'DESC'])
+        ->setEntityLabelInSingular('Forfait')
+        ->setEntityLabelInPlural('Forfaits');
+}
 
-    /*
+    
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -24,5 +37,5 @@ class ForfaitCrudController extends AbstractCrudController
             TextEditorField::new('description'),
         ];
     }
-    */
+    
 }

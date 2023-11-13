@@ -3,10 +3,11 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Licencie;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class LicencieCrudController extends AbstractCrudController
 {
@@ -15,14 +16,26 @@ class LicencieCrudController extends AbstractCrudController
         return Licencie::class;
     }
 
-    /*
+    public function configureCrud(Crud $crud): Crud{
+        return $crud
+            ->setPageTitle('index', 'Licenciés')
+            ->setPageTitle('new', 'Ajouter un licencié')
+            ->setPageTitle('edit', 'Modifier un licencié')
+            ->setPageTitle('detail', 'Détail du licencié')
+            ->setSearchFields(['name', 'firstname', 'birthday', 'adress', 'zip', 'city', 'phone', 'email', 'licence', 'certif', 'cotisation', 'forfait', 'group'])
+            ->setDefaultSort(['id' => 'DESC'])
+            ->setEntityLabelInSingular('Licencié')
+            ->setEntityLabelInPlural('Licenciés');
+    }
+
+    
     public function configureFields(string $pageName): iterable
     {
         return [
             IdField::new('id'),
             TextField::new('title'),
-            TextEditorField::new('description'),
+            
         ];
     }
-    */
+   
 }
