@@ -48,7 +48,7 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::section('Menu');
+        yield MenuItem::section('Commandes')->setCssClass('border-bottom border-2');
         yield MenuItem::linkToCrud('Commandes', 'fas fa-map-marker-alt', Order::class);
         
         // ->setCssClass('nav nav-pills nav-sidebar flex-column')
