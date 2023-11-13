@@ -34,9 +34,14 @@ public function configureCrud(Crud $crud): Crud
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            ImageField::new('path', 'photo individuelle'),
-            BooleanField::new('downloaded', 'téléchargée'),
+            IdField::new('id')
+            ->hideOnDetail()
+            ->hideOnForm(),
+            ImageField::new('path', 'photo individuelle')
+            ->setUploadDir('public/uploads/photos')
+            ->setBasePath('uploads/photos'),
+
+            BooleanField::new('downloaded', 'téléchargée')->hideOnForm(),
             AssociationField::new('licencie', 'licencié')
         ];
     }
