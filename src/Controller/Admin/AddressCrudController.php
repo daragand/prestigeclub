@@ -22,7 +22,7 @@ class AddressCrudController extends AbstractCrudController
             ->setPageTitle('new', 'Ajouter une adresse')
             ->setPageTitle('edit', 'Modifier une adresse')
             ->setPageTitle('detail', 'Détail de l\'adresse')
-            ->setSearchFields(['city', 'adress', 'zip'])
+            ->setSearchFields(['city', 'address', 'zip'])
             ->setDefaultSort(['id' => 'DESC'])
             ->setEntityLabelInSingular('Adresse')
             ->setEntityLabelInPlural('Adresses');
