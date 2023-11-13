@@ -33,6 +33,9 @@ class Club
     #[ORM\ManyToOne(inversedBy: 'clubs')]
     private ?Address $address = null;
 
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'club')]
+    private Collection $users;
+
     
 
     public function __construct()
@@ -40,6 +43,7 @@ class Club
         $this->licencies = new ArrayCollection();
         $this->groups = new ArrayCollection();
         $this->photoGroups = new ArrayCollection();
+        $this->users = new ArrayCollection();
         
     }
 
@@ -158,6 +162,33 @@ class Club
     public function setAddress(?Address $address): static
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addClub($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeClub($this);
+        }
 
         return $this;
     }
