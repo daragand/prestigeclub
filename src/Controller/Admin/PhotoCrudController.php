@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Photo;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -11,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use Symfony\Component\Validator\Constraints\Date;
 
 class PhotoCrudController extends AbstractCrudController
 {
@@ -46,4 +48,22 @@ public function configureCrud(Crud $crud): Crud
         ];
     }
     
+    /**
+     * Création d'un écouteur d'événement pour ajouter la date de publication avec le persistEntity
+     */ 
+
+     public function persistEntity(EntityManagerInterface $em, $entityInstance): void
+     {
+        //si l'entité n'est pas celle de la photo, alors on ne va pas plus loin.
+
+        if (!($entityInstance instanceof Photo)) {
+            return;
+
+        }
+        //on ajoute la date de publication si c'est bien l'instance
+
+         $entityInstance->setDatePublication(new Date());
+         //la méthode ci-dessous permet de préserver les données et de les enregistrer dans la base.
+         parent::persistEntity($em, $entityInstance);
+     } 
 }

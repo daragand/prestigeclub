@@ -32,8 +32,9 @@ public function configureCrud(Crud $crud): Crud
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            TextField::new('title'),
+            IdField::new('id')->hideOnForm()
+            ->hideOnDetail(),
+            TextField::new('name','Forfait'),
             TextEditorField::new('description'),
         ];
     }
