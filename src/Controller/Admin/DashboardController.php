@@ -7,6 +7,7 @@ use App\Entity\Photo;
 use App\Entity\Livret;
 use App\Entity\Address;
 use App\Entity\Forfait;
+use App\Entity\Licencie;
 use App\Entity\Order;
 use App\Entity\PhotoGroup;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,6 +66,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Adresses', 'fas fa-map-marker-alt', Address::class);
         yield MenuItem::linkToCrud('Forfaits', 'fas fa-money-bill-wave', Forfait::class);
         yield MenuItem::linkToCrud('Clubs','fa-solid fa-landmark', Club::class);
+        yield MenuItem::linkToCrud('Licenciés', 'fas fa-users', Licencie::class)
         ;
        
     }
