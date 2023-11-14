@@ -3,15 +3,17 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Club;
+use App\Entity\Order;
 use App\Entity\Photo;
 use App\Entity\Livret;
 use App\Entity\Address;
 use App\Entity\Forfait;
 use App\Entity\Licencie;
-use App\Entity\Order;
 use App\Entity\PhotoGroup;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
@@ -40,7 +42,19 @@ class DashboardController extends AbstractDashboardController
         //
         return $this->render('Admin/DashboardAdmin.html.twig');
     }
+    public function configureAssets(): Assets
+    {
+        return parent::configureAssets()
+            ->addWebpackEncoreEntry('admin')
+            ;
+    }
+public function configureCrud(): Crud
+{
+    return parent::configureCrud()
+    ->addFormTheme('@Dropzone/form/fields.html.twig')
+    ;
 
+}
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
