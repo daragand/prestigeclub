@@ -33,7 +33,7 @@ class PhotoGroupCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id'),
-            ImageField::new('path'),
+            ImageField::new('path', 'photo de groupe'),
            
         ];
     }
