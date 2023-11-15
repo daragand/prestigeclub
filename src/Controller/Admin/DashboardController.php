@@ -42,16 +42,11 @@ class DashboardController extends AbstractDashboardController
         //
         return $this->render('Admin/DashboardAdmin.html.twig');
     }
-    public function configureAssets(): Assets
-    {
-        return parent::configureAssets()
-            ->addWebpackEncoreEntry('admin')
-            ;
-    }
+   
 public function configureCrud(): Crud
 {
     return parent::configureCrud()
-    ->addFormTheme('@Dropzone/form/fields.html.twig')
+   
     ;
 
 }

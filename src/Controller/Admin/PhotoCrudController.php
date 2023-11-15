@@ -2,8 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Form\PhotoType;
 use App\Entity\Photo;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\UX\Dropzone\Form\DropzoneType;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use Symfony\Component\Validator\Constraints\Date;
@@ -11,10 +14,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use Symfony\UX\Dropzone\Form\DropzoneType;
 
 class PhotoCrudController extends AbstractCrudController
 {
@@ -41,9 +44,10 @@ public function configureCrud(Crud $crud): Crud
             IdField::new('id')
             ->hideOnDetail()
             ->hideOnForm(),
-            yield Field::new('path', 'photo individuelle')
-            ->setFormType(DropzoneType::class)
-            ->addFormTheme('@Dropzone/form/fields.html.twig'),
+            yield Field::new('photoFile', 'Photo individuelle')
+        ->setFormType(PhotoType::class) // use the custom form type
+        ->onlyOnForms(),
+            
 
             BooleanField::new('downloaded', 'téléchargée')->hideOnForm(),
             AssociationField::new('licencie', 'licencié')
