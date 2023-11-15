@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Form\PhotoType;
+use App\Entity\Licencie;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,8 +20,9 @@ class PhotoController extends AbstractController
     #[Route('/ajout-photo', name: 'app_photo_ajout')]
     public function addPhoto(): Response
     {
+        $licencie = new Licencie();
 
-        $formAddPhoto = $this->createForm(PhotoType::class);
+        $formAddPhoto = $this->createForm(PhotoType::class, $licencie);
 
         return $this->render('photo/ajoutphoto.html.twig', [
             'controller_name' => 'PhotoController',
