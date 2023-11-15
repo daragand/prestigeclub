@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Form\PhotoType;
 use App\Entity\Licencie;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -10,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 
 class LicencieCrudController extends AbstractCrudController
 {
@@ -38,6 +40,9 @@ class LicencieCrudController extends AbstractCrudController
             TextField::new('firstname', 'Prénom'),
             TextField::new('lastname', 'Nom'),
             CollectionField::new('photos')
+            ->setFormType(PhotoType::class) // use the custom form type
+            ->onlyOnForms(),
+            AssociationField::new('photos', 'Photos')
             
         ];
     }

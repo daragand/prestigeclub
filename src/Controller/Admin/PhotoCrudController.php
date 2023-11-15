@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Form\PhotoType;
 use App\Entity\Photo;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\UX\Dropzone\Form\DropzoneType;
 use Vich\UploaderBundle\Form\Type\VichFileType;
@@ -44,13 +45,13 @@ public function configureCrud(Crud $crud): Crud
             IdField::new('id')
             ->hideOnDetail()
             ->hideOnForm(),
-            yield Field::new('photoFile', 'Photo individuelle')
-        ->setFormType(PhotoType::class) // use the custom form type
-        ->onlyOnForms(),
-            
-
+            AssociationField::new('licencie', 'licencié'),
             BooleanField::new('downloaded', 'téléchargée')->hideOnForm(),
-            AssociationField::new('licencie', 'licencié')
+            TextField::new('photoFile', 'Photo')
+            ->setFormType(VichFileType::class)
+           ,
+            
+            
         ];
     }
     
@@ -68,7 +69,8 @@ public function configureCrud(Crud $crud): Crud
         }
         //on ajoute la date de publication si c'est bien l'instance
 
-         $entityInstance->setDatePublication(new Date());
+         $entityInstance->setDatePublication(new DateTimeImmutable())
+         ->setDownloaded(false);
          //la méthode ci-dessous permet de préserver les données et de les enregistrer dans la base.
          parent::persistEntity($em, $entityInstance);
      } 

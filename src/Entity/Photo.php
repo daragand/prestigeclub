@@ -2,15 +2,18 @@
 
 namespace App\Entity;
 
+use DateTime;
 use App\Entity\Cart;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PhotoRepository;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints\Date;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PhotoRepository::class)]
@@ -85,7 +88,7 @@ class Photo
         return $this->datePublication;
     }
 
-    public function setDatePublication(Date $datePublication): static
+    public function setDatePublication(\DateTimeInterface $datePublication): static
     {
         
 
