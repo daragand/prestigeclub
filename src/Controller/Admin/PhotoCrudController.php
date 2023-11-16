@@ -48,16 +48,15 @@ public function configureCrud(Crud $crud): Crud
             ->hideOnForm(),
             AssociationField::new('licencie', 'licencié'),
             BooleanField::new('downloaded', 'téléchargée')->hideOnForm(),
-            /*ImageField::new('photoFile', 'Photo')
-            ->onlyOnDetail()
-             ->setTemplatePath('admin/photo/custom_image.html.twig'),*/
+            
             DateField::new('datePublication', 'Date de publication')
-            ->onlyOnDetail(),
+            ->hideOnForm(),
             /**
              * TextField ci-dessous sur photoFile exploite Vich Uploader Bundle. Il génère un nom au fichier et le stocke dans un dosser uploads.
              */
             TextField::new('photoFile', 'Photo')
             ->setFormType(VichFileType::class)
+            //ajout d'un template pour afficher les images dans la liste
             ->setTemplatePath('Admin/photo/custom_image.html.twig')
            ,
             
