@@ -21,7 +21,7 @@ class PhotoGroup
     #[ORM\Column(length: 255)]
     private ?string $path = null;
 
-    //Photo de groupe provisoire pour charger les images. Non utilisée dans la BDD
+    //Photo de groupe provisoire pour charger les images. Non utilisée dans la BDD. Le mapping est disponible dans le fichier config/vich_uploader.yaml
     #[Vich\UploadableField(mapping: 'groupes', fileNameProperty: 'path')]
     #[Assert\File(maxSize: '5M', mimeTypes: ['image/jpeg', 'image/png', 'image/webp'])]
     private ?File $photoGroupFile = null;

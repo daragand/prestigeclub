@@ -2,8 +2,8 @@
 {# @var field \EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto #}
 {# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
 
-
+{# Pour la gestion des photos individuelles, on utilise le bundle VichUploaderBundle. #}
 {% if field %}
-    <img src="{{ vich_uploader_asset(entity.instance, 'photoFile') }}" alt="{{ field.formattedValue }}" width="100">
+    <img src="{{ vich_uploader_asset(entity.instance, 'photoGroupFile') }}" alt="{{ field.formattedValue }}" width="100">
 {% endif %}
 
