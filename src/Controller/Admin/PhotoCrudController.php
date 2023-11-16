@@ -2,9 +2,9 @@
 
 namespace App\Controller\Admin;
 
-use App\Form\PhotoType;
 use App\Entity\Photo;
 use DateTimeImmutable;
+use App\Form\PhotoType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\UX\Dropzone\Form\DropzoneType;
 use Vich\UploaderBundle\Form\Type\VichFileType;
@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use Symfony\Component\Validator\Constraints\Date;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -47,11 +48,17 @@ public function configureCrud(Crud $crud): Crud
             ->hideOnForm(),
             AssociationField::new('licencie', 'licencié'),
             BooleanField::new('downloaded', 'téléchargée')->hideOnForm(),
+            /*ImageField::new('photoFile', 'Photo')
+            ->onlyOnDetail()
+             ->setTemplatePath('admin/photo/custom_image.html.twig'),*/
+            DateField::new('datePublication', 'Date de publication')
+            ->onlyOnDetail(),
             /**
              * TextField ci-dessous sur photoFile exploite Vich Uploader Bundle. Il génère un nom au fichier et le stocke dans un dosser uploads.
              */
             TextField::new('photoFile', 'Photo')
             ->setFormType(VichFileType::class)
+            ->setTemplatePath('Admin/photo/custom_image.html.twig')
            ,
             
             
