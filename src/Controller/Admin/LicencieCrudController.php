@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use App\Form\PhotoType;
 use App\Entity\Licencie;
 use App\Form\PhotoCollectionType;
+use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Collections\Collection;
 use Vich\UploaderBundle\Form\Type\VichFileType;
@@ -28,7 +29,8 @@ class LicencieCrudController extends AbstractCrudController
         return Licencie::class;
     }
 
-    public function configureCrud(Crud $crud): Crud{
+    public function configureCrud(Crud $crud): Crud
+    {
         return $crud
             ->setPageTitle('index', 'Licenciés')
             ->setPageTitle('new', 'Ajouter un licencié')
@@ -40,7 +42,7 @@ class LicencieCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('Licenciés');
     }
 
-    
+
     public function configureFields(string $pageName): iterable
     {
 
@@ -50,15 +52,33 @@ class LicencieCrudController extends AbstractCrudController
             TextField::new('lastname', 'Nom'),
             DateField::new('birthdate', 'Date de naissance'),
             CollectionField::new('photos', 'Photos')
-            ->setEntryType(PhotoCollectionType::class)
-            ->onlyOnForms(),
+                ->setEntryType(PhotoCollectionType::class)
+                ->onlyOnForms(),
             AssociationField::new('photos', 'Photos')
-            ->hideOnForm()
-            ->setTemplatePath('admin/licencie/photos.html.twig'),
-            
+                ->hideOnForm()
+                ->setTemplatePath('admin/licencie/photos.html.twig'),
+
         ];
-        
     }
 
 
+
+    //ajout du slug au moment de la création
+    public function persistEntity(EntityManagerInterface $em, $entityInstance): void
+    {
+        //si l'entité n'est pas celle de la photo, alors on ne va pas plus loin.
+
+        if (!($entityInstance instanceof Licencie)) {
+            return;
+        }
+
+        //on créé un slug
+        $slug = Uuid::v4()->__toString();
+
+        //on ajoute la date de publication à la photo
+        $entityInstance->setSlug($slug);
+
+        //la méthode ci-dessous permet de préserver les données et de les enregistrer dans la base.
+        parent::persistEntity($em, $entityInstance);
+    }
 }
