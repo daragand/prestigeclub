@@ -37,7 +37,7 @@ class Licencie
     #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Livret::class, orphanRemoval: true)]
     private Collection $livrets;
 
-    #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Photo::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Photo::class, orphanRemoval: true, cascade: ['persist'])]
     private Collection $photos;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'licencies')]
@@ -245,6 +245,10 @@ class Licencie
 
         return $this;
     }
+
+
+
+
     public function __toString()
     {
         return $this->firstname . ' ' . $this->lastname;

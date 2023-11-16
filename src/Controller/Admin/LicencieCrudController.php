@@ -2,12 +2,19 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Photo;
+use DateTimeImmutable;
 use App\Form\PhotoType;
 use App\Entity\Licencie;
+use App\Form\PhotoCollectionType;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Common\Collections\Collection;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use Symfony\Component\Validator\Constraints\Date;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
@@ -36,16 +43,22 @@ class LicencieCrudController extends AbstractCrudController
     
     public function configureFields(string $pageName): iterable
     {
+
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('firstname', 'Prénom'),
             TextField::new('lastname', 'Nom'),
-            CollectionField::new('photos')
-            ->setFormType(VichFileType::class) // use the custom form type
+            DateField::new('birthdate', 'Date de naissance'),
+            CollectionField::new('photos', 'Photos')
+            ->setEntryType(PhotoCollectionType::class)
             ->onlyOnForms(),
             AssociationField::new('photos', 'Photos')
+            ->hideOnForm()
+            ->setTemplatePath('admin/licencie/photos.html.twig'),
             
         ];
+        
     }
-   
+
+
 }

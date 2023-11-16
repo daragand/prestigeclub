@@ -59,13 +59,14 @@ class Photo
     {
         return $this->photoFile;
     }
-    //fonction pour le téléchargement de la photo
+    //fonction pour le téléchargement de la photo. On intègre la date de Publication et le booléen downloaded
     public function setPhotoFile(?File $photoFile = null): static
     {
         $this->photoFile = $photoFile;
 
         if (null !== $photoFile) {
             $this->datePublication = new \DateTimeImmutable();
+            $this->downloaded = false;
         }
 
         return $this;
