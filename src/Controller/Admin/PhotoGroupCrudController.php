@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 
 class PhotoGroupCrudController extends AbstractCrudController
 {
@@ -45,6 +46,8 @@ class PhotoGroupCrudController extends AbstractCrudController
             //ajout d'un template pour afficher les images dans la liste
             ->setTemplatePath('Admin/photo/custom_imageGroup.html.twig'),
             DateField::new('datePublication', 'Date de publication')->hideOnForm(),
+            AssociationField::new('groupID', 'Groupe'),
+            AssociationField::new('club', 'Club'),
            
         ];
     }

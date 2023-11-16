@@ -40,9 +40,9 @@ class LicencieCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             TextField::new('firstname', 'Prénom'),
             TextField::new('lastname', 'Nom'),
-            // CollectionField::new('photos')
-            // ->setFormType(VichFileType::class) // use the custom form type
-            // ->onlyOnForms(),
+            CollectionField::new('photos')
+            ->setFormType(VichFileType::class) // use the custom form type
+            ->onlyOnForms(),
             AssociationField::new('photos', 'Photos')
             
         ];

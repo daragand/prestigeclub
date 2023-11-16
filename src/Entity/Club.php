@@ -192,5 +192,9 @@ class Club
 
         return $this;
     }
+    public function __toString(): string
+    {
+        return $this->name. ' - ' . $this->address->getCity();
+    }
 
 }
