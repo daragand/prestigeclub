@@ -36,6 +36,17 @@ class DashboardController extends AbstractDashboardController
     {
         
     }
+    //fonction pour assets css et JS
+    public function configureAssets(): Assets
+    {
+        return Assets::new()
+            ->addCssFile('datatables.net-bs4/css/responsive.dataTables.min.css')
+            ->addCssFile('datatables.net-bs4/css/dataTables.bootstrap4.min.css')
+            ->addCssFile('datatables.net-bs4/css/dataTables.bootstrap4.css')
+            ->addJsFile('datatables.net-bs4/js/dataTables.bootstrap4.min.js')
+            ->addJsFile('datatables.net-bs4/js/dataTables.bootstrap4.js')
+            ->addJsFile('datatables.net-bs4/js/jquery.dataTables.min.js');
+    }
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {

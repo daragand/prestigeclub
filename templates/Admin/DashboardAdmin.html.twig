@@ -1,10 +1,5 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
-{% block stylesheets %}
-{# pour la gestion des tables dans le Dashboard #}
-        <link rel="stylesheet" href="{{ asset('datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
-{% endblock %}
 
 {% block main %}
 	<div class="container-fluid">
@@ -120,93 +115,31 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Multi-column ordering</h4>
-                                <h6 class="card-subtitle">On a per-column basis (i.e. order by a specific column and
-                                    then a secondary column if the data in the first column is identical), through the
-                                    <code> columns.orderData</code> option.</h6>
+                                <h4 class="card-title">Commandes en cours</h4>
+                                <h6 class="card-subtitle">Tant que le téléchargement de la photo ou la réception du livret n'est pas confirmée, la commande reste en cours de traitement</h6>
                                 <div class="table-responsive">
                                     <table id="multi_col_order"
                                         class="table border table-striped table-bordered text-nowrap" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>First name</th>
-                                                <th>Last name</th>
-                                                <th>Position</th>
-                                                <th>Office</th>
-                                                <th>Salary</th>
+                                                <th>Numéro de commande</th>
+                                                <th>client</th>
+                                                <th>Licencié</th>
+                                                <th>Forfait</th>
+                                                <th>Prix</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        {% for cmd in commandes %}
                                             <tr>
-                                                <td>Tiger</td>
-                                                <td>Nixon</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>$320,800</td>
+                                                <td>{{ cmd.id }}</td>
+                                                <td>{{ cmd.users }}</td>
+                                                <td>{{ cmd.users.licencies[0] }}</td>
+                                                <td>{{ cmd.cart.forfait }}</td>
+                                                <td>{{ cmd.amount }}</td>
                                             </tr>
-                                            <tr>
-                                                <td>Garrett</td>
-                                                <td>Winters</td>
-                                                <td>Accountant</td>
-                                                <td>Tokyo</td>
-                                                <td>$170,750</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Ashton</td>
-                                                <td>Cox</td>
-                                                <td>Junior Technical Author</td>
-                                                <td>San Francisco</td>
-                                                <td>$86,000</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cedric</td>
-                                                <td>Kelly</td>
-                                                <td>Senior Javascript Developer</td>
-                                                <td>Edinburgh</td>
-                                                <td>$433,060</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Airi</td>
-                                                <td>Satou</td>
-                                                <td>Accountant</td>
-                                                <td>Tokyo</td>
-                                                <td>$162,700</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Brielle</td>
-                                                <td>Williamson</td>
-                                                <td>Integration Specialist</td>
-                                                <td>New York</td>
-                                                <td>$372,000</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Herrod</td>
-                                                <td>Chandler</td>
-                                                <td>Sales Assistant</td>
-                                                <td>San Francisco</td>
-                                                <td>$137,500</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Rhona</td>
-                                                <td>Davidson</td>
-                                                <td>Integration Specialist</td>
-                                                <td>Tokyo</td>
-                                                <td>$327,900</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Colleen</td>
-                                                <td>Hurst</td>
-                                                <td>Javascript Developer</td>
-                                                <td>San Francisco</td>
-                                                <td>$205,500</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Sonya</td>
-                                                <td>Frost</td>
-                                                <td>Software Engineer</td>
-                                                <td>Edinburgh</td>
-                                                <td>$103,600</td>
-                                            </tr>
+                                        {% endfor %}
+                                            
                                            
                                         </tbody>
                                     </table>
@@ -221,13 +154,118 @@
 <!-- *************************************************************** -->
     <!-- Fin des tableaux des commandes en cours -->
     <!-- *************************************************************** -->
-
+                <!-- *************************************************************** -->
+                <!-- Start Sales Charts Section -->
+                <!-- *************************************************************** -->
+                <div class="row mt-4">
+                    <div class="col-lg-4 col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Total Sales</h4>
+                                <div id="campaign-v2" class="mt-2" style="height:283px; width:100%;"></div>
+                                <ul class="list-style-none mb-0">
+                                    <li>
+                                        <i class="fas fa-circle text-primary font-10 me-2"></i>
+                                        <span class="text-muted">Direct Sales</span>
+                                        <span class="text-dark float-end font-weight-medium">$2346</span>
+                                    </li>
+                                    <li class="mt-3">
+                                        <i class="fas fa-circle text-danger font-10 me-2"></i>
+                                        <span class="text-muted">Referral Sales</span>
+                                        <span class="text-dark float-end font-weight-medium">$2108</span>
+                                    </li>
+                                    <li class="mt-3">
+                                        <i class="fas fa-circle text-cyan font-10 me-2"></i>
+                                        <span class="text-muted">Affiliate Sales</span>
+                                        <span class="text-dark float-end font-weight-medium">$1204</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Net Income</h4>
+                                <div class="net-income mt-4 position-relative" style="height:294px;"></div>
+                                <ul class="list-inline text-center mt-5 mb-2">
+                                    <li class="list-inline-item text-muted fst-italic">Sales for this month</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mb-4">Earning by Location</h4>
+                                <div class="" style="height:180px">
+                                    <div id="visitbylocate" style="height:100%"></div>
+                                </div>
+                                <div class="row mb-3 align-items-center mt-1 mt-5">
+                                    <div class="col-4 text-end">
+                                        <span class="text-muted font-14">India</span>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="progress" style="height: 5px;">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"
+                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 text-end">
+                                        <span class="mb-0 font-14 text-dark font-weight-medium">28%</span>
+                                    </div>
+                                </div>
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-4 text-end">
+                                        <span class="text-muted font-14">UK</span>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="progress" style="height: 5px;">
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 74%"
+                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 text-end">
+                                        <span class="mb-0 font-14 text-dark font-weight-medium">21%</span>
+                                    </div>
+                                </div>
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-4 text-end">
+                                        <span class="text-muted font-14">USA</span>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="progress" style="height: 5px;">
+                                            <div class="progress-bar bg-cyan" role="progressbar" style="width: 60%"
+                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 text-end">
+                                        <span class="mb-0 font-14 text-dark font-weight-medium">18%</span>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center">
+                                    <div class="col-4 text-end">
+                                        <span class="text-muted font-14">China</span>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="progress" style="height: 5px;">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 50%"
+                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 text-end">
+                                        <span class="mb-0 font-14 text-dark font-weight-medium">12%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- *************************************************************** -->
+                <!-- End Sales Charts Section -->
+                <!-- *************************************************************** -->
 
 	</div>
 	{{ dump(commandes) }}
   
-{% endblock %}
-{% block javascripts %}
-<script src="{{ asset('datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
 {% endblock %}

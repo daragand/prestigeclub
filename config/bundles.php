@@ -18,5 +18,4 @@ return [
     Symfony\UX\StimulusBundle\StimulusBundle::class => ['all' => true],
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
     Liip\ImagineBundle\LiipImagineBundle::class => ['all' => true],
-    Omines\DataTablesBundle\DataTablesBundle::class => ['all' => true],
 ];
