@@ -10,6 +10,10 @@ use App\Entity\Address;
 use App\Entity\Forfait;
 use App\Entity\Licencie;
 use App\Entity\PhotoGroup;
+use App\Repository\LivretRepository;
+use App\Repository\OrderRepository;
+use App\Repository\PhotoRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -21,26 +25,42 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
 class DashboardController extends AbstractDashboardController
 {
+
+    //contournement du Dashboard en placant un constructeur
+    public function __construct(
+        private OrderRepository $orderRepository, 
+        private LivretRepository $livretRepository,
+        private PhotoRepository $photoRepository,
+        private UserRepository $userRepository,
+        )
+    {
+        
+    }
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        // return parent::index();
+        
+        //liste des commandes toutes confondues
+         $allOrders = $this->orderRepository->findAll();
 
-        // Option 1. You can make your dashboard redirect to some common page of your backend
-        //
-        // $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        // return $this->redirect($adminUrlGenerator->setController(OneOfYourCrudController::class)->generateUrl());
+            //liste des livrets
+            $allLivrets = $this->livretRepository->findAll();
+        //liste et nombres de photos
+            $allPhotos = $this->photoRepository->findAll();
+            $downloadedPhotos = $this->photoRepository->findBy(['downloaded'=>true]);
+            $nbPhotos = count($allPhotos);
 
-        // Option 2. You can make your dashboard redirect to different pages depending on the user
-        //
-        // if ('jane' === $this->getUser()->getUsername()) {
-        //     return $this->redirect('...');
-        // }
-
-        // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
-        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-        //
-        return $this->render('Admin/DashboardAdmin.html.twig');
+        // liste des utilisateurs Parents
+        $parents = $this->userRepository->findBy(['roles'=>'ROLE_USER']);
+        
+        return $this->render('Admin/DashboardAdmin.html.twig',[
+            'commandes'=>$allOrders,
+            'livrets'=>$allLivrets,
+            'photos'=>$allPhotos,
+            'downloadedPhotos'=>$downloadedPhotos,
+            'parents'=>$parents,
+            'nbPhotos'=>$nbPhotos
+        ]);
     }
    
 public function configureCrud(): Crud
