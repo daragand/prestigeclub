@@ -11,7 +11,7 @@ class PhotoGalleryController extends AbstractController
     #[Route('/photo/gallery', name: 'app_photo_gallery')]
     public function index(): Response
     {
-        return $this->render('photo_gallery/index.html.twig', [
+        return $this->render('photo_gallery/gallery.html.twig', [
             'controller_name' => 'PhotoGalleryController',
         ]);
     }
