@@ -3,12 +3,17 @@
 namespace App\EventSubscriber;
 
 use App\Entity\Licencie;
-use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
+use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
 
 class InvitationEventSubscriber implements EventSubscriberInterface
 {
+    public function __construct(string $emailSender)
+    {
+        $this->emailSender = $senderEmail;
+    }
     public static function getSubscribedEvents(): array
     {
         return [
@@ -16,7 +21,7 @@ class InvitationEventSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function sendInvitationEmail(AfterEntityPersistedEvent $event)
+    public function sendInvitationEmail(AfterEntityPersistedEvent $event, MailerInterface $mailer)
     {
         $entity = $event->getEntityInstance();
 
@@ -25,9 +30,10 @@ class InvitationEventSubscriber implements EventSubscriberInterface
         }
 
         $emailLicencie = $entity->getEmail();
+        $mailSender=$this->getParameters('email_sender');
 
-        $email = (new TemplatedEmail())
-            ->from('');
+        $email = (new Email())
+            ->from($container->getParameter('email_sender'));
 
 
     }
