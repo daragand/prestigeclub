@@ -1,0 +1,20 @@
+vich_uploader:
+    db_driver: orm
+    mappings:
+        photos:
+            uri_prefix: /uploads/photos
+            upload_destination: '%kernel.project_dir%/public/uploads/photos'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
+            directory_namer: Vich\UploaderBundle\Naming\SubdirDirectoryNamer
+            delete_on_remove: true
+            delete_on_update: true
+            inject_on_load: true
+        groupes:
+            uri_prefix: /uploads/groupes
+            upload_destination: '%kernel.project_dir%/public/uploads/groupes'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
+            directory_namer: Vich\UploaderBundle\Naming\SubdirDirectoryNamer
+            delete_on_remove: true
+            delete_on_update: true
+            inject_on_load: true
+

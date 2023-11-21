@@ -7,8 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity(repositoryClass: LicencieRepository::class)]
+#[Vich\Uploadable]
 class Licencie
 {
     #[ORM\Id]
@@ -34,7 +37,7 @@ class Licencie
     #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Livret::class, orphanRemoval: true)]
     private Collection $livrets;
 
-    #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Photo::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Photo::class, orphanRemoval: true, cascade: ['persist'])]
     private Collection $photos;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'licencies')]
@@ -241,5 +244,13 @@ class Licencie
         $this->Groupes->removeElement($groupe);
 
         return $this;
+    }
+
+
+
+
+    public function __toString()
+    {
+        return $this->firstname . ' ' . $this->lastname;
     }
 }

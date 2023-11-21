@@ -165,5 +165,8 @@ class Cart
         return $this;
     }
 
-   
+   public function __toString(): string
+    {
+        return $this->forfait->getName();
+    }
 }

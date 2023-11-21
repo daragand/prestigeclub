@@ -2,13 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\PhotoRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTime;
+use App\Entity\Cart;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PhotoRepository;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints\Date;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PhotoRepository::class)]
+#[Vich\Uploadable]
 class Photo
 {
     #[ORM\Id]
@@ -25,6 +34,10 @@ class Photo
     #[ORM\Column]
     private ?bool $downloaded = null;
 
+    #[Vich\UploadableField(mapping: 'photos', fileNameProperty: 'path')]
+    #[Assert\File(maxSize: '5M', mimeTypes: ['image/jpeg', 'image/png', 'image/webp'])]
+    private ?File $photoFile = null;
+
     #[ORM\ManyToOne(inversedBy: 'photos')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Licencie $licencie = null;
@@ -40,6 +53,23 @@ class Photo
     public function getId(): ?int
     {
         return $this->id;
+    }
+    //fonction pour le téléchargement de la photo
+    public function getPhotoFile(): ?File
+    {
+        return $this->photoFile;
+    }
+    //fonction pour le téléchargement de la photo. On intègre la date de Publication et le booléen downloaded
+    public function setPhotoFile(?File $photoFile = null): static
+    {
+        $this->photoFile = $photoFile;
+
+        if (null !== $photoFile) {
+            $this->datePublication = new \DateTimeImmutable();
+            $this->downloaded = false;
+        }
+
+        return $this;
     }
 
     public function getPath(): ?string
@@ -61,7 +91,10 @@ class Photo
 
     public function setDatePublication(\DateTimeInterface $datePublication): static
     {
+        
+
         $this->datePublication = $datePublication;
+        
 
         return $this;
     }

@@ -2,10 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\PhotoGroupRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PhotoGroupRepository;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PhotoGroupRepository::class)]
+#[Vich\Uploadable]
 class PhotoGroup
 {
     #[ORM\Id]
@@ -16,6 +21,11 @@ class PhotoGroup
     #[ORM\Column(length: 255)]
     private ?string $path = null;
 
+    //Photo de groupe provisoire pour charger les images. Non utilisée dans la BDD. Le mapping est disponible dans le fichier config/vich_uploader.yaml
+    #[Vich\UploadableField(mapping: 'groupes', fileNameProperty: 'path')]
+    #[Assert\File(maxSize: '5M', mimeTypes: ['image/jpeg', 'image/png', 'image/webp'])]
+    private ?File $photoGroupFile = null;
+
     #[ORM\ManyToOne(inversedBy: 'photoGroup')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Group $groupID = null;
@@ -23,6 +33,9 @@ class PhotoGroup
     #[ORM\ManyToOne(inversedBy: 'photoGroups')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Club $club = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $datePublication = null;
 
     public function getId(): ?int
     {
@@ -61,6 +74,35 @@ class PhotoGroup
     public function setClub(?Club $club): static
     {
         $this->club = $club;
+
+        return $this;
+    }
+
+    //fonction pour le téléchargement de la photo de groupe.
+    public function getPhotoGroupFile(): ?File
+    {
+        return $this->photoGroupFile;
+    }
+    //fonction pour le téléchargement de la photo de groupe.
+    public function setPhotoGroupFile(?File $photoGroupFile = null): static
+    {
+        $this->photoGroupFile = $photoGroupFile;
+
+        if (null !== $photoGroupFile) {
+            $this->datePublication = new \DateTimeImmutable();
+        }
+
+        return $this;
+    }
+
+    public function getDatePublication(): ?\DateTimeInterface
+    {
+        return $this->datePublication;
+    }
+
+    public function setDatePublication(\DateTimeInterface $datePublication): static
+    {
+        $this->datePublication = $datePublication;
 
         return $this;
     }
