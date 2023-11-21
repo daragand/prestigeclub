@@ -18,13 +18,16 @@ class PhotoGalleryController extends AbstractController
 
         $roles = $this->getUser()->getRoles();
 
+        /**
+         * Si l'utilisateur est un usager, on affiche les photos liées à son compte
+         */
         if (in_array('ROLE_USER', $roles)) {
             
 
             $user = $this->getUser();
-        $licencies = $user->getLicencies();
+            $photos = $photoRepository->findBy(['user' => $user]);
 
-        $photos = $photoRepository->findBy();
+        
         }
         
         
