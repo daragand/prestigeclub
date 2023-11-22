@@ -69,6 +69,7 @@ $domain = $this->parameterBag->get('domain');
             ->htmlTemplate('mail/invitation.html.twig')
             ->context([
                 'uuid' => $uuid,
+                'emailcontact' => $mailSender,
                 'emailLicencie' => $emailLicencie,
                 'domain' => $domain,
                 'firstName' => $firstName,
