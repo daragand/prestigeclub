@@ -8,6 +8,7 @@ parameters:
     licencies_photos_directory: '%kernel.project_dir%/public/uploads/licencies/photos'
     groupes_photos_directory: '%kernel.project_dir%/public/uploads/groupes/photos'
     email_address: '%env(EMAIL_ADDRESS)%'
+    domain: '%env(DOMAIN)%'
 
 services:
     # default configuration for services in *this* file

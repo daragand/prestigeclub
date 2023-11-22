@@ -211,7 +211,7 @@
 																		<table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:100%;">
 																			<tr>
 																				<td align="left" class="textContent">
-																					<div style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#828282;text-align:center;line-height:120%;">Ce mail est destiné à activer votre compte sur le portail de votre médiathèque.
+																					<div style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#828282;text-align:center;line-height:120%;">Suite à notre partenariat avec le club sportif de {{ firstName }} {{ lastName }}, nous avons réalisé une séance photo pour lui offrir un souvenir inoubliable.
 																					</div>
 																				</td>
 																			</tr>
@@ -298,7 +298,7 @@ $!{logo}
 
 #end
 																		<h1 style="color:#FFFFFF;line-height:100%;font-family:Helvetica,Arial,sans-serif;font-size:35px;font-weight:normal;margin-bottom:5px;text-align:center;">BIENVENUE</h1>
-																		<h2 style="text-align:center;font-weight:normal;font-family:Helvetica,Arial,sans-serif;font-size:23px;margin-bottom:10px;color:#ffffff;line-height:135%;"><span style="padding:10px;"> $!{cur.legal.secondaryname} ${cur.legal.lastname}</span></h2>
+																		<h2 style="text-align:center;font-weight:normal;font-family:Helvetica,Arial,sans-serif;font-size:23px;margin-bottom:10px;color:#ffffff;line-height:135%;"><span style="padding:10px;"> Retour de Séance Photo de {{ lastName|capitalize }} {{ firstName|capitalize }}</span></h2>
 																		<div style="text-align:center;font-family:Helvetica,Arial,sans-serif;font-size:15px;margin-bottom:0;color:#FFFFFF;line-height:135%;">Votre inscription auprès de ${library.name}. Vous permet de bénéficier des services proposés par notre portail.</div>
 																	</td>
 																</tr>
@@ -381,7 +381,7 @@ $!{logo}
 															<table border="0" cellpadding="0" cellspacing="0" width="50%" class="emailButton" style="background-color: #c42748;">
 																<tr>
 																	<td align="center" valign="middle" class="buttonContent" style="padding-top:15px;padding-bottom:15px;padding-right:15px;padding-left:15px;">
-																		<a style="color:#FFFFFF;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:20px;line-height:135%;" href="${host}/index.php?_action_=activePublicAccount&qid=${qid}" target="_blank">Activer mon compte</a>
+																		<a style="color:#FFFFFF;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:20px;line-height:135%;" href="{{ domain }}/invitation/{{ uuid }}" target="_blank">Accéder aux photos</a>
 																	</td>
 																</tr>
 															</table>
@@ -425,7 +425,7 @@ $!{logo}
 																						http://kb.mailchimp.com/templates/code/create-editable-content-areas-with-mailchimps-template-language
 																					-->
 																					<h3 mc:edit="header" style="color:#5F5F5F;line-height:125%;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:normal;margin-top:0;margin-bottom:3px;text-align:left;">Une fois connecté,</h3>
-																					<div mc:edit="body" style="text-align:left;font-family:Helvetica,Arial,sans-serif;font-size:15px;margin-bottom:0;color:#5F5F5F;line-height:135%;"><span style="padding:10px;">Vous pourrez  utiliser votre compte et toutes les fonctionnalités possibles : consultation des documents disponibles, demande de réservations, prolongation, etc..</span></div>
+																					<div mc:edit="body" style="text-align:left;font-family:Helvetica,Arial,sans-serif;font-size:15px;margin-bottom:0;color:#5F5F5F;line-height:135%;"><span style="padding:10px;">Vous pourrez  visualiser les photos et choisir la formule souhaitée</span></div>
 																				</td>
 																			</tr>
 																		</table>

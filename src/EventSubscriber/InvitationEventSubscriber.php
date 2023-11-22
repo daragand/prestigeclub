@@ -40,6 +40,7 @@ class InvitationEventSubscriber implements EventSubscriberInterface
         if (!($entity instanceof Licencie)) {
             return;
         }
+        
 
         $emailLicencie = $entity->getEmail();
         //récupération de l'adresse mail de l'expéditeur dans le fichier .yaml (récupéré lui-même dans le fichier .env)
@@ -51,8 +52,13 @@ class InvitationEventSubscriber implements EventSubscriberInterface
          */
         $mailer = $this->mailer;
 
-        
+/**
+ * infos utilisateurs
+ */
+$domain = $this->parameterBag->get('domain');
         $uuid = $entity->getSlug();
+        $firstName = $entity->getFirstName();
+        $lastName = $entity->getLastName();
         
         
 
@@ -64,6 +70,10 @@ class InvitationEventSubscriber implements EventSubscriberInterface
             ->context([
                 'uuid' => $uuid,
                 'emailLicencie' => $emailLicencie,
+                'domain' => $domain,
+                'firstName' => $firstName,
+                'lastName' => $lastName,
+               
             ]);
 
             $mailer->send($email);
