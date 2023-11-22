@@ -45,16 +45,25 @@ class InvitationEventSubscriber implements EventSubscriberInterface
         //récupération de l'adresse mail de l'expéditeur dans le fichier .yaml (récupéré lui-même dans le fichier .env)
         $mailSender = $this->parameterBag->get('email_address');
         
-        dd($entity);
+
+        /**
+         * suite à un problème de sérialisation des photos (à cause File), je bascule en contexte des données spéciques.
+         */
+        $mailer = $this->mailer;
+
+        
+        $uuid = $entity->getSlug();
+        
         
 
         $email = (new TemplatedEmail())
             ->from($mailSender)
-            ->to($entity->getEmail())
-            ->subject('Confirmation de votre inscription')
-            ->htmlTemplate('mail/licence/confirmation.html.twig')
+            ->to($emailLicencie)
+            ->subject('Invitation à consulter vos photos')
+            ->htmlTemplate('mail/invitation.html.twig')
             ->context([
-                'licence' => $entity,
+                'uuid' => $uuid,
+                'emailLicencie' => $emailLicencie,
             ]);
 
             $mailer->send($email);

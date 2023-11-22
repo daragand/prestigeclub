@@ -1,6 +1,6 @@
 
-{{ dump(entity.instance) }}
-{# {% for photo in photos %}
+{# {{ dump(entity.instance) }} #}
+ {% for photo in entity.instance.photos %} 
     <img src="{{ vich_uploader_asset(photo, 'photoFile') }}" alt="" width="100">
-{% endfor %} #}
+{% endfor %} 
 
