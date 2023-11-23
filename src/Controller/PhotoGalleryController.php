@@ -12,23 +12,23 @@ class PhotoGalleryController extends AbstractController
     #[Route('/photo/gallery', name: 'app_photo_gallery')]
     public function presentation(PhotoRepository $photoRepository): Response
     {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
+        // if (!$this->getUser()) {
+        //     return $this->redirectToRoute('app_login');
+        // }
 
-        $roles = $this->getUser()->getRoles();
+        // $roles = $this->getUser()->getRoles();
 
         /**
          * Si l'utilisateur est un usager, on affiche les photos liées à son compte
          */
-        if (in_array('ROLE_USER', $roles)) {
+        // if (in_array('ROLE_USER', $roles)) {
             
 
-            $user = $this->getUser();
-            $photos = $photoRepository->findBy(['user' => $user]);
+        //     $user = $this->getUser();
+        //     $photos = $photoRepository->findBy(['user' => $user]);
 
         
-        }
+        // }
         
         
 
