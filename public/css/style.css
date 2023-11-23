@@ -1,7 +1,7 @@
 .topbar
 {
-    background-color: #28ad87;
-    font-family: Cooper Black;
+    /* background-color: #28ad87; */
+    font-family: 'Montserrat';
     font-weight: bold;
     font-size : 20px;
 }
@@ -19,7 +19,7 @@
     display: flex;
 }
 h1, h2 {
-    font-family: 'Cooper Black';
+    font-family: 'Montserrat'; 
 }
 h1 {
     font-size: 4rem;
