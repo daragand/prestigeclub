@@ -46,6 +46,9 @@ class Licencie
     #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'licencies')]
     private Collection $Groupes;
 
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+
     public function __construct()
     {
         $this->clubs = new ArrayCollection();
@@ -252,5 +255,17 @@ class Licencie
     public function __toString()
     {
         return $this->firstname . ' ' . $this->lastname;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
     }
 }

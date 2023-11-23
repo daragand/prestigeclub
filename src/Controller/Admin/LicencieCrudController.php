@@ -6,8 +6,9 @@ use App\Entity\Photo;
 use DateTimeImmutable;
 use App\Form\PhotoType;
 use App\Entity\Licencie;
-use App\Form\PhotoCollectionType;
+use PharIo\Manifest\Email;
 use Symfony\Component\Uid\Uuid;
+use App\Form\PhotoCollectionType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Collections\Collection;
 use Vich\UploaderBundle\Form\Type\VichFileType;
@@ -17,6 +18,7 @@ use Symfony\Component\Validator\Constraints\Date;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -51,6 +53,7 @@ class LicencieCrudController extends AbstractCrudController
             TextField::new('firstname', 'Prénom'),
             TextField::new('lastname', 'Nom'),
             DateField::new('birthdate', 'Date de naissance'),
+            EmailField::new('email', 'Email'),
             CollectionField::new('photos', 'Photos')
                 ->setEntryType(PhotoCollectionType::class)
                 ->onlyOnForms(),
@@ -63,7 +66,7 @@ class LicencieCrudController extends AbstractCrudController
 
 
 
-    //ajout du slug au moment de la création
+    //ajout du slug(UUID) au moment de la création
     public function persistEntity(EntityManagerInterface $em, $entityInstance): void
     {
         //si l'entité n'est pas celle de la photo, alors on ne va pas plus loin.
