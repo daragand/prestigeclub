@@ -36,4 +36,6 @@ class PhotoGalleryController extends AbstractController
             'controller_name' => 'PhotoGalleryController',
         ]);
     }
+
+    
 }
