@@ -1,37 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!
+{% block title %}Sign in{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block body %}
-	<div class="container vh-100 d-flex align-items-center">
+<div class="container vh-100 d-flex align-items-center">
 
-		<div class="form-signing w-100 m-auto">
-			<form method="post">
-				{% if error %}
-					<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-				{% endif %}
+    <div class="form-signing w-100 m-auto">
 
-				{% if app.user %}
-					<div class="mb-3">
-						You are logged in as
-						{{ app.user.userIdentifier }},
-						<a href="{{ path('app_logout') }}">Logout</a>
-					</div>
-				{% endif %}
+        {% if app.user %}
+            <div class="alert alert-info text-center col-6 m-auto" role="alert">
+                <h2>
+                    Vous êtes déjà connecté en tant que {{ app.user.userIdentifier }}
+                </h2>
+                <div class="text-center mt-5">
+                    <a href="{{ path('admin') }}" class="btn btn-dark">Retourner à la page d'accueil</a>
+                    <a href="{{ path('app_logout') }}" class="btn btn-outline-danger">Logout</a>
+                </div>
+            </div>
+        {% else %}
+<img src={{ asset('images/logonb.png') }} class="img-fluid w-25 rounded mx-auto d-block" alt="logo de Prestige Club">
+         <h1 class="h3 mb-3 fw-normal text-center">Bienvenue chez Prestige Club</h1>
+       
 
-				<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-				<label for="inputEmail">Email</label>
-				<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-				<label for="inputPassword">Password</label>
-				<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+        <form method="post" class="col-4 m-auto">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
 
-				<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <div class="form-floating mb-2">
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+                <label for="inputEmail">Email</label>
+            </div>
+            <div class="form-floating mb-2">
+                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+                <label for="inputPassword">Password</label>
+            </div>
+            <input type="hidden" name="_csrf_token"
+                value="{{ csrf_token('authenticate') }}"
+            >
 
-				<button class="btn btn-lg btn-primary" type="submit">
-					Sign in
-				</button>
-			</form>
-		</div>
-	</div>
+            <button class="btn btn-primary w-100 py-2" type="submit">Se connecter</button>
+        </form>
+
+        <div class="text-center mt-3"> <!-- TODO: add route to sign in -->
+            <p>Pas encore de compte ? <a href="#" class="text-decoration-none">Register here</a></p>
+        </div>
+        {% endif %}
+
+        
+</div>
 {% endblock %}
