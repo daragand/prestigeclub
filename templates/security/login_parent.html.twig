@@ -14,7 +14,7 @@
 			{% if error is defined %}
 				<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 			{% endif %}
-			<form action="{{ path('app_login') }}" method="POST">
+			<form action="{{ path('app_login_parent') }}" method="POST">
 				<div class="form-floating mb-2">
 					<input type="email" name="email" id="inputEmail" class="form-control">
 					<label for="inputEmail">Email</label>

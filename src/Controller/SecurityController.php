@@ -55,7 +55,7 @@ class SecurityController extends AbstractController
         if ($request->isMethod('POST')) {
             $email = $request->request->get('email');
 
-            dd($email);
+           
             $user = $userRepository->findOneBy(['email' => $email]);
             //récupération de l'adresse mail de l'expéditeur dans le fichier .yaml (récupéré lui-même dans le fichier .env)
             $mailSender = $this->parameterBag->get('email_address');
@@ -69,7 +69,7 @@ class SecurityController extends AbstractController
                 ->subject('Votre lien de connexion à Prestige Club')
                 ->priority(TemplatedEmail::PRIORITY_HIGH)
                 ->html('<p>Voici votre lien de connexion : <a href="' . $loginLinkDetails->getUrl() . '">Connexion</a></p>');
-
+            dd($email);
             $mailer->send($email);
 
             // Page de confirmation d'envoi du lien de connexion
