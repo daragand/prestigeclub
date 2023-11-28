@@ -9,14 +9,21 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+        app_token_provider:
+            entity:
+                class: App\Entity\User
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            pattern: ^/admin
             lazy: true
             provider: app_user_provider
-            custom_authenticator: App\Security\AppParentAuthenticator
+            custom_authenticator: 
+                - App\Security\AppParentAuthenticator
+            
             logout:
                 path: app_logout
                 # where to redirect after logout
@@ -27,6 +34,18 @@ security:
                 lifetime: 604800
                 path: /
                 always_remember_me: true
+
+        parent:
+            lazy: true
+            provider: app_token_provider
+             # Pare-feu pour une connexion via magic link
+            login_link:
+                # Route surveillée par le pare-feu
+                check_route: login_check
+                # Éléments de l'utilisateur à utiliser pour la connexion
+                signature_properties: ['id']
+                # Durée de validité du lien en secondes (600 = 10 minutes)
+                lifetime: 600
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
