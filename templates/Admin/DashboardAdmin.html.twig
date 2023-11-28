@@ -86,7 +86,7 @@
         <div class="card-body">
             <div class="d-flex align-items-center">
                 <div>
-                    <h2 class="text-dark mb-1 font-weight-medium">{{ parents|length }}</h2>
+                    <h2 class="text-dark mb-1 font-weight-medium">{{ parents }}</h2>
                     <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">clients</h6>
                 </div>
                 <div class="ms-auto mt-md-3 mt-lg-0">
@@ -115,7 +115,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Commandes en cours</h4>
+                                <h4 class="card-title">Commandes payantes en cours</h4>
                                 <h6 class="card-subtitle">Tant que le téléchargement de la photo ou la réception du livret n'est pas confirmée, la commande reste en cours de traitement</h6>
                                 <div class="table-responsive">
                                     <table id="multi_col_order"
@@ -130,7 +130,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        {% for cmd in commandes %}
+                                        {% for cmd in commandesPayantes %}
                                             <tr>
                                                 <td>{{ cmd.id }}</td>
                                                 <td>{{ cmd.users }}</td>
