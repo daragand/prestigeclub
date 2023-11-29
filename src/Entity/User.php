@@ -33,6 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\ManyToMany(targetEntity: Licencie::class, inversedBy: 'users')]
+    #[ORM\JoinTable(name: 'user_licencie')]
     private Collection $licencies;
 
     #[ORM\ManyToOne(inversedBy: 'users')]

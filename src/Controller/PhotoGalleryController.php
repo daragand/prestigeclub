@@ -23,25 +23,35 @@ class PhotoGalleryController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-        $user = $this->getUser();
-        $roles = $user->getRoles();
-        $licencie = $licencieRepository->findBy(['users' => $this->getUser()]);
-    //    $licencies = $licencieRepository->findBy(['users' => $this->getUser()]);
-            dd($licencies);
+        $userConnected = $this->getUser();
+      
+        
+        $email = $userConnected->getUserIdentifier();
+
+        
+        $user = $userRepository->findOneBy(['email' => $email]);
+        $userLicencies = $user->getLicencies();
+        
+        
+        foreach ($userLicencies as $userLicencie) {
+            
+            $photos[] = $photoRepository->findBy(['licencie' => $userLicencie]);
+        }
+           
         /**
          * Si l'utilisateur est un usager, on affiche les photos liées à ses licenciés
          */
-        if ($roles[0] === 'ROLE_USER') {
-            // $licencies = $user->getLicencies();
+        // if ($roles[0] === 'ROLE_USER') {
+        //     // $licencies = $user->getLicencies();
             
           
-            $photos = $photoRepository->findBy(['users' => $this->getUser()]);
-        } else {
-            return $this->redirectToRoute('admin');
-        }
-        dd($photos);
+        //     $photos = $photoRepository->findBy(['users' => $this->getUser()]);
+        // } else {
+        //     return $this->redirectToRoute('admin');
+        // }
+        // dd($photos);
         
-        
+        $photos = array_merge(...$photos);
 
         return $this->render('photo_gallery/gallery.html.twig', [
             'controller_name' => 'PhotoGalleryController',

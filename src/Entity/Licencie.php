@@ -41,6 +41,7 @@ class Licencie
     private Collection $photos;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'licencies')]
+    #[ORM\JoinTable(name: 'user_licencie')]
     private Collection $users;
 
     #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'licencies')]
