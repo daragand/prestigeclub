@@ -21,7 +21,9 @@
 
  <div class="body_content">
     <!-- Blog Section -->
-    
+    {% if app.user is defined %}
+  {{ dump(app.user.licencies.club) }}
+{% endif %}
 
     <!-- Shop Single Area -->
     <section class="shop-checkout pt40 pb90">
