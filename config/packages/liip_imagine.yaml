@@ -3,10 +3,25 @@ liip_imagine:
     driver: "gd"
     filter_sets:
         cache: ~
-        webp_with_watermark:
+                
+        thumbnail:
             quality: 75
+            format: webp
             filters:
-                webp_encode: ~
+                thumbnail: { size: [120, 90], mode: inset }
+        scale_photo:
+            filters:
+                downscale:
+                    max: [400, 400]
+                watermark_image:
+                    image: '%kernel.project_dir%/public/images/watermark.png'
+                    size: 0.5
+                    position: center
+                    alpha: 0.7        
+        watermark:
+            quality: 75
+            format: webp
+            filters:
                 watermark_image:
                     image: '%kernel.project_dir%/public/images/watermark.png'
                     size: 0.5
