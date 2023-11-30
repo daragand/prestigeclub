@@ -35,41 +35,47 @@ class PhotoGalleryController extends AbstractController
          */
         $user = $userRepository->findOneBy(['email' => $email]);
 
-        
+
         $userLicencies = $user->getLicencies();
+       
         
+        /**
+         * Si l'utilisateur n'a qu'un seul licencié, je le redirige directement vers la galerie de photos de ce licencié
+         */
+        if (!$userLicencies && count($userLicencies)<=1){
+           $slug = $userLicencies[0]->getSlug();
+              return $this->redirectToRoute('app_photo_gallery', ['slug' => $slug]);
+        }
+        
+        /**
+         * Si l'utilisateur a plusieurs licenciés, je lui affiche la page de présentation des licenciés, en récupérant les photos de chaque licencié
+         */
+        $infosLicencies = [];
         
         foreach ($userLicencies as $userLicencie) {
-            
-            $photos[$userLicencie->getId()] = $photoRepository->findBy(['licencie' => $userLicencie]);
-        }
-           
-        /**
-         * Si l'utilisateur est un usager, on affiche les photos liées à ses licenciés
-         */
-        // if ($roles[0] === 'ROLE_USER') {
-        //     // $licencies = $user->getLicencies();
-            
-          
-        //     $photos = $photoRepository->findBy(['users' => $this->getUser()]);
-        // } else {
-        //     return $this->redirectToRoute('admin');
-        // }
-        // dd($photos);
-        
-        $photos = array_merge(...$photos);
+            $licencieInfo = [
+                'licencie' => $userLicencie,
+                'photos' => $photoRepository->findBy(['licencie' => $userLicencie]),
+                'club' => $userLicencie->getClubs(),
+                'groupe' => $userLicencie->getGroupes(),
 
-        return $this->render('photo_gallery/index.html.twig', [
+            ];
+            array_push($infosLicencies, $licencieInfo);
+        }
+       
+        
+       
+
+        return $this->render('photo_gallery/accueil.html.twig', [
             'controller_name' => 'PhotoGalleryController',
-            'photos' => $photos,
-            'licencie' => $userLicencie,
+            'licencies' => $infosLicencies,
         ]);
     }
     
     
     
     
-    #[Route('/photo/gallery', name: 'app_photo_gallery')]
+    #[Route('/photos/gallery', name: 'app_photo_gallery')]
     public function presentation(
         PhotoRepository $photoRepository,
         UserRepository $userRepository,

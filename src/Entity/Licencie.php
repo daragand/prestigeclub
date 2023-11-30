@@ -31,7 +31,8 @@ class Licencie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $slug = null;
 
-    #[ORM\ManyToMany(targetEntity: Club::class, mappedBy: 'licencies')]
+    #[ORM\ManyToMany(targetEntity: Club::class, mappedBy: 'licencies', cascade: ['persist'])]
+    #[ORM\JoinTable(name: 'club_licencie')]
     private Collection $clubs;
 
     #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Livret::class, orphanRemoval: true)]
@@ -45,7 +46,7 @@ class Licencie
     private Collection $users;
 
     #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'licencies')]
-    private Collection $Groupes;
+    private Collection $groupes;
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
@@ -56,7 +57,7 @@ class Licencie
         $this->livrets = new ArrayCollection();
         $this->photos = new ArrayCollection();
         $this->users = new ArrayCollection();
-        $this->Groupes = new ArrayCollection();
+        $this->groupes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -231,13 +232,13 @@ class Licencie
      */
     public function getGroupes(): Collection
     {
-        return $this->Groupes;
+        return $this->groupes;
     }
 
     public function addGroupe(Group $groupe): static
     {
-        if (!$this->Groupes->contains($groupe)) {
-            $this->Groupes->add($groupe);
+        if (!$this->groupes->contains($groupe)) {
+            $this->groupes->add($groupe);
         }
 
         return $this;
@@ -245,7 +246,7 @@ class Licencie
 
     public function removeGroupe(Group $groupe): static
     {
-        $this->Groupes->removeElement($groupe);
+        $this->groupes->removeElement($groupe);
 
         return $this;
     }
