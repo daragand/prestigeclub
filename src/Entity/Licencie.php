@@ -52,6 +52,10 @@ class Licencie
     #[ORM\JoinColumn(nullable: false)]
     private ?Club $club = null;
 
+    #[ORM\ManyToOne(inversedBy: 'licencies')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Group $groupes = null;
+
     public function __construct()
     {
         
@@ -232,6 +236,18 @@ class Licencie
     public function setClub(?Club $club): static
     {
         $this->club = $club;
+
+        return $this;
+    }
+
+    public function getGroupes(): ?Group
+    {
+        return $this->groupes;
+    }
+
+    public function setGroupes(?Group $groupes): static
+    {
+        $this->groupes = $groupes;
 
         return $this;
     }
