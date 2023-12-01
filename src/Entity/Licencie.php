@@ -43,8 +43,7 @@ class Licencie
     #[ORM\JoinTable(name: 'user_licencie')]
     private Collection $users;
 
-    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'licencies')]
-    private Collection $groupes;
+   
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
@@ -59,7 +58,7 @@ class Licencie
         $this->livrets = new ArrayCollection();
         $this->photos = new ArrayCollection();
         $this->users = new ArrayCollection();
-        $this->groupes = new ArrayCollection();
+        
     }
 
     public function getId(): ?int
@@ -204,30 +203,7 @@ class Licencie
         return $this;
     }
 
-    /**
-     * @return Collection<int, Group>
-     */
-    public function getGroupes(): Collection
-    {
-        return $this->groupes;
-    }
-
-    public function addGroupe(Group $groupe): static
-    {
-        if (!$this->groupes->contains($groupe)) {
-            $this->groupes->add($groupe);
-        }
-
-        return $this;
-    }
-
-    public function removeGroupe(Group $groupe): static
-    {
-        $this->groupes->removeElement($groupe);
-
-        return $this;
-    }
-
+    
 
 
 
