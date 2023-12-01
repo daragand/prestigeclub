@@ -49,6 +49,10 @@ class Licencie
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
+    #[ORM\ManyToOne(inversedBy: 'licencie')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Club $club = null;
+
     public function __construct()
     {
         
@@ -240,6 +244,18 @@ class Licencie
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getClub(): ?Club
+    {
+        return $this->club;
+    }
+
+    public function setClub(?Club $club): static
+    {
+        $this->club = $club;
 
         return $this;
     }

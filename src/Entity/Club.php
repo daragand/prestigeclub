@@ -35,6 +35,9 @@ class Club
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'club')]
     private Collection $users;
 
+    #[ORM\OneToMany(mappedBy: 'club', targetEntity: Licencie::class, orphanRemoval: true)]
+    private Collection $licencie;
+
     
 
     public function __construct()
@@ -43,6 +46,7 @@ class Club
         $this->groups = new ArrayCollection();
         $this->photoGroups = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->licencie = new ArrayCollection();
         
     }
 
@@ -172,6 +176,36 @@ class Club
     public function __toString(): string
     {
         return $this->name. ' - ' . $this->address->getCity();
+    }
+
+    /**
+     * @return Collection<int, Licencie>
+     */
+    public function getLicencie(): Collection
+    {
+        return $this->licencie;
+    }
+
+    public function addLicencie(Licencie $licencie): static
+    {
+        if (!$this->licencie->contains($licencie)) {
+            $this->licencie->add($licencie);
+            $licencie->setClub($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLicencie(Licencie $licencie): static
+    {
+        if ($this->licencie->removeElement($licencie)) {
+            // set the owning side to null (unless already changed)
+            if ($licencie->getClub() === $this) {
+                $licencie->setClub(null);
+            }
+        }
+
+        return $this;
     }
 
 }
