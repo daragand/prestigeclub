@@ -189,14 +189,14 @@ class AppFixtures extends Fixture
                 ->setBirthdate($faker->dateTimeBetween('-20 years', '-5 years'))
                 ->setSlug($faker->slug)
                 ->setEmail($faker->email)
-                ->addClub($objectClubs[$randNumber]);
+                ->setClub($objectClubs[$randNumber]);
 
             //selon le nom du club, récupération des groupes correspondants
             $groupsLicencies = $objectClubs[$randNumber]->getGroups();
             //ajout du groupe dans le licencié
             $randomGroup = $groupsLicencies[$faker->numberBetween(0, count($groupsLicencies) - 1)];
             if ($randomGroup instanceof Group) {
-                $objectLicencie->addGroupe($randomGroup);
+                $objectLicencie->setGroupes($randomGroup);
             }
 
             //persistence de l'objet et ajout dans le tableau
