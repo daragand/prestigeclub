@@ -53,7 +53,7 @@ class Licencie
     private ?Club $club = null;
 
     #[ORM\ManyToOne(inversedBy: 'licencies')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Group $groupes = null;
 
     public function __construct()
@@ -62,6 +62,7 @@ class Licencie
         $this->livrets = new ArrayCollection();
         $this->photos = new ArrayCollection();
         $this->users = new ArrayCollection();
+        
         
     }
 
