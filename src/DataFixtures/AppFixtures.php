@@ -248,7 +248,7 @@ class AppFixtures extends Fixture
         $roles = [
             ['ROLE_CLUB'],
             ['ROLE_ADMIN'],
-            ['ROLE_USER'],
+            ['ROLE_PARENT'],
         ];
 
         for ($i = 0; $i < 20; $i++) {
@@ -262,7 +262,7 @@ class AppFixtures extends Fixture
                 ;
                 
             //s'il s'agit d'un parent, je lui ajoute un licencié
-            if ($objectUser->getRoles() == ['ROLE_USER']) {
+            if (in_array('ROLE_PARENT', $objectUser->getRoles())) {
                 
                 $objectUser->addLicency($objectLicencies[$faker->numberBetween(0, (count($objectLicencies) - 1))]);
             }
@@ -295,12 +295,16 @@ class AppFixtures extends Fixture
 
         $parents = [];
         foreach ($objectUsers as $user) {
-            if ($user->getRoles() == ['ROLE_USER']) {
+            if (in_array('ROLE_PARENT', $user->getRoles())) {
+               
                 array_push($parents, $user);
             }
         }
+        
+        
 
         foreach ($parents as $parent) {
+            
             $objectCart = new Cart();
             $objectCart->setUsers($parent)
                 ->setForfait($objectsForfaits[$faker->numberBetween(0, (count($objectsForfaits) - 1))]);
@@ -342,7 +346,7 @@ class AppFixtures extends Fixture
             $objectOrder->setPaymentDate($faker->dateTimeBetween('-1 years', 'now'))
                 ->setCart($objectCarts[$faker->numberBetween(0, (count($objectCarts) - 1))])
                 ->setOrderStatus($objectsOrderStatus[$faker->numberBetween(0, (count($objectsOrderStatus) - 1))])
-                ->setUsers($objectUsers[$faker->numberBetween(0, (count($objectUsers) - 1))])
+                ->setUsers($objectOrder->getCart()->getUsers())
                 ->setAmount($objectOrder->getCart()->getAmount());
                 
             array_push($objectOrders, $objectOrder);

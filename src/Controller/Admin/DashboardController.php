@@ -61,8 +61,14 @@ class DashboardController extends AbstractDashboardController
             $downloadedPhotos = $this->photoRepository->findBy(['downloaded'=>true]);
             $nbPhotos = count($allPhotos);
 
-        // liste des utilisateurs Parents
-        $parents = $this->userRepository->findBy(['roles'=>'ROLE_USER']);
+         // liste des utilisateurs Parents ayant passés commandes. GetSingleScalarResult() permet de retourner un seul résultat : le nombre de parents distincts ayant passé commande
+         $parents = $this->orderRepository->createQueryBuilder('o')
+         ->select('COUNT(DISTINCT u.id) as userCount')
+         ->join('o.users', 'u')
+         ->getQuery()
+         ->getSingleScalarResult();
+     
+      
         
         return $this->render('Admin/DashboardAdmin.html.twig',[
             'commandes'=>$allOrders,
