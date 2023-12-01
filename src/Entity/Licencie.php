@@ -31,9 +31,7 @@ class Licencie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $slug = null;
 
-    #[ORM\ManyToMany(targetEntity: Club::class, mappedBy: 'licencies', cascade: ['persist'])]
-    #[ORM\JoinTable(name: 'club_licencie')]
-    private Collection $clubs;
+    
 
     #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Livret::class, orphanRemoval: true)]
     private Collection $livrets;
@@ -53,7 +51,7 @@ class Licencie
 
     public function __construct()
     {
-        $this->clubs = new ArrayCollection();
+        
         $this->livrets = new ArrayCollection();
         $this->photos = new ArrayCollection();
         $this->users = new ArrayCollection();
@@ -113,32 +111,7 @@ class Licencie
         return $this;
     }
 
-    /**
-     * @return Collection<int, Club>
-     */
-    public function getClubs(): Collection
-    {
-        return $this->clubs;
-    }
-
-    public function addClub(Club $club): static
-    {
-        if (!$this->clubs->contains($club)) {
-            $this->clubs->add($club);
-            $club->addLicency($this);
-        }
-
-        return $this;
-    }
-
-    public function removeClub(Club $club): static
-    {
-        if ($this->clubs->removeElement($club)) {
-            $club->removeLicency($this);
-        }
-
-        return $this;
-    }
+    
 
     /**
      * @return Collection<int, Livret>
