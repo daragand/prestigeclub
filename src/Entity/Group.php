@@ -25,14 +25,17 @@ class Group
     #[ORM\OneToMany(mappedBy: 'groupID', targetEntity: PhotoGroup::class, orphanRemoval: true)]
     private Collection $photoGroup;
 
-    #[ORM\ManyToMany(targetEntity: Licencie::class, mappedBy: 'Groupes')]
+    #[ORM\OneToMany(mappedBy: 'groupes', targetEntity: Licencie::class, orphanRemoval: true)]
     private Collection $licencies;
+
+   
 
     public function __construct()
     {
         $this->clubs = new ArrayCollection();
         $this->photoGroup = new ArrayCollection();
         $this->licencies = new ArrayCollection();
+       
     }
 
     public function getId(): ?int
@@ -109,6 +112,12 @@ class Group
         return $this;
     }
 
+    
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
     /**
      * @return Collection<int, Licencie>
      */
@@ -121,7 +130,7 @@ class Group
     {
         if (!$this->licencies->contains($licency)) {
             $this->licencies->add($licency);
-            $licency->addGroupe($this);
+            $licency->setGroupes($this);
         }
 
         return $this;
@@ -130,13 +139,12 @@ class Group
     public function removeLicency(Licencie $licency): static
     {
         if ($this->licencies->removeElement($licency)) {
-            $licency->removeGroupe($this);
+            // set the owning side to null (unless already changed)
+            if ($licency->getGroupes() === $this) {
+                $licency->setGroupes(null);
+            }
         }
 
         return $this;
-    }
-    public function __toString(): string
-    {
-        return $this->name;
     }
 }

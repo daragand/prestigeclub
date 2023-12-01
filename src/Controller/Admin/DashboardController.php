@@ -9,6 +9,7 @@ use App\Entity\Livret;
 use App\Entity\Address;
 use App\Entity\Forfait;
 use App\Entity\Licencie;
+use App\Entity\Options;
 use App\Entity\PhotoGroup;
 use App\Repository\LivretRepository;
 use App\Repository\OrderRepository;
@@ -61,8 +62,14 @@ class DashboardController extends AbstractDashboardController
             $downloadedPhotos = $this->photoRepository->findBy(['downloaded'=>true]);
             $nbPhotos = count($allPhotos);
 
-        // liste des utilisateurs Parents
-        $parents = $this->userRepository->findBy(['roles'=>'ROLE_USER']);
+         // liste des utilisateurs Parents ayant passés commandes. GetSingleScalarResult() permet de retourner un seul résultat : le nombre de parents distincts ayant passé commande
+         $parents = $this->orderRepository->createQueryBuilder('o')
+         ->select('COUNT(DISTINCT u.id) as userCount')
+         ->join('o.users', 'u')
+         ->getQuery()
+         ->getSingleScalarResult();
+     
+      
         
         return $this->render('Admin/DashboardAdmin.html.twig',[
             'commandes'=>$allOrders,
@@ -105,6 +112,7 @@ public function configureCrud(): Crud
         yield MenuItem::section('Gestion')->setCssClass('border-bottom border-2');
         yield MenuItem::linkToCrud('Adresses', 'fas fa-map-marker-alt', Address::class);
         yield MenuItem::linkToCrud('Forfaits', 'fas fa-money-bill-wave', Forfait::class);
+        yield MenuItem::linkToCrud('Options', 'fas fa-cog', Options::class);
         yield MenuItem::linkToCrud('Clubs','fa-solid fa-landmark', Club::class);
         yield MenuItem::linkToCrud('Licenciés', 'fas fa-users', Licencie::class)
         ;

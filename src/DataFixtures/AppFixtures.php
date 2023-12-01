@@ -189,14 +189,14 @@ class AppFixtures extends Fixture
                 ->setBirthdate($faker->dateTimeBetween('-20 years', '-5 years'))
                 ->setSlug($faker->slug)
                 ->setEmail($faker->email)
-                ->addClub($objectClubs[$randNumber]);
+                ->setClub($objectClubs[$randNumber]);
 
             //selon le nom du club, récupération des groupes correspondants
             $groupsLicencies = $objectClubs[$randNumber]->getGroups();
             //ajout du groupe dans le licencié
             $randomGroup = $groupsLicencies[$faker->numberBetween(0, count($groupsLicencies) - 1)];
             if ($randomGroup instanceof Group) {
-                $objectLicencie->addGroupe($randomGroup);
+                $objectLicencie->setGroupes($randomGroup);
             }
 
             //persistence de l'objet et ajout dans le tableau
@@ -220,6 +220,7 @@ class AppFixtures extends Fixture
             $objectPhotoGroup = new PhotoGroup();
             $objectPhotoGroup->setPath($faker->imageUrl(640, 480, 'photo de groupe'))
                 ->setClub($objectClubs[$randNumber])
+                ->setDatePublication($faker->dateTimeBetween('-1 years', 'now'))
                 ->setGroupID($objectsGroups[$faker->numberBetween(0, count($objectsGroups) - 1)]);
             array_push($objectPhotoGroups, $objectPhotoGroup);
             $manager->persist($objectPhotoGroup);
@@ -245,9 +246,9 @@ class AppFixtures extends Fixture
 
         $objectUsers = [];
         $roles = [
-            ['ROLE_USER'],
-            ['ROLE_ADMIN'],
             ['ROLE_CLUB'],
+            ['ROLE_ADMIN'],
+            ['ROLE_PARENT'],
         ];
 
         for ($i = 0; $i < 20; $i++) {
@@ -257,13 +258,16 @@ class AppFixtures extends Fixture
                 ->setLastname($faker->lastName)
                 ->setPassword($faker->password)
                 ->setAddress($objectAddresses[$faker->numberBetween(0, 99)])
-                ->setRoles($roles[$faker->numberBetween(0, 2)]);
+                ->setRoles($roles[$faker->numberBetween(0, 2)])
+                ;
+                
             //s'il s'agit d'un parent, je lui ajoute un licencié
-            if ($objectUser->getRoles() == ['ROLE_USER']) {
+            if (in_array('ROLE_PARENT', $objectUser->getRoles())) {
+                
                 $objectUser->addLicency($objectLicencies[$faker->numberBetween(0, (count($objectLicencies) - 1))]);
             }
             //s'il s'agit d'un club, je lui ajoute un club
-            if ($objectUser->getRoles() == ['ROLE_CLUB']) {
+            if (in_array('ROLE_CLUB', $objectUser->getRoles())) {
                 $objectUser->addClub($objectClubs[$faker->numberBetween(0, (count($objectClubs) - 1))]);
             }
             array_push($objectUsers, $objectUser);
@@ -291,12 +295,16 @@ class AppFixtures extends Fixture
 
         $parents = [];
         foreach ($objectUsers as $user) {
-            if ($user->getRoles() == ['ROLE_USER']) {
+            if (in_array('ROLE_PARENT', $user->getRoles())) {
+               
                 array_push($parents, $user);
             }
         }
+        
+        
 
         foreach ($parents as $parent) {
+            
             $objectCart = new Cart();
             $objectCart->setUsers($parent)
                 ->setForfait($objectsForfaits[$faker->numberBetween(0, (count($objectsForfaits) - 1))]);
@@ -328,6 +336,22 @@ class AppFixtures extends Fixture
                 $manager->persist($objectCart);
         }
 
+        //////////////////////////////  Order  ///////////////////////////////////////
+
+        $objectOrders = [];
+        //ajout de 50 commandes
+        for ($i = 0; $i < 20; $i++) {
+            $objectOrder = new Order();
+            
+            $objectOrder->setPaymentDate($faker->dateTimeBetween('-1 years', 'now'))
+                ->setCart($objectCarts[$faker->numberBetween(0, (count($objectCarts) - 1))])
+                ->setOrderStatus($objectsOrderStatus[$faker->numberBetween(0, (count($objectsOrderStatus) - 1))])
+                ->setUsers($objectOrder->getCart()->getUsers())
+                ->setAmount($objectOrder->getCart()->getAmount());
+                
+            array_push($objectOrders, $objectOrder);
+            $manager->persist($objectOrder);
+        }
 
         $manager->flush();
     }

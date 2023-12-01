@@ -21,9 +21,10 @@
 
  <div class="body_content">
     <!-- Blog Section -->
-    {% if app.user is defined %}
-  {{ dump(app.user.licencies.club) }}
+    {% if photos is defined %}
+  {{ dump(photos) }}
 {% endif %}
+
 
     <!-- Shop Single Area -->
     <section class="shop-checkout pt40 pb90">
@@ -32,11 +33,14 @@
           <div class="col-lg-6">
             <div class="shop-single">
               <div class="tab-content" id="pills-tabContent">
+              {% for photo in photos %}
+                
                 <div class="tab-pane fade show active" id="pills-item1" role="tabpanel" aria-labelledby="pills-item1-tab">
                   <div class="shop-single-item mb10 bdr1 bdrs8 text-center py-5">
-                    <a class="popup-img" href="images/shop/shop-single-1.png"><img class="wa" src="images/shop/shop-single-1.png" alt=""></a>
+                    <a class="popup-img" href="{{ vich_uploader_asset(photo, 'photoFile') }}"><img class="wa" src="{{ vich_uploader_asset(photo, 'photoFile')|imagine_filter('scale_photo')  }}" alt=""></a>
                   </div>
                 </div>
+              {% endfor %}
                 <div class="tab-pane fade" id="pills-item2" role="tabpanel" aria-labelledby="pills-item2-tab">
                   <div class="shop-single-item mb10 bdr1 bdrs8 text-center py-5">
                     <a class="popup-img" href="images/shop/shop-single-1.png"><img class="wa" src="images/shop/shop-single-1.png" alt=""></a>
@@ -54,11 +58,13 @@
                 </div>
               </div>
               <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                {% for photo in photos %}
                 <li class="nav-item" role="presentation">
                   <button class="nav-link mr10 mb10 active" id="pills-item1-tab" data-bs-toggle="pill" data-bs-target="#pills-item1" type="button" role="tab" aria-controls="pills-item1" aria-selected="true">
-                    <img src="images/shop/shop-single-2.png" alt="">
+                    <img src="{{ vich_uploader_asset(photo, 'photoFile')|imagine_filter('thumbnail') }}" alt="">
                   </button>
                 </li>
+                {% endfor %}
                 <li class="nav-item" role="presentation">
                   <button class="nav-link mr10 mb10" id="pills-item2-tab" data-bs-toggle="pill" data-bs-target="#pills-item2" type="button" role="tab" aria-controls="pills-item2" aria-selected="false">
                     <img src="images/shop/shop-single-3.png" alt="">

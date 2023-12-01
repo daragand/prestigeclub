@@ -31,8 +31,7 @@ class Licencie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $slug = null;
 
-    #[ORM\ManyToMany(targetEntity: Club::class, mappedBy: 'licencies')]
-    private Collection $clubs;
+    
 
     #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Livret::class, orphanRemoval: true)]
     private Collection $livrets;
@@ -41,21 +40,30 @@ class Licencie
     private Collection $photos;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'licencies')]
+    #[ORM\JoinTable(name: 'user_licencie')]
     private Collection $users;
 
-    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'licencies')]
-    private Collection $Groupes;
+   
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
+    #[ORM\ManyToOne(inversedBy: 'licencie')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Club $club = null;
+
+    #[ORM\ManyToOne(inversedBy: 'licencies')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Group $groupes = null;
+
     public function __construct()
     {
-        $this->clubs = new ArrayCollection();
+        
         $this->livrets = new ArrayCollection();
         $this->photos = new ArrayCollection();
         $this->users = new ArrayCollection();
-        $this->Groupes = new ArrayCollection();
+        
+        
     }
 
     public function getId(): ?int
@@ -111,32 +119,7 @@ class Licencie
         return $this;
     }
 
-    /**
-     * @return Collection<int, Club>
-     */
-    public function getClubs(): Collection
-    {
-        return $this->clubs;
-    }
-
-    public function addClub(Club $club): static
-    {
-        if (!$this->clubs->contains($club)) {
-            $this->clubs->add($club);
-            $club->addLicency($this);
-        }
-
-        return $this;
-    }
-
-    public function removeClub(Club $club): static
-    {
-        if ($this->clubs->removeElement($club)) {
-            $club->removeLicency($this);
-        }
-
-        return $this;
-    }
+    
 
     /**
      * @return Collection<int, Livret>
@@ -225,30 +208,7 @@ class Licencie
         return $this;
     }
 
-    /**
-     * @return Collection<int, Group>
-     */
-    public function getGroupes(): Collection
-    {
-        return $this->Groupes;
-    }
-
-    public function addGroupe(Group $groupe): static
-    {
-        if (!$this->Groupes->contains($groupe)) {
-            $this->Groupes->add($groupe);
-        }
-
-        return $this;
-    }
-
-    public function removeGroupe(Group $groupe): static
-    {
-        $this->Groupes->removeElement($groupe);
-
-        return $this;
-    }
-
+    
 
 
 
@@ -265,6 +225,30 @@ class Licencie
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getClub(): ?Club
+    {
+        return $this->club;
+    }
+
+    public function setClub(?Club $club): static
+    {
+        $this->club = $club;
+
+        return $this;
+    }
+
+    public function getGroupes(): ?Group
+    {
+        return $this->groupes;
+    }
+
+    public function setGroupes(?Group $groupes): static
+    {
+        $this->groupes = $groupes;
 
         return $this;
     }
