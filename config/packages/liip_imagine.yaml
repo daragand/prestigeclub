@@ -23,7 +23,7 @@ liip_imagine:
             format: webp
             filters:
                 watermark_image:
-                    image: '%kernel.project_dir%/public/images/watermark.png'
+                    image: '\public\images\watermark.png'
                     size: 0.5
                     position: center
                     alpha: 0.7
