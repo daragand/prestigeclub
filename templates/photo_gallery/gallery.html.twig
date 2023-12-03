@@ -37,7 +37,7 @@
                 
                 <div class="tab-pane fade show active" id="pills-item1" role="tabpanel" aria-labelledby="pills-item1-tab">
                   <div class="shop-single-item mb10 bdr1 bdrs8 text-center py-5">
-                    <a class="popup-img" href="{{ vich_uploader_asset(photo, 'photoFile') }}"><img class="wa" src="{{ vich_uploader_asset(photo, 'photoFile')|imagine_filter('scale_photo')  }}" alt=""></a>
+                    <a class="popup-img" href="{{ vich_uploader_asset(photo, 'photoFile') }}"><img class="wa" src="{{ vich_uploader_asset(photo, 'photoFile')|imagine_filter('watermark')  }}" alt=""></a>
                   </div>
                 </div>
               {% endfor %}

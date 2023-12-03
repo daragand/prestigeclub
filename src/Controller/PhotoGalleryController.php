@@ -56,7 +56,7 @@ class PhotoGalleryController extends AbstractController
             $licencieInfo = [
                 'licencie' => $userLicencie,
                 'photos' => $photoRepository->findBy(['licencie' => $userLicencie]),
-                'club' => $userLicencie->getClubs(),
+                'club' => $userLicencie->getClub(),
                 'groupe' => $userLicencie->getGroupes(),
 
             ];

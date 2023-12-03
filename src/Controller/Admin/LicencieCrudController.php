@@ -61,7 +61,7 @@ class LicencieCrudController extends AbstractCrudController
                 ->hideOnForm()
                 ->setTemplatePath('admin/licencie/photos.html.twig'),
                 AssociationField::new('groupes', 'Groupes'),
-                AssociationField::new('clubs', 'Clubs'),
+                AssociationField::new('club', 'Clubs'),
 
         ];
     }
