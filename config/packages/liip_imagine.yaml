@@ -26,5 +26,7 @@ liip_imagine:
                     image: '\public\images\watermark.png'
                     size: 0.5
                     position: center
-                    alpha: 0.7
+                    alpha: 0.5
+                downscale:
+                    max: [400, 400]
 
