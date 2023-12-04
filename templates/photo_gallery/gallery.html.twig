@@ -32,30 +32,34 @@
             <div class="shop-single">
               <div class="tab-content" id="pills-tabContent">
               {% for photo in photos %}
-                
-                <div class="tab-pane fade" id="{{ photo.path }}" role="tabpanel" aria-labelledby="pills-item1-tab">
+                <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="pills-item{{photo.id}}" role="tabpanel" aria-labelledby="pills-item{{photo.id}}-tab">
                   <div class="shop-single-item mb10 bdr1 bdrs8 text-center py-5">
-                    <a class="popup-img" href="{{ vich_uploader_asset(photo, 'photoFile') }}"><img class="wa" src="{{ vich_uploader_asset(photo, 'photoFile')|imagine_filter('watermark')  }}" alt=""></a>
+                    <a class="popup-img" href="{{ vich_uploader_asset(photo, 'photoFile')|imagine_filter('watermark') }}"><img class="wa" src="{{ vich_uploader_asset(photo, 'photoFile')|imagine_filter('scale_photo') }}" alt=""></a>
                   </div>
                 </div>
               {% endfor %}
-                
+              
+              
               </div>
+      
               <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                {% for photo in photos %}
+              {% for photo in photos %}
+                
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link mr10 mb10 active" id="{{ photo.path }}-tab" data-bs-toggle="pill" data-bs-target="#{{ photo.path }}" type="button" role="tab" aria-controls="{{ photo.path }}" aria-selected="true">
+                  <button class="nav-link mr10 mb10 {% if loop.first %}active{% endif %}" id="pills-item{{photo.id}}-tab" data-bs-toggle="pill" data-bs-target="#pills-item{{photo.id}}" type="button" role="tab" aria-controls="pills-item{{photo.id}}" {% if loop.first %}
+                    
+                  aria-selected="true"{% else %} aria-selected="false" {% endif %} >
                     <img src="{{ vich_uploader_asset(photo, 'photoFile')|imagine_filter('thumbnail') }}" alt="">
                   </button>
                 </li>
-                {% endfor %}
+              {% endfor %}
                 
               </ul>
             </div>
           </div>
           <div class="col-lg-6">
             <div class="shop-single-content">
-              <h2 class="mb15">Urban Bags - {{ app.user.licencies[0].firstname }}</h2>
+              <h2 class="mb15">Une star est née : {{ app.user.licencies[0].firstname }} {{ app.user.licencies[0].lastname }}</h2>
               <div class="list-style1 mb10">
                 <ul class="mb-1">
                   <li class="mb-1"><i class="far fa-check text-thm3 bgc-thm3-light"></i>432 in stock</li>
@@ -221,7 +225,22 @@
 
 
 {% block javascripts %}
-    {{ parent() }}
-   
+    {# {{ parent() }} #}
+    <script src={{ asset('js/jquery-3.6.4.min.js') }} defer></script>
+            <script src={{ asset('js/jquery-migrate-3.0.0.min.js') }} defer></script>
+            <script src={{ asset('js/popper.min.js') }} defer></script>
+            <script src={{ asset('js/bootstrap.min.js') }} defer></script>
+            <script src={{ asset('js/bootstrap-select.min.js') }} defer></script>
+            <script src={{ asset('js/jquery.mmenu.all.js') }} defer></script>
+            <script src={{ asset('js/ace-responsive-menu.js') }} defer></script>
+            <script src={{ asset('js/jquery-scrolltofixed-min.js') }} defer></script>
+            <script src={{ asset('js/wow.min.js') }} defer></script>
+            <script src={{ asset('js/isotop.js') }} defer></script>
+            <!-- Custom script for all pages -->
+            <script src={{ asset('js/script.js') }} defer></script>
+
+
+
+ 
 {% endblock %}
 {% endblock %}
