@@ -15,10 +15,7 @@
 								{% for licencie in licencies %}
                                     {{ dump(licencie) }}
                                     
-                                    {% for item in licencie.club %}
-                                    <p>club</p>
-                                        {{ dump(item) }}
-                                    {% endfor %}
+                                    
                                     
 									
 										<div class="col-lg-3 col-md-6">
@@ -28,7 +25,7 @@
 																																																							                        Si l'image est absente, on récupère l'image par défaut #}
 												{% if licencie['photos'][0] is defined %}
 
-													<img class="card-img-top img-fluid " src={{ vich_uploader_asset(licencie['photos'][0]) }} alt={{ licencie['photos'][0].path }}>
+													<img class="card-img-top img-fluid " src={{ vich_uploader_asset(licencie['photos'][0])|imagine_filter('watermark') }} alt={{ licencie['photos'][0].path }}>
 
 													{% else %}
 													<img class="card-img-top img-fluid " src="https://via.placeholder.com/640x480.png/00bb99?text=imageDefaut" alt={{ licencie['licencie'].firstname }}>
@@ -51,18 +48,20 @@
 													{# espace pour les équipements de la salle et les ergonomies #}
 													<div class="row">
 														<div class="col-md-8 p-4">
-															<h4 class="title">Club</h4>
+															<h4 class="title">{{ licencie['club'].name }}</h4>
 															<ul class="list-unstyled">
 																
 																	<li class="media d-flex align-items-start">
 																		{% if licencie %}
-
-																			<img class="d-flex me-3" src="https://via.placeholder.com/60" width="60" alt="alternance">
+																		
+																		
+																			<img class="d-flex me-3" src="{{ licencie['club'].logo }}" width="60" alt="alternance">
 																		{% else %}
 																			<img class="d-flex me-3" src="https://via.placeholder.com/60" alt="icon par défault">
 																		{% endif %}
 																		<div class="media-body">
-																			<h5 class="mt-0 mb-1">nom du club</h5>
+																			
+																			<h6 class="mt-0 mb-1">{{ licencie['groupe'].name }}</h6>
 																		</div>
 																	</li>
 																
@@ -75,7 +74,7 @@
 													</div>
 												</div>
 
-												<a href="{{ path('app_photo_gallery') }}" class="btn btn-primary">Voir la salle
+												<a href="{{ path('app_photo_gallery',{'slug' : licencie['licencie'].slug}) }}" class="btn btn-dark">Accéder aux photos
 
 												</a>
 

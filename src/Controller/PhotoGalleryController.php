@@ -75,16 +75,20 @@ class PhotoGalleryController extends AbstractController
     
     
     
-    #[Route('/photos/gallery', name: 'app_photo_gallery')]
+    #[Route('/photos/gallery/{slug}', name: 'app_photo_gallery')]
     public function presentation(
         PhotoRepository $photoRepository,
         UserRepository $userRepository,
-        LicencieRepository $licencieRepository
+        Licencie $licencie
         ): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
+
+        
+
+
         $userConnected = $this->getUser();
       
         
@@ -100,18 +104,7 @@ class PhotoGalleryController extends AbstractController
             $photos[] = $photoRepository->findBy(['licencie' => $userLicencie]);
         }
            
-        /**
-         * Si l'utilisateur est un usager, on affiche les photos liées à ses licenciés
-         */
-        // if ($roles[0] === 'ROLE_USER') {
-        //     // $licencies = $user->getLicencies();
-            
-          
-        //     $photos = $photoRepository->findBy(['users' => $this->getUser()]);
-        // } else {
-        //     return $this->redirectToRoute('admin');
-        // }
-        // dd($photos);
+      
         
         $photos = array_merge(...$photos);
 
@@ -119,6 +112,7 @@ class PhotoGalleryController extends AbstractController
             'controller_name' => 'PhotoGalleryController',
             'photos' => $photos,
             'licencie' => $userLicencie,
+            'sportif' => $licencie,
         ]);
     }
 
