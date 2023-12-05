@@ -2,14 +2,18 @@
 
 namespace App\Controller;
 
-use App\Entity\Licencie;
 use App\Entity\User;
-use App\Repository\LicencieRepository;
+use App\Entity\Forfait;
+use App\Entity\Options;
+use App\Entity\Licencie;
 use App\Repository\UserRepository;
 use App\Repository\PhotoRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\ForfaitRepository;
+use App\Repository\OptionsRepository;
+use App\Repository\LicencieRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PhotoGalleryController extends AbstractController
 {
@@ -79,7 +83,9 @@ class PhotoGalleryController extends AbstractController
     public function presentation(
         PhotoRepository $photoRepository,
         UserRepository $userRepository,
-        Licencie $licencie
+        Licencie $licencie,
+        ForfaitRepository $forfaitRepository,
+        OptionsRepository $optionsRepository
         ): Response
     {
         if (!$this->getUser()) {
@@ -108,11 +114,20 @@ class PhotoGalleryController extends AbstractController
         
         $photos = array_merge(...$photos);
 
+        /**
+         * Récupération des forfaits et des options
+         */
+        $forfaits = $forfaitRepository->findAll();
+        $options = $optionsRepository->findAll();
+
+
         return $this->render('photo_gallery/gallery.html.twig', [
             'controller_name' => 'PhotoGalleryController',
             'photos' => $photos,
             'licencie' => $userLicencie,
             'sportif' => $licencie,
+            'forfaits' => $forfaits,
+            'options' => $options,
         ]);
     }
 
