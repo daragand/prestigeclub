@@ -34,12 +34,20 @@
 										</div>
 									</div>
 								{% endfor %}
-
+                {% for phGroup in photoGroup %}
+                  
+                  <div class="tab-pane fade" id="pills-item{{phGroup.id}}" role="tabpanel" aria-labelledby="pills-item{{phGroup.id}}-tab">
+										<div class="shop-single-item mb10 bdr1 bdrs8 text-center py-5">
+											<a class="popup-img" href="{{ vich_uploader_asset(phGroup, 'photoGroupFile')|imagine_filter('watermark') }}"><img class="wa" src="{{ vich_uploader_asset(phGroup, 'photoGroupFile')|imagine_filter('scale_photo') }}" alt=""></a>
+										</div>
+									</div>
+                {% endfor %}
 
 							</div>
 
 							<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-								{% for photo in photos %}
+								{# menu pour les photos individuelles #}
+                {% for photo in photos %}
 
 									<li class="nav-item" role="presentation">
 										<button class="nav-link mr10 mb10 {% if loop.first %}active{% endif %}" id="pills-item{{photo.id}}-tab" data-bs-toggle="pill" data-bs-target="#pills-item{{photo.id}}" type="button" role="tab" aria-controls="pills-item{{photo.id}}" {% if loop.first %} aria-selected="true" {% else %} aria-selected="false" {% endif %}>
@@ -47,7 +55,14 @@
 										</button>
 									</li>
 								{% endfor %}
-
+                {# menu pour les photos de groupes #}
+              {% for phGroup in photoGroup %}
+                <li class="nav-item" role="presentation">
+										<button class="nav-link mr10 mb10" id="pills-item{{phGroup.id}}-tab" data-bs-toggle="pill" data-bs-target="#pills-item{{phGroup.id}}" type="button" role="tab" aria-controls="pills-item{{phGroup.id}}" aria-selected="false">
+											<img src="{{ vich_uploader_asset(phGroup, 'photoGroupFile')|imagine_filter('thumbnail') }}" alt="">
+										</button>
+									</li>
+              {% endfor %}
 							</ul>
 						</div>
 					</div>
@@ -108,16 +123,7 @@
 									</fieldset>
 									<button class="ud-btn btn-thm" type="submit">Ajouter au panier</button>
 								</form>
-								{# <div class="cart-quantity mb10-xs mr20">
-																	<div class="quantity-block">
-																		<button class="quantity-arrow-minus">
-																			<span class="fa fa-minus"></span>
-																		</button>
-																		<input class="quantity-num" type="number" value="12">
-																		<button class="quantity-arrow-plus">
-																			<span class="fas fa-plus"></span>
-																		</button>
-																	</div> #}
+								
 							</div>
 
 						</div>
@@ -125,7 +131,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="row wow fadeInUp mt90" data-wow-delay="300ms">
+			{# <div class="row wow fadeInUp mt90" data-wow-delay="300ms">
 				<div class="col-md-3 col-lg-4">
 					<div class="vertical-tab">
 						<div class="widget_list">
@@ -261,7 +267,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> #}
 		</div>
 	</section>
 

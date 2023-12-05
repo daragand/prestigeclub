@@ -11,6 +11,7 @@ use App\Repository\PhotoRepository;
 use App\Repository\ForfaitRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\LicencieRepository;
+use App\Repository\PhotoGroupRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -85,7 +86,8 @@ class PhotoGalleryController extends AbstractController
         UserRepository $userRepository,
         Licencie $licencie,
         ForfaitRepository $forfaitRepository,
-        OptionsRepository $optionsRepository
+        OptionsRepository $optionsRepository,
+        PhotoGroupRepository $photoGroupRepository
         ): Response
     {
         if (!$this->getUser()) {
@@ -93,13 +95,9 @@ class PhotoGalleryController extends AbstractController
         }
 
         
-
-
         $userConnected = $this->getUser();
-      
-        
+              
         $email = $userConnected->getUserIdentifier();
-
         
         $user = $userRepository->findOneBy(['email' => $email]);
         $userLicencies = $user->getLicencies();
@@ -109,8 +107,17 @@ class PhotoGalleryController extends AbstractController
             
             $photos[] = $photoRepository->findBy(['licencie' => $userLicencie]);
         }
-           
+    
+        //récupération des photos du groupe associé au licencié (avec le club et le groupe)
+        $photoGroup = $photoGroupRepository->createQueryBuilder('pg')
+            ->where('pg.club = :club')
+            ->andWhere('pg.groupID = :group')
+            ->setParameter('club', $licencie->getClub())
+            ->setParameter('group', $licencie->getGroupes())
+            ->getQuery()
+            ->getResult();
       
+            
         
         $photos = array_merge(...$photos);
 
@@ -128,6 +135,7 @@ class PhotoGalleryController extends AbstractController
             'sportif' => $licencie,
             'forfaits' => $forfaits,
             'options' => $options,
+            'photoGroup' => $photoGroup,
         ]);
     }
 
