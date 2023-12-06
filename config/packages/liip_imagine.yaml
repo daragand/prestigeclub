@@ -1,9 +1,10 @@
 # Documentation on how to configure the bundle can be found at: https://symfony.com/doc/current/bundles/LiipImagineBundle/basic-usage.html
 liip_imagine:
     driver: "gd"
+    default_filter_set_settings:
+        format: webp
     filter_sets:
-        cache: ~
-                
+        cache: ~       
         thumbnail:
             quality: 75
             format: webp
@@ -14,17 +15,22 @@ liip_imagine:
                 downscale:
                     max: [400, 400]
                 watermark_image:
-                    image: '%kernel.project_dir%/public/images/watermark.png'
+                    image: '\public\images\watermark.png'
                     size: 0.5
                     position: center
-                    alpha: 0.7        
+                    alpha: 0.1        
         watermark:
             quality: 75
             format: webp
             filters:
                 watermark_image:
-                    image: '%kernel.project_dir%/public/images/watermark.png'
+                    image: '\public\images\watermark.png'
                     size: 0.5
-                    position: center
-                    alpha: 0.7
+                    position: multiple
+                    alpha: 0.1
+                upscale:
+                    min: [700, 1000]
+                thumbnail: 
+                    size: [565, 800]
+                    mode: outbound 
 

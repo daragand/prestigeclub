@@ -47,6 +47,9 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
+        
+        
+       
 
         /**
          * Redirection en fonction du rôle de l'utilisateur. Un seul role par utilisateur.

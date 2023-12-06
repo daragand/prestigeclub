@@ -2,14 +2,19 @@
 
 namespace App\Controller;
 
-use App\Entity\Licencie;
 use App\Entity\User;
-use App\Repository\LicencieRepository;
+use App\Entity\Forfait;
+use App\Entity\Options;
+use App\Entity\Licencie;
 use App\Repository\UserRepository;
 use App\Repository\PhotoRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\ForfaitRepository;
+use App\Repository\OptionsRepository;
+use App\Repository\LicencieRepository;
+use App\Repository\PhotoGroupRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PhotoGalleryController extends AbstractController
 {
@@ -56,7 +61,7 @@ class PhotoGalleryController extends AbstractController
             $licencieInfo = [
                 'licencie' => $userLicencie,
                 'photos' => $photoRepository->findBy(['licencie' => $userLicencie]),
-                'club' => $userLicencie->getClubs(),
+                'club' => $userLicencie->getClub(),
                 'groupe' => $userLicencie->getGroupes(),
 
             ];
@@ -75,50 +80,62 @@ class PhotoGalleryController extends AbstractController
     
     
     
-    #[Route('/photos/gallery', name: 'app_photo_gallery')]
+    #[Route('/photos/gallery/{slug}', name: 'app_photo_gallery')]
     public function presentation(
         PhotoRepository $photoRepository,
         UserRepository $userRepository,
-        LicencieRepository $licencieRepository
+        Licencie $licencie,
+        ForfaitRepository $forfaitRepository,
+        OptionsRepository $optionsRepository,
+        PhotoGroupRepository $photoGroupRepository
         ): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-        $userConnected = $this->getUser();
-      
-        
-        $email = $userConnected->getUserIdentifier();
 
         
+        $userConnected = $this->getUser();
+              
+        $email = $userConnected->getUserIdentifier();
+        
         $user = $userRepository->findOneBy(['email' => $email]);
-        $userLicencies = $user->getLicencies();
         
-        //ajouter une fonction IN ARRAY
-        foreach ($userLicencies as $userLicencie) {
+        
+        
+        //ajout des photos dans le tableau $photos
+      
             
-            $photos[] = $photoRepository->findBy(['licencie' => $userLicencie]);
-        }
-           
+            $photos = $photoRepository->findBy(['licencie' => $licencie]);
+       
+    
+        //récupération des photos du groupe associé au licencié (avec le club et le groupe)
+        $photoGroup = $photoGroupRepository->createQueryBuilder('pg')
+            ->where('pg.club = :club')
+            ->andWhere('pg.groupID = :group')
+            ->setParameter('club', $licencie->getClub())
+            ->setParameter('group', $licencie->getGroupes())
+            ->getQuery()
+            ->getResult();
+      
+            
+        
+        
+
         /**
-         * Si l'utilisateur est un usager, on affiche les photos liées à ses licenciés
+         * Récupération des forfaits et des options
          */
-        // if ($roles[0] === 'ROLE_USER') {
-        //     // $licencies = $user->getLicencies();
-            
-          
-        //     $photos = $photoRepository->findBy(['users' => $this->getUser()]);
-        // } else {
-        //     return $this->redirectToRoute('admin');
-        // }
-        // dd($photos);
-        
-        $photos = array_merge(...$photos);
+        $forfaits = $forfaitRepository->findAll();
+        $options = $optionsRepository->findAll();
+
 
         return $this->render('photo_gallery/gallery.html.twig', [
             'controller_name' => 'PhotoGalleryController',
             'photos' => $photos,
-            'licencie' => $userLicencie,
+            'licencie' => $licencie,
+            'forfaits' => $forfaits,
+            'options' => $options,
+            'photoGroup' => $photoGroup,
         ]);
     }
 
