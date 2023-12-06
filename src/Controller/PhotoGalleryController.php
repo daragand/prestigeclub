@@ -100,13 +100,14 @@ class PhotoGalleryController extends AbstractController
         $email = $userConnected->getUserIdentifier();
         
         $user = $userRepository->findOneBy(['email' => $email]);
-        $userLicencies = $user->getLicencies();
         
-        //ajouter une fonction IN ARRAY
-        foreach ($userLicencies as $userLicencie) {
+        
+        
+        //ajout des photos dans le tableau $photos
+      
             
-            $photos[] = $photoRepository->findBy(['licencie' => $userLicencie]);
-        }
+            $photos = $photoRepository->findBy(['licencie' => $licencie]);
+       
     
         //récupération des photos du groupe associé au licencié (avec le club et le groupe)
         $photoGroup = $photoGroupRepository->createQueryBuilder('pg')
@@ -119,7 +120,7 @@ class PhotoGalleryController extends AbstractController
       
             
         
-        $photos = array_merge(...$photos);
+        
 
         /**
          * Récupération des forfaits et des options
@@ -131,8 +132,7 @@ class PhotoGalleryController extends AbstractController
         return $this->render('photo_gallery/gallery.html.twig', [
             'controller_name' => 'PhotoGalleryController',
             'photos' => $photos,
-            'licencie' => $userLicencie,
-            'sportif' => $licencie,
+            'licencie' => $licencie,
             'forfaits' => $forfaits,
             'options' => $options,
             'photoGroup' => $photoGroup,

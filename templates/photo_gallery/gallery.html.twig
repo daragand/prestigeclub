@@ -69,20 +69,22 @@
 					<div class="col-lg-6">
 						<div class="shop-single-content">
 							<h2 class="mb15">Une star est née :
-								{{ app.user.licencies[0].firstname }}
-								{{ app.user.licencies[0].lastname }}</h2>
+								{{ licencie.firstname }}
+								{{ licencie.lastname }}</h2>
 							<div class="list-style1 mb10">
 								<ul class="mb-1">
 									<li class="mb-1">
-										<i class="far fa-check text-thm3 bgc-thm3-light"></i>432 in stock</li>
+                  {% set nbPhotos = photos|length + photoGroup|length %}
+                 
+										<i class="fa-brands fa-codepen text-thm3 bgc-thm3-light"></i>{{ nbPhotos }} photos</li>
 								</ul>
 							</div>
 							<div class="d-flex ">
 								<img class="me-3" width="60" src="{{ licencie.club.logo }}" alt="">
 								<div>
-									<h2 class=" mb10">{{ licencie.club.name|upper }}
+									<h2 class=" mb10">{{ licencie.club.name|upper }} - {{ licencie.club.address.city }}({{ licencie.club.address.zip }})
 									</h2>
-									<h4>{{ licencie.groupes.name }}</h4>
+									<h4>{{ licencie.groupes.name }} </h4>
 								</div>
 							</div>
 							<div class="mt-5 d-sm-flex">
