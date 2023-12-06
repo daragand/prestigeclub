@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Licencie;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,17 +35,27 @@ class SecurityController extends AbstractController
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
-    #[Route(path: '/invitation/{slug}/login', name: 'app_login_invitation')]
-    public function loginInvitation(AuthenticationUtils $authenticationUtils,Request $request,Licencie $licencie): Response
+    #[Route(path: '/tolog/invitation/{slug}', name: 'app_login_invitation')]
+    public function loginInvitation(Licencie $licencie,UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
-// dd($licencie);
 
+if ($this->getUser()) {
 
- // get the login error if there is one
- $error = $authenticationUtils->getLastAuthenticationError();
- // last username entered by the user
- $lastUsername = $authenticationUtils->getLastUsername();
+    //recherche de l'utilisateur connecté et ajout de la relation avec le licencié
+    $email = $this->getUser()->getUserIdentifier();
+    
+    $user = $userRepository->findOneBy(['email' => $email]);
+    $user->addLicency($licencie);
+    $entityManager->persist($user);
+    $entityManager->flush();
+    $this->addFlash('success', 'le licencié a été bien ajouté à votre compte.');
+            return $this->redirectToRoute('app_photos_index');
+        }else{
+            return $this->redirectToRoute('app_invitation', ['slug' => $licencie->getSlug()]);
+        }
+        
 
- return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error, 'licencie' => $licencie]);
+ 
+
     }
 }

@@ -119,7 +119,7 @@
                 {{ form_end(registrationForm) }}
 
                 <div class="text-center mt-3"> <!-- TODO: add route to sign in -->
-                    {# <p>Already have an account ? <a href="{{ path('app_login') }}" class="text-decoration-none">Sign in</a></p> #}
+                    <p>Vous avez déjà un compte ? <a href="{{ path('app_login_invitation',{'slug':licencie.slug}) }}" class="text-decoration-none">Se connecter</a></p>
                 </div>
             {% endif %}
 
