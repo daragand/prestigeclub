@@ -113,7 +113,7 @@
   <div class="d-flex flex-wrap">
     {% for option in options %}
       <div class="flex-fill">
-        <input class="form-check-input" type="checkbox" id="{{ option.id }}" name="option{{option.id}} - {{photo.id}}" value="{{ photo.id }}-{{ option.id }}"/>
+        <input class="form-check-input" type="checkbox" id="{{ option.id }}" name="option-{{option.id}}-{{photo.id}}" value="{{ photo.id }}-{{ option.id }}"/>
         <img class="me-2" src="{{ vich_uploader_asset(photo, 'photoFile')|imagine_filter('thumbnail') }}" width="60" alt="">
         <label class="form-check-label" for="{{ option.id }}">
           <strong>{{ option.name }} - {{ option.price|number_format(2) }} €</strong>

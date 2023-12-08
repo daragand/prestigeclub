@@ -26,14 +26,14 @@ class OptionList
     #[ORM\JoinColumn(nullable: false)]
     private ?Options $options = null;
 
-    #[ORM\ManyToOne(inversedBy: 'optionLists')]
+    #[ORM\ManyToOne(inversedBy: 'optionLists',cascade: ['persist','remove'])]
     private ?Cart $cart = null;
 
     #[ORM\ManyToOne(inversedBy: 'optionLists')]
     private ?Order $orders = null;
 
     #[ORM\Column]
-    private ?bool $isArchived = null;
+    private ?bool $isArchived = false;
 
     public function getId(): ?int
     {

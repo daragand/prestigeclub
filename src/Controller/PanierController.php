@@ -4,18 +4,28 @@ namespace App\Controller;
 
 use App\Entity\Cart;
 use App\Entity\Forfait;
+use App\Entity\OptionList;
 use App\Repository\ForfaitRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\OptionListRepository;
+use App\Repository\OptionsRepository;
+use App\Repository\PhotoRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PanierController extends AbstractController
 {
     #[Route('/panier', name: 'app_panier')]
     public function index(
         Request $request,
-        ForfaitRepository $forfaitRepository
+        ForfaitRepository $forfaitRepository,
+        OptionsRepository $optionsRepository,
+        PhotoRepository $photoRepository,
+        EntityManagerInterface $entityManager
     ): Response
     {
         $prods=$request->request->all();
@@ -46,16 +56,42 @@ class PanierController extends AbstractController
             }
             
         }
-dd($panier,$keys);
 
+
+        
        foreach($keys as $key){
+        if($key!='forfait'){
+            /**
+             * Explosion de la clé pour récupérer l'id de l'option et l'id de la photo.
+             * La clé est de la forme option-1-1. le premier élément est l'option, le second l'id de l'option et le troisième l'id de la photo.
+             */
+            $itemOption = explode("-",$key);
+            
 
+
+            //création de l'optionList avec l'option concernée, les photos et une quantité à 1
+            $optLst = new OptionList();
+            $optLst->setOptions($optionsRepository->findOneBy(['id'=>intval($itemOption[1])]))
+            ->setPhotos($photoRepository->findOneBy(['id'=>intval($itemOption[2])]))
+            ->setQuantity(1);
+            $entityManager->persist($optLst);
+
+
+            //ajout dans le panier de l'option et modification du montant du panier
+            $panier->addOptionList($optLst)
+            ->setAmount($panier->getAmount()+$optLst->getOptions()->getPrice());
+
+            
+            
+        }
        }
+      
 
-       
+       $entityManager->flush();
 
         return $this->render('panier/index.html.twig', [
             'controller_name' => 'PanierController',
+            'panier'=>$panier
         ]);
     }
 }

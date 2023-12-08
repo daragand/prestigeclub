@@ -1,20 +1,145 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello PanierController!{% endblock %}
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('gallery/css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('gallery/css/bootstrap-select.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('gallery/css/magnific-popup.css') }}">
+	<link rel="stylesheet" href="{{ asset('gallery/css/style.css') }}">
 
+
+{% endblock %}
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{{ dump(panier) }}
+ <div class="body_content">
+   
+    <section class="pt40 pb0">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="main-title">
+              <h2 class="title">Votre panier</h2>
+              <p class="text mb-0">Give your visitor a smooth online experience with a solid UX design</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <!-- Shop Cart Area -->
+    <section class="shop-checkout pt-0">
+      <div class="container">
+        <div class="row wow fadeInUp" data-wow-delay="300ms">
+        <div class="col-lg-8">
+          <div class="shopping_cart_table table-responsive">
+            <table class="table table-borderless">
+              <thead>
+                <tr>
+                  <th class="pl30" scope="col">Product</th>
+                  <th class="ps-0" scope="col">Price</th>
+                  <th class="ps-0" scope="col">Quantity</th>
+                  <th class="ps-0" scope="col">Subtotal</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody class="table_body">
+                <tr>
+                  <td class="pl30 ">
+                    <div class="cart_list d-flex align-items-center">
+                      <div class="cart-img"><img src="images/shop/cart-1.png" alt="cart-1.png"></div>
+                      <h5 class="mb-0">Herschel backpack</h5>
+                    </div>
+                  </td>
+                  <td><div class="cart-price">$298</div></td>
+                  <td>
+                    <div class="cart-quantity">
+                      <div class="quantity-block">
+                        <button class="quantity-arrow-minus"> <span class="fa fa-minus"></span> </button>
+                        <input class="quantity-num" type="number" value="12" />
+                        <button class="quantity-arrow-plus"> <span class="fas fa-plus"></span> </button>
+                      </div>
+                    </div>
+                    <!-- <input class="cart_count text-center" placeholder="2" type="number"> -->
+                  </td>
+                  <td><div class="cart-subtotal pl5">$1.298</div></td>
+                  <td><div class="cart-delete"><span class="flaticon-delete"></span></div></td>
+                </tr>
+                <tr>
+                  <td class="pl30 ">
+                    <div class="cart_list d-flex align-items-center">
+                      <div class="cart-img"><img src="images/shop/cart-2.png" alt="cart-2.png"></div>
+                      <h5 class="mb-0">Herschel backpack</h5>
+                    </div>
+                  </td>
+                  <td><div class="cart-price">$298</div></td>
+                  <td>
+                    <div class="cart-quantity">
+                      <div class="quantity-block">
+                        <button class="quantity-arrow-minus"> <span class="fa fa-minus"></span> </button>
+                        <input class="quantity-num" type="number" value="12" />
+                        <button class="quantity-arrow-plus"> <span class="fas fa-plus"></span> </button>
+                      </div>
+                    </div>
+                    <!-- <input class="cart_count text-center" placeholder="2" type="number"> -->
+                  </td>
+                  <td><div class="cart-subtotal pl5">$1.298</div></td>
+                  <td><div class="cart-delete"><span class="flaticon-delete"></span></div></td>
+                </tr>
+                <tr>
+                  <td class="pl30 ">
+                    <div class="cart_list d-flex align-items-center">
+                      <div class="cart-img"><img src="images/shop/cart-3.png" alt="cart-3.png"></div>
+                      <h5 class="mb-0">Herschel backpack</h5>
+                    </div>
+                  </td>
+                  <td><div class="cart-price">$298</div></td>
+                  <td>
+                    <div class="cart-quantity">
+                      <div class="quantity-block">
+                        <button class="quantity-arrow-minus"> <span class="fa fa-minus"></span> </button>
+                        <input class="quantity-num" type="number" value="12" />
+                        <button class="quantity-arrow-plus"> <span class="fas fa-plus"></span> </button>
+                      </div>
+                    </div>
+                    <!-- <input class="cart_count text-center" placeholder="2" type="number"> -->
+                  </td>
+                  <td><div class="cart-subtotal pl5">$1.298</div></td>
+                  <td><div class="cart-delete"><span class="flaticon-delete"></span></div></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="coupon-form mt30 mb30-md">
+              <div class="d-md-flex align-items-center justify-content-between">
+                <div class="d-md-flex justify-content-between">
+                  <input type="text" class="form-control coupon_input mb10-sm" placeholder="Coupon Code">
+                  <a class="ud-btn btn-thm flex-shrink-0 ml20 ml0-sm" href="#">Apply Coupon<i class="fal fa-arrow-right-long"></i></a>
+                </div>
+                <div class="btn-lsit1">
+                  <a href="#" class="ud-btn btn-light-thm">Update Cart<i class="fal fa-arrow-right-long"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="shop-sidebar ms-lg-auto">
+            <div class="order_sidebar_widget default-box-shadow1">
+              <h4 class="title">Cart Totals</h4>
+              <p class="text bdrb1 pb10">Subtotal <span class="float-end">$1.298</span></p>
+              <p class="text">Total <span class="float-end">$3.298</span></p>
+              <div class="d-grid mt40">
+                <a class="ud-btn btn-thm" href="page-shop-checkout.html">Proceed to Checkout<i class="fal fa-arrow-right-long"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/STAGE/PRESTIGECLUBAUTH/prestigeclub/src/Controller/PanierController.php'|file_link(0) }}">src/Controller/PanierController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/STAGE/PRESTIGECLUBAUTH/prestigeclub/templates/panier/index.html.twig'|file_link(0) }}">templates/panier/index.html.twig</a></code></li>
-    </ul>
+    <!-- Our Footer --> 
+   
+  </div>
 </div>
 {% endblock %}
