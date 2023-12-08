@@ -24,8 +24,7 @@ class Cart
     #[ORM\ManyToOne(inversedBy: 'carts')]
     private ?Forfait $forfait = null;
 
-    #[ORM\ManyToMany(targetEntity: Options::class, inversedBy: 'carts')]
-    private Collection $options;
+   
 
     #[ORM\OneToMany(mappedBy: 'cart', targetEntity: Order::class, orphanRemoval: true)]
     private Collection $orders;
@@ -34,13 +33,17 @@ class Cart
     #[ORM\JoinColumn(nullable: false)]
     private ?User $users = null;
 
+    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: OptionList::class)]
+    private Collection $optionLists;
+
     
 
     public function __construct()
     {
         $this->photos = new ArrayCollection();
-        $this->options = new ArrayCollection();
+       
         $this->orders = new ArrayCollection();
+        $this->optionLists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -99,30 +102,7 @@ class Cart
         return $this;
     }
 
-    /**
-     * @return Collection<int, Options>
-     */
-    public function getOptions(): Collection
-    {
-        return $this->options;
-    }
-
-    public function addOption(Options $option): static
-    {
-        if (!$this->options->contains($option)) {
-            $this->options->add($option);
-        }
-
-        return $this;
-    }
-
-    public function removeOption(Options $option): static
-    {
-        $this->options->removeElement($option);
-
-        return $this;
-    }
-
+    
     /**
      * @return Collection<int, Order>
      */
@@ -169,4 +149,34 @@ class Cart
     {
         return $this->forfait->getName();
     }
+
+   /**
+    * @return Collection<int, OptionList>
+    */
+   public function getOptionLists(): Collection
+   {
+       return $this->optionLists;
+   }
+
+   public function addOptionList(OptionList $optionList): static
+   {
+       if (!$this->optionLists->contains($optionList)) {
+           $this->optionLists->add($optionList);
+           $optionList->setCart($this);
+       }
+
+       return $this;
+   }
+
+   public function removeOptionList(OptionList $optionList): static
+   {
+       if ($this->optionLists->removeElement($optionList)) {
+           // set the owning side to null (unless already changed)
+           if ($optionList->getCart() === $this) {
+               $optionList->setCart(null);
+           }
+       }
+
+       return $this;
+   }
 }
