@@ -16,8 +16,7 @@ class OptionList
     #[ORM\Column]
     private ?int $quantity = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $statut = null;
+   
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -32,6 +31,9 @@ class OptionList
 
     #[ORM\ManyToOne(inversedBy: 'optionLists')]
     private ?Order $orders = null;
+
+    #[ORM\Column]
+    private ?bool $isArchived = null;
 
     public function getId(): ?int
     {
@@ -50,17 +52,7 @@ class OptionList
         return $this;
     }
 
-    public function getStatut(): ?string
-    {
-        return $this->statut;
-    }
-
-    public function setStatut(string $statut): static
-    {
-        $this->statut = $statut;
-
-        return $this;
-    }
+    
 
     public function getPhotos(): ?Photo
     {
@@ -106,6 +98,18 @@ class OptionList
     public function setOrders(?Order $orders): static
     {
         $this->orders = $orders;
+
+        return $this;
+    }
+
+    public function isArchived(): ?bool
+    {
+        return $this->isArchived;
+    }
+
+    public function setIsArchived(bool $isArchived): static
+    {
+        $this->isArchived = $isArchived;
 
         return $this;
     }
