@@ -355,6 +355,17 @@ class AppFixtures extends Fixture
         //////////////////////////////  Order  ///////////////////////////////////////
 
         $objectOrders = [];
+        //pour les options, je prends les options rattachées à un panier
+
+        $optionsWithCarts = [];
+
+        foreach ($objectOptionsLists as $optionList) {
+            if ($optionList->getCart() != null) {
+                array_push($optionsWithCarts, $optionList);
+            }
+        }
+
+
         //ajout de 50 commandes
         for ($i = 0; $i < 20; $i++) {
             $objectOrder = new Order();
@@ -370,6 +381,11 @@ class AppFixtures extends Fixture
             array_push($objectOrders, $objectOrder);
             $manager->persist($objectOrder);
         }
+        //ajout des options dans les commandes à partir des options rattachées à un panier
+        foreach($optionsWithCarts as $optionWithCart){
+            $objectOrders[$faker->numberBetween(0, (count($objectOrders) - 1))]->addOptionList($optionWithCart);
+        }
+
 
         $manager->flush();
     }
