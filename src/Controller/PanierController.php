@@ -28,6 +28,8 @@ class PanierController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response
     {
+
+
         $prods=$request->request->all();
         //récupération des clés du tableau
         $keys=array_keys($prods);
@@ -37,6 +39,7 @@ class PanierController extends AbstractController
            $forfaitId=$prods['forfait'];
        }
         
+       
         
         //création du panier
 
@@ -44,29 +47,33 @@ class PanierController extends AbstractController
         $panier->setUsers($this->getUser());
          //ajout du forfait au panier s'il existe et qu'il n'est pas null ainsi que le montant
         if(isset($forfaitId) && $forfaitId!=null){
-            $forfait=$forfaitRepository->findBy(['id' => intval($forfaitId)]);
+            $forfait=$forfaitRepository->findOneBy(['id' => intval($forfaitId)]);
            
             if($forfait){
-                /**
-                 * Bien que l'id soit unique, la méthode findBy renvoie un tableau. il s'agit donc de récupérer le premier élément du tableau
-                 */
-                $panier->setForfait($forfait[0])
                 
-                ->setAmount($panier->getAmount()+$forfait[0]->getPrice());
+                $panier->setForfait($forfait)
+                
+                ->setAmount($panier->getAmount()+$forfait->getPrice());
             }
             
         }
 
-
+dd($keys);
         
        foreach($keys as $key){
-        if($key!='forfait'){
+        //si la clé contient le mot option, on récupère la clé pour la traiter
+        if(strpos($key,'option')!==false){
             /**
              * Explosion de la clé pour récupérer l'id de l'option et l'id de la photo.
              * La clé est de la forme option-1-1. le premier élément est l'option, le second l'id de l'option et le troisième l'id de la photo.
              */
             $itemOption = explode("-",$key);
             
+            
+            /**
+             * Si l'option existe, on la récupère et on l'ajoute au panier
+             */
+            if($itemOption){
 
 
             //création de l'optionList avec l'option concernée, les photos et une quantité à 1
@@ -80,7 +87,7 @@ class PanierController extends AbstractController
             //ajout dans le panier de l'option et modification du montant du panier
             $panier->addOptionList($optLst)
             ->setAmount($panier->getAmount()+$optLst->getOptions()->getPrice());
-
+            }
             
             
         }

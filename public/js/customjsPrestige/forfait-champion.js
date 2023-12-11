@@ -7,6 +7,10 @@ const divChampion = document.getElementById('championChoix');
 //ajout d'une classe pour sélectionner tous les input de forfaits
 const inputTriggers = document.querySelectorAll('.trigger-champion');
 
+// pour la gestion des photos choisies par l'utilisateur pour le forfait champion
+
+const checkboxLimit = 2;//nombre de photos que l'utilisateur peut choisir 
+const checkboxes = document.querySelectorAll('.championPh');
 
 //par défaut, les images ne sont pas affichées
 divChampion.classList.add('d-none');
@@ -17,6 +21,10 @@ inputTriggers.forEach((inputTrigger) => {
     if (inputTriggers[[0]].checked === true || inputTriggers[[2]].checked === true) {
       
       divChampion.classList.add('d-none');
+      // déselection des inputs de photos automatiquement
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
     } else {
         divChampion.classList.remove('d-none');
     }
@@ -27,8 +35,7 @@ inputTriggers.forEach((inputTrigger) => {
 
 // pour la gestion des photos choisies par l'utilisateur pour le forfait champion
 
-const checkboxLimit = 2;//nombre de photos que l'utilisateur peut choisir 
-const checkboxes = document.querySelectorAll('.championPh');
+
 
 console.log('les différentes images',checkboxes);
 
@@ -52,6 +59,6 @@ form.addEventListener('submit', (e) => {
   const checkedCount = document.querySelectorAll('input[type="checkbox"][name="chamionPh"]:checked').length;
   if (inputTriggers[[1]].checked === true && checkedCount !== checkboxLimit) {
     e.preventDefault();
-    alert('Vous devez choisir deux photos pour le forfait Champion');
+    alert('Vous devez choisir '+ checkboxLimit + ' photos pour le forfait Champion');
   }
 });
