@@ -100,7 +100,7 @@
 										<legend>Choisissez votre forfait</legend>
 										{% for forfait in forfaits %}
 											<div>
-												<input class="form-check-input trigger-champion" type="radio" id="{{ forfait.name }}" name="forfait" value="{{ forfait.id }}"/>
+												<input class="form-check-input trigger-champion" type="radio" id="{{ forfait.name }}" name="forfait" value="{{ forfait.name }}"/>
 												<label class="form-check-label" for="{{ forfait.id }}">
 													<strong>{{ forfait.name }}
 														-
@@ -117,7 +117,7 @@
 														{% for photo in photos %}
 														{% set numberPhoto = numberPhoto + 1 %}
 															<div class="flex-fill">
-																<input class="form-check-input championPh" type="checkbox" id="photoChampion{{ photo.id }}" name="chamionPh" value="{{ photo.id }}"/>
+																<input class="form-check-input championPh" type="checkbox" id="photoChampion{{ photo.id }}" name="championPh" value="{{ photo.id }}"/>
 																<img class="me-2" src="{{ vich_uploader_asset(photo, 'photoFile')|imagine_filter('thumbnail') }}" width="60" alt="">
 																<label class="form-check-label" for="photoChampion{{ photo.id }}">
 																	<strong>Photo {{ numberPhoto }}

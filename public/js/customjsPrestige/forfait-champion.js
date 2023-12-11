@@ -12,13 +12,15 @@ const inputTriggers = document.querySelectorAll('.trigger-champion');
 const checkboxLimit = 2;//nombre de photos que l'utilisateur peut choisir 
 const checkboxes = document.querySelectorAll('.championPh');
 
+
 //par défaut, les images ne sont pas affichées
 divChampion.classList.add('d-none');
 
 //ajout d'un écouteur sur les input de forfaits. Si le forfait champion est choisi, on affiche les images. Sinon, on les cache.
 inputTriggers.forEach((inputTrigger) => {
-  inputTrigger.addEventListener('change', () => {
-    if (inputTriggers[[0]].checked === true || inputTriggers[[2]].checked === true) {
+  inputTrigger.addEventListener('change', (e) => {
+    console.log('target.value',e.target.value);
+    if (e.target.value !== 'Champion') {
       
       divChampion.classList.add('d-none');
       // déselection des inputs de photos automatiquement
@@ -37,12 +39,13 @@ inputTriggers.forEach((inputTrigger) => {
 
 
 
-console.log('les différentes images',checkboxes);
+console.log('Nombre de photo selectionné',checkedCount);
 
 //ajout d'un écouteur sur les checkbox. Si l'utilisateur a choisi plus de photos que le nombre autorisé, on décoche la dernière photo choisie.
 checkboxes.forEach((checkbox) => {
   checkbox.addEventListener('change', () => {
-    const checkedCount = document.querySelectorAll('input[type="checkbox"][name="chamionPh"]:checked').length;
+    const checkedCount = document.querySelectorAll('input[type="checkbox"][name="championPh"]:checked').length;
+    console.log('Nombre de photo selectionné',checkedCount, 'limit', checkboxLimit);
     if (checkedCount > checkboxLimit) {
       checkbox.checked = false;
     }
@@ -56,7 +59,8 @@ const form = document.getElementById('formCart');
 
 //ajout d'un écouteur sur le bouton de validation du formulaire
 form.addEventListener('submit', (e) => {
-  const checkedCount = document.querySelectorAll('input[type="checkbox"][name="chamionPh"]:checked').length;
+  const checkedCount = document.querySelectorAll('input[type="checkbox"][name="championPh"]:checked').length;
+
   if (inputTriggers[[1]].checked === true && checkedCount !== checkboxLimit) {
     e.preventDefault();
     alert('Vous devez choisir '+ checkboxLimit + ' photos pour le forfait Champion');
