@@ -94,7 +94,7 @@
 								</div>
 							</div>
 							<div class="mt-5 d-sm-flex">
-								<form class="" action="{{ path('app_panier')}}" method="POST">
+								<form id="formCart" class="" action="{{ path('app_panier')}}" method="POST">
 									<h2>COMMANDER</h2>
 									<fieldset class="border p-5 form-check">
 										<legend>Choisissez votre forfait</legend>
@@ -150,7 +150,7 @@
 											</div>
 										{% endfor %}
 									</fieldset>
-									<button class="ud-btn btn-thm" type="submit">Ajouter au panier</button>
+									<button onClic= class="ud-btn btn-thm" type="submit">Ajouter au panier</button>
 								</form>
 
 							</div>

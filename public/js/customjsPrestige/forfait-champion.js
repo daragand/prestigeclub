@@ -42,3 +42,16 @@ checkboxes.forEach((checkbox) => {
   });
 });
 
+
+// En cas de clic sur le bouton de validation du formulaire, on vérifie que l'utilisateur a bien choisi le nombre de photos autorisé. Si ce n'est pas le cas, on affiche un message d'erreur.
+
+const form = document.getElementById('formCart');
+
+//ajout d'un écouteur sur le bouton de validation du formulaire
+form.addEventListener('submit', (e) => {
+  const checkedCount = document.querySelectorAll('input[type="checkbox"][name="chamionPh"]:checked').length;
+  if (inputTriggers[[1]].checked === true && checkedCount !== checkboxLimit) {
+    e.preventDefault();
+    alert('Vous devez choisir deux photos pour le forfait Champion');
+  }
+});
