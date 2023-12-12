@@ -18,15 +18,15 @@ class Cart
     #[ORM\Column(nullable: true)]
     private ?float $amount = null;
 
-    #[ORM\ManyToMany(targetEntity: Photo::class, mappedBy: 'carts')]
+    #[ORM\ManyToMany(targetEntity: Photo::class, mappedBy: 'carts', cascade: ['persist', 'remove'])]
     private Collection $photos;
 
-    #[ORM\ManyToOne(inversedBy: 'carts')]
+    #[ORM\ManyToOne(inversedBy: 'carts',cascade: ['persist', 'remove'])]
     private ?Forfait $forfait = null;
 
    
 
-    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: Order::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: Order::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $orders;
 
     

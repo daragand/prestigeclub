@@ -33,6 +33,9 @@
         <div class="row wow fadeInUp" data-wow-delay="300ms">
         <div class="col-lg-8">
           <div class="shopping_cart_table table-responsive">
+          {% if panier is null %}
+            <h4>Votre panier est vide</h4>
+          {% else %}
             <table class="table table-borderless">
               <thead>
                 <tr>
@@ -44,7 +47,10 @@
                 </tr>
               </thead>
               <tbody class="table_body">
+              {% if panier.forfait is defined %}
               {% if panier.forfait is not empty %}
+                
+              
                 <tr>
                   <td class="pl30 ">
                     <div class="cart_list d-flex align-items-center">
@@ -57,7 +63,9 @@
                   <td><div class="cart-subtotal pl5">{{ panier.forfait.price }} €</div></td>
                   <td><div class="cart-delete"><span class="flaticon-delete"></span></div></td>
                 </tr>
+                {% endif %}
               {% endif %}
+              {% if panier.optionLists is defined %}
               {% if panier.optionLists is not empty %}
                 {% for option in panier.optionLists %}
                     <tr>
@@ -75,6 +83,7 @@
                 {% endfor %}
                 
               {% endif %}
+              {% endif %}
                 
                 
                 
@@ -82,10 +91,15 @@
             </table>
             <div class="coupon-form mt30 mb30-md">
               <div class="d-md-flex align-items-center justify-content-between">
+             
                 
+                {% if panier.id is defined %}
+                  
                 <div class="btn-lsit1">
                   <a href="{{ path('app_panier_delete', {'id': panier.id})}}" class="ud-btn btn-light-thm">Vider le panier<i class="fal fa-arrow-right-long"></i></a>
                 </div>
+                
+                {% endif %}
               </div>
             </div>
           </div>
@@ -102,6 +116,7 @@
             </div>
           </div>
         </div>
+        {% endif %}
         </div>
       </div>
     </section>
