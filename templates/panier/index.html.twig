@@ -11,7 +11,7 @@
 
 {% endblock %}
 {% block body %}
-{{ dump(panier) }}
+
  <div class="body_content">
    
     <section class="pt40 pb0">
@@ -80,17 +80,14 @@
                 
               </tbody>
             </table>
-            {# <div class="coupon-form mt30 mb30-md">
+            <div class="coupon-form mt30 mb30-md">
               <div class="d-md-flex align-items-center justify-content-between">
-                <div class="d-md-flex justify-content-between">
-                  <input type="text" class="form-control coupon_input mb10-sm" placeholder="Coupon Code">
-                  <a class="ud-btn btn-thm flex-shrink-0 ml20 ml0-sm" href="#">Apply Coupon<i class="fal fa-arrow-right-long"></i></a>
-                </div>
+                
                 <div class="btn-lsit1">
-                  <a href="#" class="ud-btn btn-light-thm">Update Cart<i class="fal fa-arrow-right-long"></i></a>
+                  <a href="{{ path('app_panier_delete', {'id': panier.id})}}" class="ud-btn btn-light-thm">Vider le panier<i class="fal fa-arrow-right-long"></i></a>
                 </div>
               </div>
-            </div> #}
+            </div>
           </div>
         </div>
         <div class="col-lg-4">

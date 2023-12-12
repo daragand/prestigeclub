@@ -15,7 +15,7 @@ class Cart
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $amount = null;
 
     #[ORM\ManyToMany(targetEntity: Photo::class, mappedBy: 'carts')]
@@ -31,7 +31,7 @@ class Cart
 
     
 
-    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: OptionList::class)]
+    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: OptionList::class, cascade: ['persist', 'remove'])]
     private Collection $optionLists;
 
     #[ORM\OneToOne(inversedBy: 'cart', cascade: ['persist', 'remove'])]
