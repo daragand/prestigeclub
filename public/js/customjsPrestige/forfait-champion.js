@@ -43,7 +43,7 @@ inputTriggers.forEach((inputTrigger) => {
 //ajout d'un écouteur sur les checkbox. Si l'utilisateur a choisi plus de photos que le nombre autorisé, on décoche la dernière photo choisie.
 checkboxes.forEach((checkbox) => {
   checkbox.addEventListener('change', () => {
-    const checkedCount = document.querySelectorAll('input[type="checkbox"][name="championPh"]:checked').length;
+    const checkedCount = document.querySelectorAll('input[type="checkbox"][name="championPh[]"]:checked').length;
     console.log('Nombre de photo selectionné',checkedCount, 'limit', checkboxLimit);
     if (checkedCount > checkboxLimit) {
       checkbox.checked = false;
@@ -58,10 +58,12 @@ const form = document.getElementById('formCart');
 
 //ajout d'un écouteur sur le bouton de validation du formulaire
 form.addEventListener('submit', (e) => {
-  const checkedCount = document.querySelectorAll('input[type="checkbox"][name="championPh"]:checked').length;
+  const checkedCount = document.querySelectorAll('input[type="checkbox"][name="championPh[]"]:checked').length;
 
-  if (inputTriggers[[1]].checked === true && checkedCount !== checkboxLimit) {
+// TODO: améliorer la vérification car trop manuelle. Un changement de position dans le tableau donnerait une erreur. A voir avec la fonction some() de javascript
+
+  if (inputTriggers[1].checked && inputTriggers[1].value === 'Champion' && checkedCount < checkboxLimit) {
     e.preventDefault();
-    alert('Vous devez choisir '+ checkboxLimit + ' photos pour le forfait Champion');
+    alert('Vous devez choisir ' + checkboxLimit + ' photos pour le forfait Champion');
   }
 });

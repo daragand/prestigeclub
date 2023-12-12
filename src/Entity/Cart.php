@@ -29,12 +29,13 @@ class Cart
     #[ORM\OneToMany(mappedBy: 'cart', targetEntity: Order::class, orphanRemoval: true)]
     private Collection $orders;
 
-    #[ORM\ManyToOne(inversedBy: 'carts')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $users = null;
+    
 
     #[ORM\OneToMany(mappedBy: 'cart', targetEntity: OptionList::class)]
     private Collection $optionLists;
+
+    #[ORM\OneToOne(inversedBy: 'cart', cascade: ['persist', 'remove'])]
+    private ?User $users = null;
 
     
 
@@ -133,17 +134,7 @@ class Cart
         return $this;
     }
 
-    public function getUsers(): ?User
-    {
-        return $this->users;
-    }
-
-    public function setUsers(?User $users): static
-    {
-        $this->users = $users;
-
-        return $this;
-    }
+    
 
    public function __toString(): string
     {
@@ -176,6 +167,18 @@ class Cart
                $optionList->setCart(null);
            }
        }
+
+       return $this;
+   }
+
+   public function getUsers(): ?User
+   {
+       return $this->users;
+   }
+
+   public function setUsers(?User $users): static
+   {
+       $this->users = $users;
 
        return $this;
    }

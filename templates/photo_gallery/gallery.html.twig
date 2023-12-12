@@ -89,8 +89,11 @@
 										-
 										{{ licencie.club.address.city }}({{ licencie.club.address.zip }})
 									</h2>
+									{% if licencie.groupes.name is defined %}
+										
 									<h4>{{ licencie.groupes.name }}
 									</h4>
+									{% endif %}
 								</div>
 							</div>
 							<div class="mt-5 d-sm-flex">
@@ -117,7 +120,7 @@
 														{% for photo in photos %}
 														{% set numberPhoto = numberPhoto + 1 %}
 															<div class="flex-fill">
-																<input class="form-check-input championPh" type="checkbox" id="photoChampion{{ photo.id }}" name="championPh" value="{{ photo.id }}"/>
+																<input class="form-check-input championPh" type="checkbox" id="photoChampion{{ photo.id }}" name="championPh[]" value="{{ photo.id }}"/>
 																<img class="me-2" src="{{ vich_uploader_asset(photo, 'photoFile')|imagine_filter('thumbnail') }}" width="60" alt="">
 																<label class="form-check-label" for="photoChampion{{ photo.id }}">
 																	<strong>Photo {{ numberPhoto }}
@@ -150,6 +153,7 @@
 											</div>
 										{% endfor %}
 									</fieldset>
+									<input type="hidden" name="licencie" value="{{ licencie.id }}">
 									<button onClic= class="ud-btn btn-thm" type="submit">Ajouter au panier</button>
 								</form>
 

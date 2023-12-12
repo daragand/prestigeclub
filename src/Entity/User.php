@@ -52,15 +52,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'users', targetEntity: Order::class, orphanRemoval: true)]
     private Collection $orders;
 
-    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Cart::class, orphanRemoval: true)]
-    private Collection $carts;
+    #[ORM\OneToOne(mappedBy: 'users', cascade: ['persist', 'remove'])]
+    private ?Cart $cart = null;
+
+    
 
     public function __construct()
     {
         $this->licencies = new ArrayCollection();
         $this->club = new ArrayCollection();
         $this->orders = new ArrayCollection();
-        $this->carts = new ArrayCollection();
+        
     }
 
     public function getId(): ?int
@@ -249,37 +251,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Cart>
-     */
-    public function getCarts(): Collection
-    {
-        return $this->carts;
-    }
-
-    public function addCart(Cart $cart): static
-    {
-        if (!$this->carts->contains($cart)) {
-            $this->carts->add($cart);
-            $cart->setUsers($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCart(Cart $cart): static
-    {
-        if ($this->carts->removeElement($cart)) {
-            // set the owning side to null (unless already changed)
-            if ($cart->getUsers() === $this) {
-                $cart->setUsers(null);
-            }
-        }
-
-        return $this;
-    }
+    
     public function __toString(): string
     {
         return $this->firstname. ' '.$this->lastname;
+    }
+
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(?Cart $cart): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($cart === null && $this->cart !== null) {
+            $this->cart->setUsers(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($cart !== null && $cart->getUsers() !== $this) {
+            $cart->setUsers($this);
+        }
+
+        $this->cart = $cart;
+
+        return $this;
+    }
+    public function removeCart(Cart $cart): static
+    {
+        // set the owning side to null (unless already changed)
+        if ($cart->getUsers() === $this) {
+            $cart->setUsers(null);
+        }
+
+        return $this;
     }
 }

@@ -56,14 +56,14 @@
                   <td>
                     <div class="cart-quantity">
                       <div class="quantity-block">
-                        <button class="quantity-arrow-minus"> <span class="fa fa-minus"></span> </button>
+                        
                         <input class="quantity-num" type="number" value="1" />
-                        <button class="quantity-arrow-plus"> <span class="fas fa-plus"></span> </button>
+                        
                       </div>
                     </div>
                     <!-- <input class="cart_count text-center" placeholder="2" type="number"> -->
                   </td>
-                  <td><div class="cart-subtotal pl5">$1.298</div></td>
+                  <td><div class="cart-subtotal pl5">{{ panier.forfait.price }} €</div></td>
                   <td><div class="cart-delete"><span class="flaticon-delete"></span></div></td>
                 </tr>
               {% endif %}
@@ -73,7 +73,7 @@
                     <tr>
                   <td class="pl30 ">
                     <div class="cart_list d-flex align-items-center">
-                      <div class="cart-img"><img src="images/shop/cart-1.png" alt="cart-1.png"></div>
+                      <div class="cart-img"><img src="{{ vich_uploader_asset(option.photos, 'photoFile')|imagine_filter('thumbnail') }}" alt="cart-1.png"></div>
                       <h5 class="mb-0">{{option.options.name}} : {{option.options.description|slice(0,50)}} </h5>
                     </div>
                   </td>
@@ -82,81 +82,21 @@
                     <div class="cart-quantity">
                       <div class="quantity-block">
                         <button class="quantity-arrow-minus"> <span class="fa fa-minus"></span> </button>
-                        <input class="quantity-num" type="number" value="12" />
+                        <input class="quantity-num" type="number" value="{{option.quantity}}" />
                         <button class="quantity-arrow-plus"> <span class="fas fa-plus"></span> </button>
                       </div>
                     </div>
                     <!-- <input class="cart_count text-center" placeholder="2" type="number"> -->
                   </td>
-                  <td><div class="cart-subtotal pl5">$1.298</div></td>
+                  <td><div class="cart-subtotal pl5">{{option.options.price}} €</div></td>
                   <td><div class="cart-delete"><span class="flaticon-delete"></span></div></td>
                 </tr>
                 {% endfor %}
                 
               {% endif %}
-                <tr>
-                  <td class="pl30 ">
-                    <div class="cart_list d-flex align-items-center">
-                      <div class="cart-img"><img src="images/shop/cart-1.png" alt="cart-1.png"></div>
-                      <h5 class="mb-0">Herschel backpack</h5>
-                    </div>
-                  </td>
-                  <td><div class="cart-price">$298</div></td>
-                  <td>
-                    <div class="cart-quantity">
-                      <div class="quantity-block">
-                        <button class="quantity-arrow-minus"> <span class="fa fa-minus"></span> </button>
-                        <input class="quantity-num" type="number" value="12" />
-                        <button class="quantity-arrow-plus"> <span class="fas fa-plus"></span> </button>
-                      </div>
-                    </div>
-                    <!-- <input class="cart_count text-center" placeholder="2" type="number"> -->
-                  </td>
-                  <td><div class="cart-subtotal pl5">$1.298</div></td>
-                  <td><div class="cart-delete"><span class="flaticon-delete"></span></div></td>
-                </tr>
-                <tr>
-                  <td class="pl30 ">
-                    <div class="cart_list d-flex align-items-center">
-                      <div class="cart-img"><img src="images/shop/cart-2.png" alt="cart-2.png"></div>
-                      <h5 class="mb-0">Herschel backpack</h5>
-                    </div>
-                  </td>
-                  <td><div class="cart-price">$298</div></td>
-                  <td>
-                    <div class="cart-quantity">
-                      <div class="quantity-block">
-                        <button class="quantity-arrow-minus"> <span class="fa fa-minus"></span> </button>
-                        <input class="quantity-num" type="number" value="12" />
-                        <button class="quantity-arrow-plus"> <span class="fas fa-plus"></span> </button>
-                      </div>
-                    </div>
-                    <!-- <input class="cart_count text-center" placeholder="2" type="number"> -->
-                  </td>
-                  <td><div class="cart-subtotal pl5">$1.298</div></td>
-                  <td><div class="cart-delete"><span class="flaticon-delete"></span></div></td>
-                </tr>
-                <tr>
-                  <td class="pl30 ">
-                    <div class="cart_list d-flex align-items-center">
-                      <div class="cart-img"><img src="images/shop/cart-3.png" alt="cart-3.png"></div>
-                      <h5 class="mb-0">Herschel backpack</h5>
-                    </div>
-                  </td>
-                  <td><div class="cart-price">$298</div></td>
-                  <td>
-                    <div class="cart-quantity">
-                      <div class="quantity-block">
-                        <button class="quantity-arrow-minus"> <span class="fa fa-minus"></span> </button>
-                        <input class="quantity-num" type="number" value="12" />
-                        <button class="quantity-arrow-plus"> <span class="fas fa-plus"></span> </button>
-                      </div>
-                    </div>
-                    <!-- <input class="cart_count text-center" placeholder="2" type="number"> -->
-                  </td>
-                  <td><div class="cart-subtotal pl5">$1.298</div></td>
-                  <td><div class="cart-delete"><span class="flaticon-delete"></span></div></td>
-                </tr>
+                
+                
+                
               </tbody>
             </table>
             <div class="coupon-form mt30 mb30-md">
@@ -192,4 +132,5 @@
    
   </div>
 </div>
+
 {% endblock %}
