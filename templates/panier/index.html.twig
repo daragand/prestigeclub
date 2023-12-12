@@ -20,7 +20,7 @@
           <div class="col-lg-12">
             <div class="main-title">
               <h2 class="title">Votre panier</h2>
-              <p class="text mb-0">Give your visitor a smooth online experience with a solid UX design</p>
+              <p class="text mb-0">Pour passer commande en toute sérénité</p>
             </div>
           </div>
         </div>
@@ -38,7 +38,7 @@
                 <tr>
                   <th class="pl30" scope="col">Produit</th>
                   <th class="ps-0" scope="col">Prix unitaire</th>
-                  <th class="ps-0" scope="col">Quantité</th>
+                  
                   <th class="ps-0" scope="col">Total</th>
                   <th scope="col"></th>
                 </tr>
@@ -48,28 +48,18 @@
                 <tr>
                   <td class="pl30 ">
                     <div class="cart_list d-flex align-items-center">
-                      <div class="cart-img"><img src="images/shop/cart-1.png" alt="cart-1.png"></div>
+                      {# <div class="cart-img"><img src="{{ vich_uploader_asset(option.photos, 'photoFile')|imagine_filter('thumbnail') }}" alt="cart-1.png"></div> #}
                       <h5 class="mb-0">forfait : {{ panier.forfait.name }}</h5>
                     </div>
                   </td>
                   <td><div class="cart-price">{{ panier.forfait.price }} €</div></td>
-                  <td>
-                    <div class="cart-quantity">
-                      <div class="quantity-block">
-                        
-                        <input class="quantity-num" type="number" value="1" />
-                        
-                      </div>
-                    </div>
-                    <!-- <input class="cart_count text-center" placeholder="2" type="number"> -->
-                  </td>
+                  
                   <td><div class="cart-subtotal pl5">{{ panier.forfait.price }} €</div></td>
                   <td><div class="cart-delete"><span class="flaticon-delete"></span></div></td>
                 </tr>
               {% endif %}
               {% if panier.optionLists is not empty %}
                 {% for option in panier.optionLists %}
-                {{ dump(option) }}
                     <tr>
                   <td class="pl30 ">
                     <div class="cart_list d-flex align-items-center">
@@ -78,16 +68,7 @@
                     </div>
                   </td>
                   <td><div class="cart-price">{{option.options.price}} €</div></td>
-                  <td>
-                    <div class="cart-quantity">
-                      <div class="quantity-block">
-                        <button class="quantity-arrow-minus"> <span class="fa fa-minus"></span> </button>
-                        <input class="quantity-num" type="number" value="{{option.quantity}}" />
-                        <button class="quantity-arrow-plus"> <span class="fas fa-plus"></span> </button>
-                      </div>
-                    </div>
-                    <!-- <input class="cart_count text-center" placeholder="2" type="number"> -->
-                  </td>
+                  
                   <td><div class="cart-subtotal pl5">{{option.options.price}} €</div></td>
                   <td><div class="cart-delete"><span class="flaticon-delete"></span></div></td>
                 </tr>
@@ -99,7 +80,7 @@
                 
               </tbody>
             </table>
-            <div class="coupon-form mt30 mb30-md">
+            {# <div class="coupon-form mt30 mb30-md">
               <div class="d-md-flex align-items-center justify-content-between">
                 <div class="d-md-flex justify-content-between">
                   <input type="text" class="form-control coupon_input mb10-sm" placeholder="Coupon Code">
@@ -109,17 +90,17 @@
                   <a href="#" class="ud-btn btn-light-thm">Update Cart<i class="fal fa-arrow-right-long"></i></a>
                 </div>
               </div>
-            </div>
+            </div> #}
           </div>
         </div>
         <div class="col-lg-4">
           <div class="shop-sidebar ms-lg-auto">
             <div class="order_sidebar_widget default-box-shadow1">
-              <h4 class="title">Cart Totals</h4>
-              <p class="text bdrb1 pb10">Subtotal <span class="float-end">$1.298</span></p>
-              <p class="text">Total <span class="float-end">$3.298</span></p>
+              <h4 class="title">Total du panier</h4>
+              {# <p class="text bdrb1 pb10">Subtotal <span class="float-end">$1.298</span></p> #}
+              <p class="text">Total <span class="float-end">{{panier.amount}} €</span></p>
               <div class="d-grid mt40">
-                <a class="ud-btn btn-thm" href="page-shop-checkout.html">Proceed to Checkout<i class="fal fa-arrow-right-long"></i></a>
+                <a class="ud-btn btn-thm" href="page-shop-checkout.html">Commander<i class="fal fa-arrow-right-long"></i></a>
               </div>
             </div>
           </div>
