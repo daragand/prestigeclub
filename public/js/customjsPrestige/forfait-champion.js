@@ -39,7 +39,6 @@ inputTriggers.forEach((inputTrigger) => {
 
 
 
-console.log('Nombre de photo selectionné',checkedCount);
 
 //ajout d'un écouteur sur les checkbox. Si l'utilisateur a choisi plus de photos que le nombre autorisé, on décoche la dernière photo choisie.
 checkboxes.forEach((checkbox) => {
