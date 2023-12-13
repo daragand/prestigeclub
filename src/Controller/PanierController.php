@@ -39,7 +39,11 @@ class PanierController extends AbstractController
 
     $cart = $cartRepository->findOneBy(['users' => $this->getUser()]);
     
-
+    if (!$cart) {
+        $cart = new Cart();
+        $cart->setUsers($this->getUser());
+        $entityManager->persist($cart);
+    }
     
     if (isset($prods['forfait'])) {
         $forfait = $forfaitRepository->findOneBy(['name' => $prods['forfait']]);
