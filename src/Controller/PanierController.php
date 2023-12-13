@@ -22,7 +22,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class PanierController extends AbstractController
 {
-   
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager=$entityManager;
+    }
     
 
     #[Route('/panier', name: 'app_panier')]
@@ -86,16 +91,12 @@ class PanierController extends AbstractController
 
     #[Route('/panier/delete/{id}', name: 'app_panier_delete')]
     public function deleteFromCart(
-        Cart $cart,
-        CartRepository $cartRepository,
-        UserRepository $userRepository,
-        EntityManagerInterface $entityManager
+        Cart $cart
     ): RedirectResponse {
 
-        $email = $this->getUser()->getUserIdentifier();
-        $user = $userRepository->findOneBy(['email' => $email]);
-        $user->removeCart($cart);
-        $entityManager->flush();
+        dd($cart);
+        $this->entityManager->remove($cart);
+        $this->entityManager->flush();
 
         return $this->redirectToRoute('app_panier_visualiser');
     }
