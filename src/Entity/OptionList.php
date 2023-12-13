@@ -113,4 +113,8 @@ class OptionList
 
         return $this;
     }
+    public function __toString()
+    {
+        return $this->options->getName().' - photo :'.$this->photos->getId();
+    }
 }

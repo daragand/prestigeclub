@@ -48,7 +48,7 @@ class PanierController extends AbstractController
     if (isset($prods['forfait'])) {
         $forfait = $forfaitRepository->findOneBy(['name' => $prods['forfait']]);
     }
-    
+    $amount = 0;
 
     foreach ($prods as $key => $value) {
         if (strpos($key, 'option') !== false) {
@@ -57,8 +57,8 @@ class PanierController extends AbstractController
             $optionList->setOptions($optionsRepository->findOneBy(['id' => intval($itemOption[1])]));
             $optionList->setPhotos($photoRepository->findOneBy(['id' => intval($itemOption[2])]));
             $optionList->setQuantity(1);
-            $cart->addOptionList($optionList)
-            ->setAmount($cart->getAmount() + $optionList->getOptions()->getPrice());
+            $cart->addOptionList($optionList);
+            $amount=($amount + $optionList->getOptions()->getPrice());
         } elseif (strpos($key, 'championPh') !== false) {
             foreach ($value as $photoId) {
                 $cart->addPhoto($photoRepository->findOneBy(['id' => intval($photoId)]));
@@ -66,12 +66,15 @@ class PanierController extends AbstractController
             
         } elseif ($key == 'forfait') {
             
-            $cart->setForfait($forfait)
-            ->setAmount($cart->getAmount() + $forfait->getPrice());
+            $cart->setForfait($forfait);
+            $amount=($amount + $forfait->getPrice());
           
         }
     }
     
+    //pour la gestion du montant total du panier
+    $cart->setAmount($amount);
+    $entityManager->persist($cart);
 
     $entityManager->flush();
 
@@ -106,7 +109,7 @@ class PanierController extends AbstractController
             'panier'=>$cartRepository->findOneBy(['users'=>$this->getUser()])
         ]);
     }
-    #[Route('/panier/checkout',name:'app_panier_checkout')]
+    #[Route('/panier/checkout/{id}',name:'app_panier_checkout')]
     public function checkout(CartRepository $cartRepository): Response
     {
         

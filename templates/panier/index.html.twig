@@ -111,7 +111,7 @@
               {# <p class="text bdrb1 pb10">Subtotal <span class="float-end">$1.298</span></p> #}
               <p class="text">Total <span class="float-end">{{panier.amount}} €</span></p>
               <div class="d-grid mt40">
-                <a class="ud-btn btn-thm" href="page-shop-checkout.html">Commander<i class="fal fa-arrow-right-long"></i></a>
+                <a class="ud-btn btn-thm" href="{{ path('app_panier_checkout', {'id': panier.id})}}">Commander<i class="fal fa-arrow-right-long"></i></a>
               </div>
             </div>
           </div>
