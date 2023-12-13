@@ -23,9 +23,7 @@ class Order
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $paymentDate = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orders')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Cart $cart = null;
+    
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
@@ -37,6 +35,9 @@ class Order
 
     #[ORM\OneToMany(mappedBy: 'orders', targetEntity: OptionList::class)]
     private Collection $optionLists;
+
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    private ?Forfait $forfait = null;
 
     public function __construct()
     {
@@ -72,17 +73,7 @@ class Order
         return $this;
     }
 
-    public function getCart(): ?Cart
-    {
-        return $this->cart;
-    }
-
-    public function setCart(?Cart $cart): static
-    {
-        $this->cart = $cart;
-
-        return $this;
-    }
+    
 
     public function getOrderStatus(): ?OrderStatus
     {
@@ -134,6 +125,18 @@ class Order
                 $optionList->setOrders(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getForfait(): ?Forfait
+    {
+        return $this->forfait;
+    }
+
+    public function setForfait(?Forfait $forfait): static
+    {
+        $this->forfait = $forfait;
 
         return $this;
     }

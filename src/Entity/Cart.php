@@ -43,7 +43,7 @@ class Cart
     {
         $this->photos = new ArrayCollection();
        
-        $this->orders = new ArrayCollection();
+        
         $this->optionLists = new ArrayCollection();
     }
 
@@ -104,35 +104,7 @@ class Cart
     }
 
     
-    /**
-     * @return Collection<int, Order>
-     */
-    public function getOrders(): Collection
-    {
-        return $this->orders;
-    }
-
-    public function addOrder(Order $order): static
-    {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->setCart($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(Order $order): static
-    {
-        if ($this->orders->removeElement($order)) {
-            // set the owning side to null (unless already changed)
-            if ($order->getCart() === $this) {
-                $order->setCart(null);
-            }
-        }
-
-        return $this;
-    }
+    
 
     
 

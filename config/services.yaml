@@ -9,6 +9,8 @@ parameters:
     groupes_photos_directory: '%kernel.project_dir%/public/uploads/groupes/photos'
     email_address: '%env(EMAIL_ADDRESS)%'
     domain: '%env(DOMAIN)%'
+    public_key_stripe: '%env(PUBLIC_KEY_STRIPE)%'
+    secret_key_stripe: '%env(SECRET_KEY_STRIPE)%'
 
 services:
     # default configuration for services in *this* file

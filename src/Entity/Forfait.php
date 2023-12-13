@@ -28,9 +28,13 @@ class Forfait
     #[ORM\OneToMany(mappedBy: 'forfait', targetEntity: Cart::class)]
     private Collection $carts;
 
+    #[ORM\OneToMany(mappedBy: 'forfait', targetEntity: Order::class)]
+    private Collection $orders;
+
     public function __construct()
     {
         $this->carts = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -106,5 +110,35 @@ class Forfait
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setForfait($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getForfait() === $this) {
+                $order->setForfait(null);
+            }
+        }
+
+        return $this;
     }
 }
