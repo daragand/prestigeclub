@@ -123,18 +123,21 @@ class PaymentController extends AbstractController
         //suppression du panier (placement à null les relations) et enregistrement de la commande
         $this->entityManager->persist($order);
         
-        $optionLists = $cart->getOptionLists();
-
-        foreach ($optionLists as $optionList) {
-            $optionList->setCart(null);
-            
+        if($cart->getOptionLists()){
+            foreach ($cart->getOptionLists() as $optionList) {
+                $optionList->setCart(null);
+                
+            }
+        }elseif($cart->getForfait()){
+            $cart->setForfait(null);
+        }elseif($cart->getPhotos()){
+            foreach ($cart->getPhotos() as $photo) {
+                $photo->removeCart($cart);
+            }
+        }elseif($cart->getUsers()){
+            $cart->setUsers(null);
         }
-        $photos = $cart->getPhotos();
-        foreach ($photos as $photo) {
-            $photo->removeCart($cart);
-        }
-        $cart->setForfait(null)
-            ->setUsers(null);
+       $this->entityManager->remove($cart);
 
 
         $this->entityManager->flush();

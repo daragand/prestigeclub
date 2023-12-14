@@ -95,20 +95,28 @@ class PanierController extends AbstractController
     ): RedirectResponse {
 
         
-
-        $optionLists = $cart->getOptionLists();
-
-        foreach ($optionLists as $optionList) {
-            $optionList->setCart(null);
-            
+        if (!$cart) {
+            return $this->redirectToRoute('app_panier_visualiser');
         }
-        $photos = $cart->getPhotos();
-        foreach ($photos as $photo) {
-            $photo->removeCart($cart);
+
+        if($cart->getOptionLists()){
+            foreach ($cart->getOptionLists() as $optionList) {
+                $optionList->setCart(null);
+                
+            }
+        }elseif($cart->getForfait()){
+            $cart->setForfait(null);
+        }elseif($cart->getPhotos()){
+            foreach ($cart->getPhotos() as $photo) {
+                $photo->removeCart($cart);
+            }
+        }elseif($cart->getUsers()){
+            $cart->setUsers(null);
         }
-        $cart->setForfait(null)
-            ->setUsers(null);
+       
         
+            //Maintenant que le panier est vidé de son contenu relationnel, on peut le supprimer
+        $this->entityManager->remove($cart);
         $this->entityManager->flush();
 
         return $this->redirectToRoute('app_panier_visualiser');

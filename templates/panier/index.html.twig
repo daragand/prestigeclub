@@ -61,7 +61,7 @@
                   <td><div class="cart-price">{{ panier.forfait.price }} €</div></td>
                   
                   <td><div class="cart-subtotal pl5">{{ panier.forfait.price }} €</div></td>
-                  <td><div class="cart-delete"><span class="flaticon-delete"></span></div></td>
+                  <td><div class="cart-delete"><i class="fa-solid fa-trash"></i></div></td>
                 </tr>
                 {% endif %}
               {% endif %}
@@ -78,7 +78,7 @@
                   <td><div class="cart-price">{{option.options.price}} €</div></td>
                   
                   <td><div class="cart-subtotal pl5">{{option.options.price}} €</div></td>
-                  <td><div class="cart-delete"><span class="flaticon-delete"></span></div></td>
+                  <td><div class="cart-delete"><i class="fa-solid fa-trash"></i></div></td>
                 </tr>
                 {% endfor %}
                 
@@ -96,7 +96,7 @@
                 {% if panier.id is defined %}
                   
                 <div class="btn-lsit1">
-                  <a href="{{ path('app_panier_delete', {'id': panier.id})}}" class="ud-btn btn-light-thm">Vider le panier<i class="fal fa-arrow-right-long"></i></a>
+                  <a href="{{ path('app_panier_delete', {'id': panier.id})}}" class="ud-btn btn-light-thm">Vider le panier<i class="fa-solid fa-trash"></i></a>
                 </div>
                 
                 {% endif %}
@@ -111,7 +111,7 @@
               {# <p class="text bdrb1 pb10">Subtotal <span class="float-end">$1.298</span></p> #}
               <p class="text">Total <span class="float-end">{{panier.amount}} €</span></p>
               <div class="d-grid mt40">
-                <a class="ud-btn btn-thm" href="{{ path('app_panier_checkout', {'id': panier.id})}}">Commander<i class="fal fa-arrow-right-long"></i></a>
+                <a class="ud-btn btn-thm" href="{{ path('app_panier_checkout', {'id': panier.id})}}">Commander<i class="fa-solid fa-arrow-up-right-from-square"></i></a>
               </div>
             </div>
           </div>

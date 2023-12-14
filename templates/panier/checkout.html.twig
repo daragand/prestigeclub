@@ -34,7 +34,7 @@
         <div class="row wow fadeInUp" data-wow-delay="300ms">
           <div class="col-md-7 col-lg-8">
             <div class="checkout_form">
-              <h4 class="title mb30">Détail de commande</h4>
+              <h4 class="title mb30">Récapitulatif de votre commande</h4>
               <div class="checkout_coupon">
                 <form class="form2" id="coupon_form" name="contact_form" method="post">
                   <div class="row">
@@ -109,9 +109,9 @@
                 </div>
               </div>
               <div class="d-grid default-box-shadow2">
-              <form action="{{ path('app_payment',{'id':panier.id})}}">
-                <button type="submit" class="ud-btn btn-thm" >Payer<i class="fa-solid fa-credit-card"></i></button>
-              </form>
+              
+                <a class="ud-btn btn-thm" href="{{ path('app_payment',{'id':panier.id})}}">Payer<i class="fa-solid fa-credit-card"></i></a>
+              
               </div>
             </div>
           </div>
