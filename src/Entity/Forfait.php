@@ -25,7 +25,7 @@ class Forfait
     #[ORM\Column]
     private ?float $price = null;
 
-    #[ORM\OneToMany(mappedBy: 'forfait', targetEntity: Cart::class)]
+    #[ORM\OneToMany(mappedBy: 'forfait', targetEntity: Cart::class,cascade: ['persist', 'remove'])]
     private Collection $carts;
 
     #[ORM\OneToMany(mappedBy: 'forfait', targetEntity: Order::class)]

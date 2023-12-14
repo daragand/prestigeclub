@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+<div class="body_content">
+
+   {{ dump(order) }}
+    <section>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-6">
+            <div class="order_complete_message text-center">
+              <div class="icon bgc-thm4"><span class="fa fa-check text-thm"></span></div>
+              <h2 class="title">Votre commande est confirmée !</h2>
+              <p class="text">Merci. Votre commande a bien été prise en compte !</p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-8 offset-xl-2">
+            <div class="shop_order_box mt60">
+              <div class="order_list_raw">
+                <ul class="d-md-flex align-items-center justify-content-md-between p-0 mb-0">
+                  <li class="mb20-sm">
+                    <p class="text mb5">Numéro de commande</p>
+                    <h6 class="mb-0">039422</h6>
+                  </li>
+                  <li class="mb20-sm">
+                    <p class="text mb5">Date</p>
+                    <h6 class="mb-0">27/04/2022</h6>
+                  </li>
+                  <li class="mb20-sm">
+                    <p class="text mb5">Total</p>
+                    <h6 class="mb-0">$2984.10</h6>
+                  </li>
+                  <li>
+                    <p class="text mb5">Mode de paiement</p>
+                    <h6 class="mb-0">En ligne</h6>
+                  </li>
+                </ul>
+              </div>
+              <div class="order_details default-box-shadow1">
+                <h4 class="title mb25">Détails de la commande</h4>
+                <div class="od_content">
+                  <ul class="p-0 mb-0">
+                    <li class="bdrb1 mb20"><h6>Produits <span class="float-end">Subtotal</span></h6></li>
+                    <li class="mb20"><p class="body-color">Hoodie x2 <span class="float-end">$59.00</span></p></li>
+                    <li class="mb20"><p class="body-color">Seo Books x 1 <span class="float-end">$67.00</span></p></li>
+                    <li class=" bdrb1 mb15"><h6>Subtotal <span class="float-end">$178.00</span></h6></li>
+                    <li class=" bdrb1 mb15"><h6>Shipping <span class="float-end">$178.00</span></h6></li>
+                    <li><h6>Total <span class="float-end">$9,218.00</span></h6></li>
+                  </ul>
+                </div>
+              </div>
+            </div>            
+          </div>
+        </div>
+      </div>
+    </section>
+
+   
+  </div>
+
+  {% endblock %}

@@ -5,16 +5,17 @@ namespace App\Controller;
 use Stripe\Stripe;
 use App\Entity\Cart;
 use App\Entity\Order;
-use App\Entity\OrderStatus;
-use App\Repository\UserRepository;
-use Stripe\Checkout\Session;
-use Doctrine\ORM\EntityManagerInterface;
 use PharIo\Manifest\Url;
+use App\Entity\OrderStatus;
+use Stripe\Checkout\Session;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PaymentController extends AbstractController
 {
@@ -90,7 +91,7 @@ class PaymentController extends AbstractController
     }
 
     #[Route('/order/success/{id}', name: 'app_payment_success')]
-    public function success(Cart $cart, UserRepository $userRepository): RedirectResponse
+    public function success(Cart $cart, UserRepository $userRepository): Response
     {
         //création d'une commande depuis le panier
         $order = new Order();
@@ -117,16 +118,18 @@ class PaymentController extends AbstractController
                 $order->setOrderStatus($orderStatus);
             }
         
-        
-        //pour la suppression du panier         
-        // $email = $this->getUser()->getUserIdentifier();
-        // $user = $userRepository->findOneBy(['email' => $email]);
-        // $user->removeCart($cart);
-        $this->entityManager->remove($cart);
+       
+        //suppression du panier et enregistrement de la commande
         $this->entityManager->persist($order);
+        
+        $this->entityManager->flush();
+        $this->entityManager->remove($cart);
         $this->entityManager->flush();
 
-        return $this->redirectToRoute('app_panier_visualiser');
+        return $this->render('payment/payment_success.html.twig', [
+            'controller_name' => 'Paiement effectué avec succès',
+            'order'=>$order
+        ]);
     }
     #[Route('/order/error/{id}', name: 'app_payment_error')]
     public function error(): RedirectResponse

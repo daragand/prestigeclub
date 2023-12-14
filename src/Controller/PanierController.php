@@ -94,7 +94,7 @@ class PanierController extends AbstractController
         Cart $cart
     ): RedirectResponse {
 
-        dd($cart);
+        
         $this->entityManager->remove($cart);
         $this->entityManager->flush();
 

@@ -50,10 +50,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface,\Seriali
     private ?string $lastname = null;
 
 
-    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Order::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Order::class, orphanRemoval: true,cascade: ['persist', 'remove'])]
     private Collection $orders;
 
-    #[ORM\OneToOne(mappedBy: 'users', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'users', cascade: ['persist', 'remove'],orphanRemoval: true)]
     private ?Cart $cart = null;
 
     

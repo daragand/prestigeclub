@@ -230,6 +230,8 @@ class AppFixtures extends Fixture
         ///////////////////  Photo   ////////////////////////
         $objectPhotos = [];
 
+        
+
         foreach ($objectLicencies as $licencie) {
             //ajout pour chaque licencié de 4 photos
             for ($i = 0; $i < 4; $i++) {
@@ -371,10 +373,10 @@ class AppFixtures extends Fixture
             $objectOrder = new Order();
             
             $objectOrder->setPaymentDate($faker->dateTimeBetween('-1 years', 'now'))
-                ->setCart($objectCarts[$faker->numberBetween(0, (count($objectCarts) - 1))])
                 ->setOrderStatus($objectsOrderStatus[$faker->numberBetween(0, (count($objectsOrderStatus) - 1))])
-                ->setUsers($objectOrder->getCart()->getUsers())
-                ->setAmount($objectOrder->getCart()->getAmount());
+                ->setUsers($parents[$faker->numberBetween(0, (count($parents) - 1))])
+                ->setAmount($faker->randomFloat(2, 0, 100))
+                ->setForfait($objectsForfaits[$faker->numberBetween(0, (count($objectsForfaits) - 1))]);
 
             
                 

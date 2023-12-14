@@ -21,17 +21,11 @@ class Cart
     #[ORM\ManyToMany(targetEntity: Photo::class, mappedBy: 'carts', cascade: ['persist', 'remove'])]
     private Collection $photos;
 
-    #[ORM\ManyToOne(inversedBy: 'carts',cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'carts')]
     private ?Forfait $forfait = null;
 
-   
 
-    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: Order::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
-    private Collection $orders;
-
-    
-
-    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: OptionList::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: OptionList::class,cascade: ['persist', 'remove'],orphanRemoval: false)]
     private Collection $optionLists;
 
     #[ORM\OneToOne(inversedBy: 'cart', cascade: ['persist', 'remove'])]
