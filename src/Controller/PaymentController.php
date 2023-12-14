@@ -5,6 +5,7 @@ namespace App\Controller;
 use Stripe\Stripe;
 use App\Entity\Cart;
 use App\Entity\Order;
+use App\Entity\Forfait;
 use PharIo\Manifest\Url;
 use App\Entity\OrderStatus;
 use Stripe\Checkout\Session;
@@ -30,13 +31,27 @@ class PaymentController extends AbstractController
         $this->urlGenerator = $urlGenerator;
     }
     #[Route('/order/create-session-stripe/{id}', name: 'app_payment')]
-    public function stripeCheckout(Cart $cart): RedirectResponse
+    public function stripeCheckout($id): RedirectResponse
     {
+        $cart = $this->entityManager->getRepository(Cart::class)->findOneBy(['id' => $id]);
 
         if (!$cart) {
             return $this->redirectToRoute('app_panier_visualiser');
         }
 
+        //pour contourner le Lazy Loading, on récupère le forfait en tant que référence
+        $forfaitName= $cart->getForfait()->getName();
+
+        
+       /**
+        * Lors de la récupération du panier, il semble que le forfait ne veut pas apparaitre. Utilisation donc du get_Reference
+        */
+
+        $forfait = $this->entityManager->getReference(Forfait::class, $cart->getForfait()->getId());
+        
+        
+
+       
 
         $productStripe = [];
 
@@ -53,18 +68,25 @@ class PaymentController extends AbstractController
                     'quantity' => 1,
                 ];
             }
-        } elseif ($cart->getForfait()) {
-            dd($cart->getForfait()->getPrice());
+        }
+        
+        if($cart->getForfait()){
+           
             $productStripe[] = [
                 'price_data' => [
                     'currency' => 'eur',
-                    'unit_amount' => $cart->getForfait()->getPrice() * 100,
+                    'unit_amount' => $forfait->getPrice() * 100,
                     'product_data' => [
-                        'name' => $cart->getForfait()->getName(),
+                        'name' => 'forfait '.$forfaitName,
                     ],
                 ],
                 'quantity' => 1,
             ];
+        }
+
+        if(count($productStripe) === 0){
+            $this->addFlash('error', 'Votre panier est vide et ne peut donc pas faire l\objet d\'un paiement.');
+            return $this->redirectToRoute('app_panier_visualiser');
         }
 
         
@@ -92,7 +114,7 @@ class PaymentController extends AbstractController
     }
 
     #[Route('/order/success/{id}', name: 'app_payment_success')]
-    public function success(Cart $cart, UserRepository $userRepository): Response
+    public function success(Cart $cart, UserRepository $userRepository): RedirectResponse
     {
         //création d'une commande depuis le panier
         $order = new Order();
@@ -100,11 +122,13 @@ class PaymentController extends AbstractController
             ->setPaymentDate(new \DateTime())
             ->setUsers($this->getUser());
 
-        if ($cart->getOptionLists()) {
+        if($cart->getOptionLists()) {
             foreach ($cart->getOptionLists() as $optionList) {
                 $order->addOptionList($optionList);
             }
-        } elseif ($cart->getForfait()) {
+        }
+        if($cart->getForfait()) {
+            
             $order->setForfait($cart->getForfait());
         }
         /**
@@ -137,16 +161,15 @@ class PaymentController extends AbstractController
         }elseif($cart->getUsers()){
             $cart->setUsers(null);
         }
-       $this->entityManager->remove($cart);
+        $this->entityManager->remove($cart);
 
-
+        
+        
         $this->entityManager->flush();
         
-
-        return $this->render('payment/payment_success.html.twig', [
-            'controller_name' => 'Paiement effectué avec succès',
-            'order'=>$order
-        ]);
+        
+       return $this->redirectToRoute('app_order_confirmation', ['order' => $order]);
+     
     }
     #[Route('/order/error/{id}', name: 'app_payment_error')]
     public function error(): RedirectResponse
@@ -154,5 +177,13 @@ class PaymentController extends AbstractController
 
         $this->addFlash('error', 'Le règlement de votre commande a échoué. N\'hésitez pas à réessayer.');
         return $this->redirectToRoute('app_panier_visualiser');
+    }
+
+    #[Route('/order/confirmation/{order}', name: 'app_order_confirmation')]
+    public function confirmation(Order $order): Response
+    {
+        return $this->render('order/confirmation.html.twig', [
+            'order' => $order,
+        ]);
     }
 }

@@ -131,6 +131,17 @@ class PanierController extends AbstractController
             'panier'=>$cartRepository->findOneBy(['users'=>$this->getUser()])
         ]);
     }
+    #[Route('/panier/deleteitem/{item}', name: 'app_panier_deleteitem')]
+    public function deleteItemFromCart(
+
+    )
+    {
+        //TODO : à faire
+        return $this->redirectToRoute('app_panier_visualiser');
+    }
+    
+
+
     #[Route('/panier/checkout/{id}',name:'app_panier_checkout')]
     public function checkout(CartRepository $cartRepository): Response
     {

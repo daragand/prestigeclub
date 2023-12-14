@@ -26,7 +26,7 @@ class OptionList
     #[ORM\JoinColumn(nullable: false)]
     private ?Options $options = null;
 
-    #[ORM\ManyToOne(inversedBy: 'optionLists',cascade: ['persist','remove'])]
+    #[ORM\ManyToOne(inversedBy: 'optionLists')]
     private ?Cart $cart = null;
 
     #[ORM\ManyToOne(inversedBy: 'optionLists')]
