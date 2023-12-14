@@ -54,6 +54,7 @@ class PaymentController extends AbstractController
                 ];
             }
         } elseif ($cart->getForfait()) {
+            dd($cart->getForfait()->getPrice());
             $productStripe[] = [
                 'price_data' => [
                     'currency' => 'eur',
@@ -119,12 +120,25 @@ class PaymentController extends AbstractController
             }
         
        
-        //suppression du panier et enregistrement de la commande
+        //suppression du panier (placement à null les relations) et enregistrement de la commande
         $this->entityManager->persist($order);
         
+        $optionLists = $cart->getOptionLists();
+
+        foreach ($optionLists as $optionList) {
+            $optionList->setCart(null);
+            
+        }
+        $photos = $cart->getPhotos();
+        foreach ($photos as $photo) {
+            $photo->removeCart($cart);
+        }
+        $cart->setForfait(null)
+            ->setUsers(null);
+
+
         $this->entityManager->flush();
-        $this->entityManager->remove($cart);
-        $this->entityManager->flush();
+        
 
         return $this->render('payment/payment_success.html.twig', [
             'controller_name' => 'Paiement effectué avec succès',

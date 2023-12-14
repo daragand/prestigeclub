@@ -95,7 +95,20 @@ class PanierController extends AbstractController
     ): RedirectResponse {
 
         
-        $this->entityManager->remove($cart);
+
+        $optionLists = $cart->getOptionLists();
+
+        foreach ($optionLists as $optionList) {
+            $optionList->setCart(null);
+            
+        }
+        $photos = $cart->getPhotos();
+        foreach ($photos as $photo) {
+            $photo->removeCart($cart);
+        }
+        $cart->setForfait(null)
+            ->setUsers(null);
+        
         $this->entityManager->flush();
 
         return $this->redirectToRoute('app_panier_visualiser');
