@@ -2,18 +2,19 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Serializable;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface,\Serializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -49,18 +50,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastname = null;
 
 
-    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Order::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Order::class, orphanRemoval: true,cascade: ['persist', 'remove'])]
     private Collection $orders;
 
-    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Cart::class, orphanRemoval: true)]
-    private Collection $carts;
+    #[ORM\OneToOne(mappedBy: 'users',orphanRemoval: true)]
+    private ?Cart $cart = null;
+
+    
 
     public function __construct()
     {
         $this->licencies = new ArrayCollection();
         $this->club = new ArrayCollection();
         $this->orders = new ArrayCollection();
-        $this->carts = new ArrayCollection();
+        
     }
 
     public function getId(): ?int
@@ -249,37 +252,64 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Cart>
-     */
-    public function getCarts(): Collection
-    {
-        return $this->carts;
-    }
-
-    public function addCart(Cart $cart): static
-    {
-        if (!$this->carts->contains($cart)) {
-            $this->carts->add($cart);
-            $cart->setUsers($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCart(Cart $cart): static
-    {
-        if ($this->carts->removeElement($cart)) {
-            // set the owning side to null (unless already changed)
-            if ($cart->getUsers() === $this) {
-                $cart->setUsers(null);
-            }
-        }
-
-        return $this;
-    }
+    
     public function __toString(): string
     {
         return $this->firstname. ' '.$this->lastname;
     }
+
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(?Cart $cart): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($cart === null && $this->cart !== null) {
+            $this->cart->setUsers(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($cart !== null && $cart->getUsers() !== $this) {
+            $cart->setUsers($this);
+        }
+
+        $this->cart = $cart;
+
+        return $this;
+    }
+    public function removeCart(Cart $cart): static
+    {
+        // set the owning side to null (unless already changed)
+        if ($cart->getUsers() === $this) {
+            $cart->setUsers(null);
+        }
+
+        return $this;
+    }
+     /** @see \Serializable::serialize() */
+     public function serialize()
+     {
+         return serialize(array(
+             $this->id,
+             $this->email,
+             $this->password,
+             // see section on salt below
+             // $this->salt,
+         ));
+     }
+ 
+     /** @see \Serializable::unserialize() */
+     public function unserialize($serialized)
+     {
+         list (
+             $this->id,
+             $this->email,
+             $this->password,
+             // see section on salt below
+             // $this->salt
+         ) = unserialize($serialized);
+     }
+    
 }

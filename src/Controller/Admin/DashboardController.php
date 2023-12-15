@@ -8,13 +8,14 @@ use App\Entity\Photo;
 use App\Entity\Livret;
 use App\Entity\Address;
 use App\Entity\Forfait;
-use App\Entity\Licencie;
 use App\Entity\Options;
+use App\Entity\Licencie;
+use App\Entity\OptionList;
 use App\Entity\PhotoGroup;
-use App\Repository\LivretRepository;
+use App\Repository\UserRepository;
 use App\Repository\OrderRepository;
 use App\Repository\PhotoRepository;
-use App\Repository\UserRepository;
+use App\Repository\LivretRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -41,6 +42,7 @@ class DashboardController extends AbstractDashboardController
     public function configureAssets(): Assets
     {
         return Assets::new()
+        ->addCssFile('css/admin.css')
             ->addCssFile('datatables.net-bs4/css/responsive.dataTables.min.css')
             ->addCssFile('datatables.net-bs4/css/dataTables.bootstrap4.min.css')
             ->addCssFile('datatables.net-bs4/css/dataTables.bootstrap4.css')
@@ -68,6 +70,8 @@ class DashboardController extends AbstractDashboardController
          ->join('o.users', 'u')
          ->getQuery()
          ->getSingleScalarResult();
+        
+         
      
       
         
@@ -91,13 +95,17 @@ public function configureCrud(): Crud
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Prestige Club');
+            ->setTitle("<img src=\"images/logoj.png\" alt=\" Logo de Prestige Club\"/>");
     }
 
     public function configureMenuItems(): iterable
     {
         yield MenuItem::section('Commandes')->setCssClass('border-bottom border-2');
-        yield MenuItem::linkToCrud('Commandes', 'fas fa-map-marker-alt', Order::class);
+        yield MenuItem::linkToCrud('Toutes les commandes', 'fa-solid fa-table-list', Order::class)->setController(OrderCrudController::class);
+        yield MenuItem::linkToCrud('Commandes en cours', 'fa-solid fa-list', Order::class)->setController(OrderToControllCrudController::class);
+        yield MenuItem::linkToCrud('Commandes traitées', 'fa-solid fa-list-check', Order::class)->setController(OrderTreatedCrudController::class);
+        yield MenuItem::linkToCrud('Commandes terminées', 'fa-regular fa-square-check', Order::class)->setController(OrderFinishedCrudController::class);
+
         
         // ->setCssClass('nav nav-pills nav-sidebar flex-column')
        
@@ -106,6 +114,7 @@ public function configureCrud(): Crud
         yield MenuItem::linkToCrud('Photos individuelles', 'fas fa-images', Photo::class);
         yield MenuItem::linkToCrud('Photos de groupes', 'fa-solid fa-image-portrait', PhotoGroup::class);
         yield MenuItem::linkToCrud('Livrets', 'fa-solid fa-file', Livret::class);
+        yield MenuItem::linkToCrud('Les Options', 'fas fa-cog', OptionList::class);
        
         
 

@@ -34,20 +34,21 @@
 										</div>
 									</div>
 								{% endfor %}
-                {% for phGroup in photoGroup %}
-                  
-                  <div class="tab-pane fade" id="pills-item{{phGroup.id}}" role="tabpanel" aria-labelledby="pills-item{{phGroup.id}}-tab">
+								{% for phGroup in photoGroup %}
+
+									<div class="tab-pane fade" id="pills-item{{phGroup.id}}" role="tabpanel" aria-labelledby="pills-item{{phGroup.id}}-tab">
 										<div class="shop-single-item mb10 bdr1 bdrs8 text-center py-5">
 											<a class="popup-img" href="{{ vich_uploader_asset(phGroup, 'photoGroupFile')|imagine_filter('watermark') }}"><img class="wa" src="{{ vich_uploader_asset(phGroup, 'photoGroupFile')|imagine_filter('scale_photo') }}" alt=""></a>
 										</div>
 									</div>
-                {% endfor %}
+								{% endfor %}
 
 							</div>
 
-							<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+							<ul
+								class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 								{# menu pour les photos individuelles #}
-                {% for photo in photos %}
+								{% for photo in photos %}
 
 									<li class="nav-item" role="presentation">
 										<button class="nav-link mr10 mb10 {% if loop.first %}active{% endif %}" id="pills-item{{photo.id}}-tab" data-bs-toggle="pill" data-bs-target="#pills-item{{photo.id}}" type="button" role="tab" aria-controls="pills-item{{photo.id}}" {% if loop.first %} aria-selected="true" {% else %} aria-selected="false" {% endif %}>
@@ -55,14 +56,14 @@
 										</button>
 									</li>
 								{% endfor %}
-                {# menu pour les photos de groupes #}
-              {% for phGroup in photoGroup %}
-                <li class="nav-item" role="presentation">
+								{# menu pour les photos de groupes #}
+								{% for phGroup in photoGroup %}
+									<li class="nav-item" role="presentation">
 										<button class="nav-link mr10 mb10" id="pills-item{{phGroup.id}}-tab" data-bs-toggle="pill" data-bs-target="#pills-item{{phGroup.id}}" type="button" role="tab" aria-controls="pills-item{{phGroup.id}}" aria-selected="false">
 											<img src="{{ vich_uploader_asset(phGroup, 'photoGroupFile')|imagine_filter('thumbnail') }}" alt="">
 										</button>
 									</li>
-              {% endfor %}
+								{% endfor %}
 							</ul>
 						</div>
 					</div>
@@ -74,27 +75,35 @@
 							<div class="list-style1 mb10">
 								<ul class="mb-1">
 									<li class="mb-1">
-                  {% set nbPhotos = photos|length + photoGroup|length %}
-                 
-										<i class="fa-brands fa-codepen text-thm3 bgc-thm3-light"></i>{{ nbPhotos }} photos</li>
+										{% set nbPhotos = photos|length + photoGroup|length %}
+
+										<i class="fa-brands fa-codepen text-thm3 bgc-thm3-light"></i>
+										{{ nbPhotos }}
+										photos</li>
 								</ul>
 							</div>
 							<div class="d-flex ">
 								<img class="me-3" width="60" src="{{ licencie.club.logo }}" alt="">
 								<div>
-									<h2 class=" mb10">{{ licencie.club.name|upper }} - {{ licencie.club.address.city }}({{ licencie.club.address.zip }})
+									<h2 class=" mb10">{{ licencie.club.name|upper }}
+										-
+										{{ licencie.club.address.city }}({{ licencie.club.address.zip }})
 									</h2>
-									<h4>{{ licencie.groupes.name }} </h4>
+									{% if licencie.groupes.name is defined %}
+										
+									<h4>{{ licencie.groupes.name }}
+									</h4>
+									{% endif %}
 								</div>
 							</div>
 							<div class="mt-5 d-sm-flex">
-								<form class="" action="POST">
+								<form id="formCart" class="" action="{{ path('app_panier')}}" method="POST">
 									<h2>COMMANDER</h2>
 									<fieldset class="border p-5 form-check">
 										<legend>Choisissez votre forfait</legend>
 										{% for forfait in forfaits %}
 											<div>
-												<input class="form-check-input" type="radio" id="{{ forfait.id }}" name="forfait" value="{{ forfait.id }}"/>
+												<input class="form-check-input trigger-champion" type="radio" id="{{ forfait.name }}" name="forfait" value="{{ forfait.name }}"/>
 												<label class="form-check-label" for="{{ forfait.id }}">
 													<strong>{{ forfait.name }}
 														-
@@ -103,29 +112,51 @@
 													:
 													{{ forfait.description }}
 												</label>
+												{# Si l'usager choisit le forfait champion, on affichera la possibilité de choisir des photos individuelles. En lien avec le fichier javascript #}
+												{% if forfait.name == 'Champion' %}
+													<div id="championChoix">
+
+														 {% set numberPhoto = 1 %}
+														{% for photo in photos %}
+														{% set numberPhoto = numberPhoto + 1 %}
+															<div class="flex-fill">
+																<input class="form-check-input championPh" type="checkbox" id="photoChampion{{ photo.id }}" name="championPh[]" value="{{ photo.id }}"/>
+																<img class="me-2" src="{{ vich_uploader_asset(photo, 'photoFile')|imagine_filter('thumbnail') }}" width="60" alt="">
+																<label class="form-check-label" for="photoChampion{{ photo.id }}">
+																	<strong>Photo {{ numberPhoto }}
+																		</strong>
+																</label>
+															</div>
+														{% endfor %}
+													</div>
+												{% endif %}
 											</div>
 										{% endfor %}
 									</fieldset>
 									<fieldset class="border p-5 form-check">
 										<legend>Choisissez vos options</legend>
 										{# Affichage des options avec les photos. Chaque photo est associé à une option. Respecter l'ordre #}
-{% for photo in photos %}
-  <div class="d-flex flex-wrap">
-    {% for option in options %}
-      <div class="flex-fill">
-        <input class="form-check-input" type="checkbox" id="{{ option.id }}" name="option{{photo.id}}" value="{{ photo.id - option.id }}"/>
-        <img class="me-2" src="{{ vich_uploader_asset(photo, 'photoFile')|imagine_filter('thumbnail') }}" width="60" alt="">
-        <label class="form-check-label" for="{{ option.id }}">
-          <strong>{{ option.name }} - {{ option.price|number_format(2) }} €</strong>
-        </label>
-      </div>
-    {% endfor %}
-  </div>
-{% endfor %}
+										{% for photo in photos %}
+											<div class="d-flex flex-wrap">
+												{% for option in options %}
+													<div class="flex-fill">
+														<input class="form-check-input" type="checkbox" id="{{ option.id }}" name="option-{{option.id}}-{{photo.id}}" value="{{ photo.id }}-{{ option.id }}"/>
+														<img class="me-2" src="{{ vich_uploader_asset(photo, 'photoFile')|imagine_filter('thumbnail') }}" width="60" alt="">
+														<label class="form-check-label" for="{{ option.id }}">
+															<strong>{{ option.name }}
+																-
+																{{ option.price|number_format(2) }}
+																€</strong>
+														</label>
+													</div>
+												{% endfor %}
+											</div>
+										{% endfor %}
 									</fieldset>
-									<button class="ud-btn btn-thm" type="submit">Ajouter au panier</button>
+									<input type="hidden" name="licencie" value="{{ licencie.id }}">
+									<button  class="ud-btn btn-thm" type="submit">Ajouter au panier</button>
 								</form>
-								
+
 							</div>
 
 						</div>
@@ -134,142 +165,142 @@
 				</div>
 			</div>
 			{# <div class="row wow fadeInUp mt90" data-wow-delay="300ms">
-				<div class="col-md-3 col-lg-4">
-					<div class="vertical-tab">
-						<div class="widget_list">
-							<nav>
-								<div class="nav flex-column nav-tabs text-start" id="nav-tab" role="tablist">
-									<button class="nav-link active text-start" id="nav-accountpayment-tab" data-bs-toggle="tab" data-bs-target="#nav-accountpayment" type="button" role="tab" aria-controls="nav-accountpayment" aria-selected="true">
-										<span>Description</span>
-									</button>
-									<button class="nav-link text-start" id="nav-manageother-tab" data-bs-toggle="tab" data-bs-target="#nav-manageother" type="button" role="tab" aria-controls="nav-manageother" aria-selected="false">
-										<span>Review</span>
-									</button>
-								</div>
-							</nav>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-9 col-lg-8">
-					<div class="terms_condition_grid text-start">
-						<div class="tab-content" id="nav-tabContent">
-							<div class="tab-pane fade show active" id="nav-accountpayment" role="tabpanel" aria-labelledby="nav-accountpayment-tab">
-								<div class="grids">
-									<h4 class="title mb20">Details</h4>
-									<p class="mb25 text fz15">Do you want to become a UI/UX designer but you don't know where to start? This course will allow you to develop your user interface design skills and you can add UI designer to your CV and start getting clients for your skills.</p>
-									<p class="mb25 text fz15">Hi everyone. I'm Arash and I'm a UI/UX designer. In this course, I will help you learn and master Figma app comprehensively from scratch. Figma is an innovative and brilliant tool for User Interface design. It's used by everyone from entrepreneurs and start-ups to Apple, Airbnb, Facebook, etc.</p>
-									<h4 class="title">Material and care</h4>
-									<div class="custom_bsp_grid d-sm-flex align-items-center">
-										<ul class="list-style-type-bullet p-0 ml15 mb0-sm">
-											<li>Main: 100% Cotton</li>
-											<li>Soft twill.</li>
-											<li>Ribbed, diagonal pattern</li>
-										</ul>
-										<ul class="list-style-type-bullet p-0 ml80 ml15-sm">
-											<li>One size fits all</li>
-											<li>Imported</li>
-											<li>Product color: Dark greenish</li>
-										</ul>
+							<div class="col-md-3 col-lg-4">
+								<div class="vertical-tab">
+									<div class="widget_list">
+										<nav>
+											<div class="nav flex-column nav-tabs text-start" id="nav-tab" role="tablist">
+												<button class="nav-link active text-start" id="nav-accountpayment-tab" data-bs-toggle="tab" data-bs-target="#nav-accountpayment" type="button" role="tab" aria-controls="nav-accountpayment" aria-selected="true">
+													<span>Description</span>
+												</button>
+												<button class="nav-link text-start" id="nav-manageother-tab" data-bs-toggle="tab" data-bs-target="#nav-manageother" type="button" role="tab" aria-controls="nav-manageother" aria-selected="false">
+													<span>Review</span>
+												</button>
+											</div>
+										</nav>
 									</div>
 								</div>
 							</div>
-							<div class="tab-pane fade" id="nav-manageother" role="tabpanel" aria-labelledby="nav-manageother-tab">
-								<div class="grids">
-									<div class="product_single_content mb50">
-										<div class="mbp_pagination_comments">
-											<div class="row">
-												<div class="col-lg-12">
-													<div class="total_review d-flex align-items-center justify-content-between mb20">
-														<h4 class="mb15 mb0-sm">80 Reviews</h4>
-													</div>
+							<div class="col-md-9 col-lg-8">
+								<div class="terms_condition_grid text-start">
+									<div class="tab-content" id="nav-tabContent">
+										<div class="tab-pane fade show active" id="nav-accountpayment" role="tabpanel" aria-labelledby="nav-accountpayment-tab">
+											<div class="grids">
+												<h4 class="title mb20">Details</h4>
+												<p class="mb25 text fz15">Do you want to become a UI/UX designer but you don't know where to start? This course will allow you to develop your user interface design skills and you can add UI designer to your CV and start getting clients for your skills.</p>
+												<p class="mb25 text fz15">Hi everyone. I'm Arash and I'm a UI/UX designer. In this course, I will help you learn and master Figma app comprehensively from scratch. Figma is an innovative and brilliant tool for User Interface design. It's used by everyone from entrepreneurs and start-ups to Apple, Airbnb, Facebook, etc.</p>
+												<h4 class="title">Material and care</h4>
+												<div class="custom_bsp_grid d-sm-flex align-items-center">
+													<ul class="list-style-type-bullet p-0 ml15 mb0-sm">
+														<li>Main: 100% Cotton</li>
+														<li>Soft twill.</li>
+														<li>Ribbed, diagonal pattern</li>
+													</ul>
+													<ul class="list-style-type-bullet p-0 ml80 ml15-sm">
+														<li>One size fits all</li>
+														<li>Imported</li>
+														<li>Product color: Dark greenish</li>
+													</ul>
 												</div>
-												<div class="col-md-12">
-													<div class="mbp_first position-relative d-flex align-items-center justify-content-start mb30-sm">
-														<img src="images/blog/comments-2.png" class="mr-3" alt="comments-2.png">
-														<div class="ml20">
-															<h6 class="mt-0 mb-0">Bessie Cooper</h6>
-															<div>
-																<span class="fz14">12 March 2022</span>
+											</div>
+										</div>
+										<div class="tab-pane fade" id="nav-manageother" role="tabpanel" aria-labelledby="nav-manageother-tab">
+											<div class="grids">
+												<div class="product_single_content mb50">
+													<div class="mbp_pagination_comments">
+														<div class="row">
+															<div class="col-lg-12">
+																<div class="total_review d-flex align-items-center justify-content-between mb20">
+																	<h4 class="mb15 mb0-sm">80 Reviews</h4>
+																</div>
+															</div>
+															<div class="col-md-12">
+																<div class="mbp_first position-relative d-flex align-items-center justify-content-start mb30-sm">
+																	<img src="images/blog/comments-2.png" class="mr-3" alt="comments-2.png">
+																	<div class="ml20">
+																		<h6 class="mt-0 mb-0">Bessie Cooper</h6>
+																		<div>
+																			<span class="fz14">12 March 2022</span>
+																		</div>
+																	</div>
+																</div>
+																<p class="text mt20 mb20">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.</p>
+																<div class="review_cansel_btns d-flex">
+																	<a href="#">
+																		<i class="fas fa-thumbs-up"></i>Helpful</a>
+																	<a href="#">
+																		<i class="fas fa-thumbs-down"></i>Not helpful</a>
+																</div>
+															</div>
+															<div class="col-md-12">
+																<div class="mbp_first position-relative d-flex align-items-center justify-content-start mt30 mb30-sm">
+																	<img src="images/blog/comments-2.png" class="mr-3" alt="comments-2.png">
+																	<div class="ml20">
+																		<h6 class="mt-0 mb-0">Darrell Steward</h6>
+																		<div>
+																			<span class="fz14">12 March 2022</span>
+																		</div>
+																	</div>
+																</div>
+																<p class="text mt20 mb20">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.</p>
+																<div class="review_cansel_btns d-flex pb30">
+																	<a href="#">
+																		<i class="fas fa-thumbs-up"></i>Helpful</a>
+																	<a href="#">
+																		<i class="fas fa-thumbs-down"></i>Not helpful</a>
+																</div>
+															</div>
+															<div class="col-md-12">
+																<div class="position-relative bdrb1 pb50">
+																	<a href="page-service-single.html" class="ud-btn btn-light-thm">See More<i class="fal fa-arrow-right-long"></i>
+																	</a>
+																</div>
 															</div>
 														</div>
 													</div>
-													<p class="text mt20 mb20">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.</p>
-													<div class="review_cansel_btns d-flex">
-														<a href="#">
-															<i class="fas fa-thumbs-up"></i>Helpful</a>
-														<a href="#">
-															<i class="fas fa-thumbs-down"></i>Not helpful</a>
-													</div>
 												</div>
-												<div class="col-md-12">
-													<div class="mbp_first position-relative d-flex align-items-center justify-content-start mt30 mb30-sm">
-														<img src="images/blog/comments-2.png" class="mr-3" alt="comments-2.png">
-														<div class="ml20">
-															<h6 class="mt-0 mb-0">Darrell Steward</h6>
-															<div>
-																<span class="fz14">12 March 2022</span>
+												<div class="bsp_reveiw_wrt">
+													<h6 class="fz17">Add a Review</h6>
+													<p class="text">Your email address will not be published. Required fields are marked *</p>
+													<form class="comments_form mt30">
+														<div class="row">
+															<div class="col-md-12">
+																<div class="mb-4">
+																	<label class="fw500 ff-heading dark-color mb-2">Comment</label>
+																	<textarea class="pt15" rows="6" placeholder="There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text."></textarea>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="mb20">
+																	<label class="fw500 ff-heading dark-color mb-2">Name</label>
+																	<input type="text" class="form-control" placeholder="Ali Tufan">
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="mb20">
+																	<label class="fw500 ff-heading dark-color mb-2">Email</label>
+																	<input type="email" class="form-control" placeholder="creativelayers088">
+																</div>
+															</div>
+															<div class="col-md-12">
+																<div class="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb20">
+																	<label class="custom_checkbox fz15 ff-heading">Save my name, email, and website in this browser for the next time I comment.
+																		<input type="checkbox">
+																		<span class="checkmark"></span>
+																	</label>
+																</div>
+																<a href="" class="ud-btn btn-thm">Send<i class="fal fa-arrow-right-long"></i>
+																</a>
 															</div>
 														</div>
-													</div>
-													<p class="text mt20 mb20">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.</p>
-													<div class="review_cansel_btns d-flex pb30">
-														<a href="#">
-															<i class="fas fa-thumbs-up"></i>Helpful</a>
-														<a href="#">
-															<i class="fas fa-thumbs-down"></i>Not helpful</a>
-													</div>
-												</div>
-												<div class="col-md-12">
-													<div class="position-relative bdrb1 pb50">
-														<a href="page-service-single.html" class="ud-btn btn-light-thm">See More<i class="fal fa-arrow-right-long"></i>
-														</a>
-													</div>
+													</form>
 												</div>
 											</div>
 										</div>
 									</div>
-									<div class="bsp_reveiw_wrt">
-										<h6 class="fz17">Add a Review</h6>
-										<p class="text">Your email address will not be published. Required fields are marked *</p>
-										<form class="comments_form mt30">
-											<div class="row">
-												<div class="col-md-12">
-													<div class="mb-4">
-														<label class="fw500 ff-heading dark-color mb-2">Comment</label>
-														<textarea class="pt15" rows="6" placeholder="There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text."></textarea>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="mb20">
-														<label class="fw500 ff-heading dark-color mb-2">Name</label>
-														<input type="text" class="form-control" placeholder="Ali Tufan">
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="mb20">
-														<label class="fw500 ff-heading dark-color mb-2">Email</label>
-														<input type="email" class="form-control" placeholder="creativelayers088">
-													</div>
-												</div>
-												<div class="col-md-12">
-													<div class="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb20">
-														<label class="custom_checkbox fz15 ff-heading">Save my name, email, and website in this browser for the next time I comment.
-															<input type="checkbox">
-															<span class="checkmark"></span>
-														</label>
-													</div>
-													<a href="" class="ud-btn btn-thm">Send<i class="fal fa-arrow-right-long"></i>
-													</a>
-												</div>
-											</div>
-										</form>
-									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-				</div>
-			</div> #}
+						</div> #}
 		</div>
 	</section>
 
@@ -290,4 +321,7 @@
 <script src={{ asset('js/wow.min.js') }} defer></script>
 <script src={{ asset('js/isotop.js') }} defer></script>
 <!-- Custom script for all pages -->
-<script src={{ asset('js/script.js') }} defer></script>{% endblock %}{% endblock %}
+<script src={{ asset('js/script.js') }} defer></script>
+{# pour la gestion du forfait champion #}
+<script src={{ asset('js/customjsPrestige/forfait-champion.js') }} defer></script>
+{% endblock %}{% endblock %}

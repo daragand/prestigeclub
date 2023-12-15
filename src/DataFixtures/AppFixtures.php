@@ -2,22 +2,23 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Club;
-use App\Entity\Address;
-use App\Entity\Group;
-use App\Entity\Licencie;
-use App\Entity\PhotoGroup;
+use Faker\Factory;
 use App\Entity\Cart;
-use App\Entity\Forfait;
-use App\Entity\Livret;
-use App\Entity\Options;
+use App\Entity\Club;
+use App\Entity\User;
+use App\Entity\Group;
 use App\Entity\Order;
 use App\Entity\Photo;
+use App\Entity\Livret;
+use App\Entity\Address;
+use App\Entity\Forfait;
+use App\Entity\Options;
+use App\Entity\Licencie;
+use App\Entity\OptionList;
+use App\Entity\PhotoGroup;
 use App\Entity\OrderStatus;
-use App\Entity\User;
-use Faker\Factory;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class AppFixtures extends Fixture
 {
@@ -229,6 +230,8 @@ class AppFixtures extends Fixture
         ///////////////////  Photo   ////////////////////////
         $objectPhotos = [];
 
+        
+
         foreach ($objectLicencies as $licencie) {
             //ajout pour chaque licencié de 4 photos
             for ($i = 0; $i < 4; $i++) {
@@ -285,7 +288,22 @@ class AppFixtures extends Fixture
             $manager->persist($objectLivret);
         }
 
+///////////////////////////////////// OptionsList ///////////////////////////////////////
 
+        $objectOptionsLists = [];
+
+        for($i=0; $i<20; $i++){
+
+        $objectOptionsList = new OptionList();
+        $objectOptionsList->setPhotos($objectPhotos[$faker->numberBetween(0, (count($objectPhotos) - 1))])
+            ->setOptions($objectsOptions[$faker->numberBetween(0, (count($objectsOptions) - 1))])
+            ->setQuantity($faker->numberBetween(1, 2))
+            ->setIsArchived($faker->boolean)
+            ->setPhotos($objectPhotos[$faker->numberBetween(0, (count($objectPhotos) - 1))]);
+
+        array_push($objectOptionsLists, $objectOptionsList);
+        $manager->persist($objectOptionsList);
+        }
 
 
 
@@ -316,16 +334,16 @@ class AppFixtures extends Fixture
             } elseif ($objectCart->getForfait()->getName() == 'Champion') {
                 //gestion des options
            
-                $objectCart->addOption($objectsOptions[$faker->numberBetween(0, (count($objectsOptions) - 1))]);
-                $objectCart->setAmount($objectCart->getForfait()->getPrice() + $objectCart->getOptions()[0]->getPrice());
+                $objectCart->addOptionList($objectOptionsLists[$faker->numberBetween(0, (count($objectOptionsLists) - 1))]);
+                $objectCart->setAmount($objectCart->getForfait()->getPrice() + $objectCart->getOptionLists()[0]->getOptions()->getPrice());
                 //ajout de 2 photos individuelles prises aléatoirement. Je ne prends pas de photos lié à l'utilisateur par gain de temps
                 
                 for ($i = 0; $i < 2; $i++) {
                     $objectCart->addPhoto($objectPhotos[$faker->numberBetween(0, (count($objectPhotos) - 1))]);
                 }
             } elseif ($objectCart->getForfait()->getName() == 'Prestige') {
-                $objectCart->addOption($objectsOptions[$faker->numberBetween(0, (count($objectsOptions) - 1))]);
-                $objectCart->setAmount($objectCart->getForfait()->getPrice() + $objectCart->getOptions()[0]->getPrice());
+                $objectCart->addOptionList($objectOptionsLists[$faker->numberBetween(0, (count($objectOptionsLists) - 1))]);
+                $objectCart->setAmount($objectCart->getForfait()->getPrice() + $objectCart->getOptionLists()[0]->getOptions()->getPrice());
            
                 //ajout de 4 photos individuelles prises aléatoirement. Je ne prends pas de photos lié à l'utilisateur par gain de temps
                 for ($i = 0; $i < 4; $i++) {
@@ -339,19 +357,37 @@ class AppFixtures extends Fixture
         //////////////////////////////  Order  ///////////////////////////////////////
 
         $objectOrders = [];
+        //pour les options, je prends les options rattachées à un panier
+
+        $optionsWithCarts = [];
+
+        foreach ($objectOptionsLists as $optionList) {
+            if ($optionList->getCart() != null) {
+                array_push($optionsWithCarts, $optionList);
+            }
+        }
+
+
         //ajout de 50 commandes
         for ($i = 0; $i < 20; $i++) {
             $objectOrder = new Order();
             
             $objectOrder->setPaymentDate($faker->dateTimeBetween('-1 years', 'now'))
-                ->setCart($objectCarts[$faker->numberBetween(0, (count($objectCarts) - 1))])
                 ->setOrderStatus($objectsOrderStatus[$faker->numberBetween(0, (count($objectsOrderStatus) - 1))])
-                ->setUsers($objectOrder->getCart()->getUsers())
-                ->setAmount($objectOrder->getCart()->getAmount());
+                ->setUsers($parents[$faker->numberBetween(0, (count($parents) - 1))])
+                ->setAmount($faker->randomFloat(2, 0, 100))
+                ->setForfait($objectsForfaits[$faker->numberBetween(0, (count($objectsForfaits) - 1))]);
+
+            
                 
             array_push($objectOrders, $objectOrder);
             $manager->persist($objectOrder);
         }
+        //ajout des options dans les commandes à partir des options rattachées à un panier
+        foreach($optionsWithCarts as $optionWithCart){
+            $objectOrders[$faker->numberBetween(0, (count($objectOrders) - 1))]->addOptionList($optionWithCart);
+        }
+
 
         $manager->flush();
     }
