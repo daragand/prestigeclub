@@ -46,13 +46,12 @@ class DashboardController extends AbstractDashboardController
             ->addCssFile('datatables.net-bs4/css/responsive.dataTables.min.css')
             ->addCssFile('datatables.net-bs4/css/dataTables.bootstrap4.min.css')
             ->addCssFile('datatables.net-bs4/css/dataTables.bootstrap4.css')
-            ->addCssFile('https://cdn.datatables.net/v/dt/dt-1.10.23/datatables.min.css')
+           
             ->addJsFile('datatables.net/js/jquery.min.js')
-            // ->addJsFile('datatables.net-bs4/js/dataTables.bootstrap4.min.js')
-            // ->addJsFile('datatables.net-bs4/js/dataTables.bootstrap4.js')
+       
             ->addJsFile('datatables.net/js/jquery.dataTables.min.js')
-            ->addJsFile('datatables.net/js/datatable-basic.init.js')
-            ->addJsFile('https://cdn.datatables.net/v/dt/dt-1.10.23/datatables.min.js');
+            ->addJsFile('datatables.net/js/datatable-basic.init.js');
+        
     }
     #[Route('/admin', name: 'admin')]
     public function index(): Response
@@ -125,8 +124,10 @@ public function configureCrud(): Crud
         yield MenuItem::linkToCrud('Forfaits', 'fas fa-money-bill-wave', Forfait::class);
         yield MenuItem::linkToCrud('Options', 'fas fa-cog', Options::class);
         yield MenuItem::linkToCrud('Clubs','fa-solid fa-landmark', Club::class);
-        yield MenuItem::linkToCrud('Licenciés', 'fas fa-users', Licencie::class)
-        ;
+        yield MenuItem::linkToCrud('Licenciés', 'fas fa-users', Licencie::class);
+        //section vide pour créer un espace entre les deux menus
+        yield MenuItem::section(' ');
+        yield MenuItem::linkToLogout('Déconnexion', 'fa-solid fa-sign-out-alt');
        
     }
     
