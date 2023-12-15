@@ -46,9 +46,13 @@ class DashboardController extends AbstractDashboardController
             ->addCssFile('datatables.net-bs4/css/responsive.dataTables.min.css')
             ->addCssFile('datatables.net-bs4/css/dataTables.bootstrap4.min.css')
             ->addCssFile('datatables.net-bs4/css/dataTables.bootstrap4.css')
-            ->addJsFile('datatables.net-bs4/js/dataTables.bootstrap4.min.js')
-            ->addJsFile('datatables.net-bs4/js/dataTables.bootstrap4.js')
-            ->addJsFile('datatables.net-bs4/js/jquery.dataTables.min.js');
+            ->addCssFile('https://cdn.datatables.net/v/dt/dt-1.10.23/datatables.min.css')
+            ->addJsFile('datatables.net/js/jquery.min.js')
+            // ->addJsFile('datatables.net-bs4/js/dataTables.bootstrap4.min.js')
+            // ->addJsFile('datatables.net-bs4/js/dataTables.bootstrap4.js')
+            ->addJsFile('datatables.net/js/jquery.dataTables.min.js')
+            ->addJsFile('datatables.net/js/datatable-basic.init.js')
+            ->addJsFile('https://cdn.datatables.net/v/dt/dt-1.10.23/datatables.min.js');
     }
     #[Route('/admin', name: 'admin')]
     public function index(): Response
