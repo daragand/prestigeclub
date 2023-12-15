@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -21,9 +23,7 @@ class Order
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $paymentDate = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orders')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Cart $cart = null;
+    
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
@@ -32,6 +32,17 @@ class Order
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $users = null;
+
+    #[ORM\OneToMany(mappedBy: 'orders', targetEntity: OptionList::class)]
+    private Collection $optionLists;
+
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    private ?Forfait $forfait = null;
+
+    public function __construct()
+    {
+        $this->optionLists = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -62,17 +73,7 @@ class Order
         return $this;
     }
 
-    public function getCart(): ?Cart
-    {
-        return $this->cart;
-    }
-
-    public function setCart(?Cart $cart): static
-    {
-        $this->cart = $cart;
-
-        return $this;
-    }
+    
 
     public function getOrderStatus(): ?OrderStatus
     {
@@ -94,6 +95,48 @@ class Order
     public function setUsers(?User $users): static
     {
         $this->users = $users;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OptionList>
+     */
+    public function getOptionLists(): Collection
+    {
+        return $this->optionLists;
+    }
+
+    public function addOptionList(OptionList $optionList): static
+    {
+        if (!$this->optionLists->contains($optionList)) {
+            $this->optionLists->add($optionList);
+            $optionList->setOrders($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOptionList(OptionList $optionList): static
+    {
+        if ($this->optionLists->removeElement($optionList)) {
+            // set the owning side to null (unless already changed)
+            if ($optionList->getOrders() === $this) {
+                $optionList->setOrders(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getForfait(): ?Forfait
+    {
+        return $this->forfait;
+    }
+
+    public function setForfait(?Forfait $forfait): static
+    {
+        $this->forfait = $forfait;
 
         return $this;
     }

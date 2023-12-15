@@ -1,0 +1,47 @@
+.topbar
+{
+    /* background-color: #28ad87; */
+    font-family: 'Montserrat';
+    font-weight: bold;
+    font-size : 20px;
+}
+#navbarSupportedContent
+{
+    justify-content: right;
+}
+.nav-item:hover .nav-link {
+    color: white; /* Couleur du texte au survol */
+}
+
+.example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+.example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+.carousel-inner {
+    display: flex;
+}
+h1, h2 {
+    font-family: 'Montserrat'; 
+}
+h1 {
+    font-size: 4rem;
+    font-weight: bold;
+}
+.carousel-control-prev-icon, .carousel-control-next-icon {
+background-color: black;
+opacity: 0.3;
+}
+
+/* Styles ajoutés pour le positionnement des flèches */
+.carousel-control-prev, .carousel-control-next {
+    top: 100%; /* déplace les boutons sous le carrousel */
+    transform: translateY(-50%); /* centrage vertical */
+}
+
+.carousel-control-prev {
+    left: 10%; /* déplace le bouton vers la gauche */
+}
+
+.carousel-control-next {
+    right: 10%; /* déplace le bouton vers la droite */
+}
+
+

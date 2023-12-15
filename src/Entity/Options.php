@@ -25,12 +25,15 @@ class Options
     #[ORM\Column]
     private ?float $price = null;
 
-    #[ORM\ManyToMany(targetEntity: Cart::class, mappedBy: 'options')]
-    private Collection $carts;
+   
+
+    #[ORM\OneToMany(mappedBy: 'options', targetEntity: OptionList::class, orphanRemoval: true)]
+    private Collection $optionLists;
 
     public function __construct()
     {
-        $this->carts = new ArrayCollection();
+        
+        $this->optionLists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,28 +77,33 @@ class Options
         return $this;
     }
 
+    
+
     /**
-     * @return Collection<int, Cart>
+     * @return Collection<int, OptionList>
      */
-    public function getCarts(): Collection
+    public function getOptionLists(): Collection
     {
-        return $this->carts;
+        return $this->optionLists;
     }
 
-    public function addCart(Cart $cart): static
+    public function addOptionList(OptionList $optionList): static
     {
-        if (!$this->carts->contains($cart)) {
-            $this->carts->add($cart);
-            $cart->addOption($this);
+        if (!$this->optionLists->contains($optionList)) {
+            $this->optionLists->add($optionList);
+            $optionList->setOptions($this);
         }
 
         return $this;
     }
 
-    public function removeCart(Cart $cart): static
+    public function removeOptionList(OptionList $optionList): static
     {
-        if ($this->carts->removeElement($cart)) {
-            $cart->removeOption($this);
+        if ($this->optionLists->removeElement($optionList)) {
+            // set the owning side to null (unless already changed)
+            if ($optionList->getOptions() === $this) {
+                $optionList->setOptions(null);
+            }
         }
 
         return $this;

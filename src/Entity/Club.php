@@ -21,8 +21,7 @@ class Club
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $logo = null;
 
-    #[ORM\ManyToMany(targetEntity: Licencie::class, inversedBy: 'clubs')]
-    private Collection $licencies;
+   
 
     #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'clubs')]
     private Collection $groups;
@@ -36,14 +35,18 @@ class Club
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'club')]
     private Collection $users;
 
+    #[ORM\OneToMany(mappedBy: 'club', targetEntity: Licencie::class, orphanRemoval: true)]
+    private Collection $licencie;
+
     
 
     public function __construct()
     {
-        $this->licencies = new ArrayCollection();
+       
         $this->groups = new ArrayCollection();
         $this->photoGroups = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->licencie = new ArrayCollection();
         
     }
 
@@ -76,29 +79,7 @@ class Club
         return $this;
     }
 
-    /**
-     * @return Collection<int, Licencie>
-     */
-    public function getLicencies(): Collection
-    {
-        return $this->licencies;
-    }
-
-    public function addLicency(Licencie $licency): static
-    {
-        if (!$this->licencies->contains($licency)) {
-            $this->licencies->add($licency);
-        }
-
-        return $this;
-    }
-
-    public function removeLicency(Licencie $licency): static
-    {
-        $this->licencies->removeElement($licency);
-
-        return $this;
-    }
+    
 
     /**
      * @return Collection<int, Group>
@@ -188,6 +169,40 @@ class Club
     {
         if ($this->users->removeElement($user)) {
             $user->removeClub($this);
+        }
+
+        return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->name. ' - ' . $this->address->getCity();
+    }
+
+    /**
+     * @return Collection<int, Licencie>
+     */
+    public function getLicencie(): Collection
+    {
+        return $this->licencie;
+    }
+
+    public function addLicencie(Licencie $licencie): static
+    {
+        if (!$this->licencie->contains($licencie)) {
+            $this->licencie->add($licencie);
+            $licencie->setClub($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLicencie(Licencie $licencie): static
+    {
+        if ($this->licencie->removeElement($licencie)) {
+            // set the owning side to null (unless already changed)
+            if ($licencie->getClub() === $this) {
+                $licencie->setClub(null);
+            }
         }
 
         return $this;

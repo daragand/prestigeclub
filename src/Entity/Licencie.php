@@ -7,8 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity(repositoryClass: LicencieRepository::class)]
+#[Vich\Uploadable]
 class Licencie
 {
     #[ORM\Id]
@@ -28,28 +31,39 @@ class Licencie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $slug = null;
 
-    #[ORM\ManyToMany(targetEntity: Club::class, mappedBy: 'licencies')]
-    private Collection $clubs;
+    
 
     #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Livret::class, orphanRemoval: true)]
     private Collection $livrets;
 
-    #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Photo::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Photo::class, orphanRemoval: true, cascade: ['persist'])]
     private Collection $photos;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'licencies')]
+    #[ORM\JoinTable(name: 'user_licencie')]
     private Collection $users;
 
-    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'licencies')]
-    private Collection $Groupes;
+   
+
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+
+    #[ORM\ManyToOne(inversedBy: 'licencie')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Club $club = null;
+
+    #[ORM\ManyToOne(inversedBy: 'licencies')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Group $groupes = null;
 
     public function __construct()
     {
-        $this->clubs = new ArrayCollection();
+        
         $this->livrets = new ArrayCollection();
         $this->photos = new ArrayCollection();
         $this->users = new ArrayCollection();
-        $this->Groupes = new ArrayCollection();
+        
+        
     }
 
     public function getId(): ?int
@@ -105,32 +119,7 @@ class Licencie
         return $this;
     }
 
-    /**
-     * @return Collection<int, Club>
-     */
-    public function getClubs(): Collection
-    {
-        return $this->clubs;
-    }
-
-    public function addClub(Club $club): static
-    {
-        if (!$this->clubs->contains($club)) {
-            $this->clubs->add($club);
-            $club->addLicency($this);
-        }
-
-        return $this;
-    }
-
-    public function removeClub(Club $club): static
-    {
-        if ($this->clubs->removeElement($club)) {
-            $club->removeLicency($this);
-        }
-
-        return $this;
-    }
+    
 
     /**
      * @return Collection<int, Livret>
@@ -219,26 +208,47 @@ class Licencie
         return $this;
     }
 
-    /**
-     * @return Collection<int, Group>
-     */
-    public function getGroupes(): Collection
+    
+
+
+
+    public function __toString()
     {
-        return $this->Groupes;
+        return $this->firstname . ' ' . $this->lastname;
     }
 
-    public function addGroupe(Group $groupe): static
+    public function getEmail(): ?string
     {
-        if (!$this->Groupes->contains($groupe)) {
-            $this->Groupes->add($groupe);
-        }
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
 
         return $this;
     }
 
-    public function removeGroupe(Group $groupe): static
+    public function getClub(): ?Club
     {
-        $this->Groupes->removeElement($groupe);
+        return $this->club;
+    }
+
+    public function setClub(?Club $club): static
+    {
+        $this->club = $club;
+
+        return $this;
+    }
+
+    public function getGroupes(): ?Group
+    {
+        return $this->groupes;
+    }
+
+    public function setGroupes(?Group $groupes): static
+    {
+        $this->groupes = $groupes;
 
         return $this;
     }
