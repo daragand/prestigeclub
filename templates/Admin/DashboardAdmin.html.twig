@@ -187,11 +187,16 @@
                     <div class="col-lg-4 col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Net Income</h4>
-                                <div class="net-income mt-4 position-relative" style="height:294px;"></div>
+                                <h4 class="card-title">Dernières commandes</h4>
+                                <div class="net-income mt-4 position-relative" style="height:294px;">
                                 <ul class="list-inline text-center mt-5 mb-2">
-                                    <li class="list-inline-item text-muted fst-italic">Sales for this month</li>
+                                    {% for cmd in commandes|slice(0,6) %}
+                                        
+                                    <li class="list-inline-item text-muted fst-italic">{{cmd.users.firstname}} {{cmd.paymentDate|format_datetime('short', 'none', locale='fr')}}</li>
+                                    {% endfor %}
                                 </ul>
+                                </div>
+                                
                             </div>
                         </div>
                     </div>

@@ -54,10 +54,8 @@ class DashboardController extends AbstractDashboardController
     public function index(): Response
     {
         
-        //liste des commandes toutes confondues
-         $allOrders = $this->orderRepository->findAll();
-
-            //liste des livrets
+        //liste des commandes toutes confondues trié par date de paiement
+         $allOrders = $this->orderRepository->findBy([],['paymentDate'=>'DESC']);            //liste des livrets
             $allLivrets = $this->livretRepository->findAll();
         //liste et nombres de photos
             $allPhotos = $this->photoRepository->findAll();
