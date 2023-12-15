@@ -1,0 +1,18 @@
+/* Ce fichier permet de modifier les paramètres d'affichage de EasyAdmin. */
+/* Les paramètres sont définis dans le fichier vendor/easycorp/easyadmin-bundle/assets/css/easyadmin-theme/variables-theme.scss */
+
+:root {
+ 
+    
+    --body-bg: #fff;
+    --sidebar-menu-color: #fff;
+    --sidebar-menu-icon-color: #fff;
+    --sidebar-logo-color: #fff;
+    --pagination-active-bg:#000;
+
+    /* change le background de la sidebar et des bourtons*/
+    --sidebar-bg: #000;
+    --form-switch-checked-bg:#E0BD01;
+    --button-primary-bg: #000;
+    --sidebar-menu-active-item-color: #E0BD01;
+}
