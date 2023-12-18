@@ -168,7 +168,7 @@ class PaymentController extends AbstractController
         $this->entityManager->flush();
         
         
-       return $this->redirectToRoute('app_order_confirmation', ['order' => $order]);
+       return $this->redirectToRoute('app_order_confirmation', ['id' => $order->getId()]);
      
     }
     #[Route('/order/error/{id}', name: 'app_payment_error')]
@@ -179,11 +179,5 @@ class PaymentController extends AbstractController
         return $this->redirectToRoute('app_panier_visualiser');
     }
 
-    #[Route('/order/confirmation/{order}', name: 'app_order_confirmation')]
-    public function confirmation(Order $order): Response
-    {
-        return $this->render('order/confirmation.html.twig', [
-            'order' => $order,
-        ]);
-    }
+    
 }
