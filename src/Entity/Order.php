@@ -42,6 +42,9 @@ class Order
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?Licencie $licencie = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $uuidOrder = null;
+
     public function __construct()
     {
         $this->optionLists = new ArrayCollection();
@@ -152,6 +155,18 @@ class Order
     public function setLicencie(?Licencie $licencie): static
     {
         $this->licencie = $licencie;
+
+        return $this;
+    }
+
+    public function getUuidOrder(): ?string
+    {
+        return $this->uuidOrder;
+    }
+
+    public function setUuidOrder(string $uuidOrder): static
+    {
+        $this->uuidOrder = $uuidOrder;
 
         return $this;
     }

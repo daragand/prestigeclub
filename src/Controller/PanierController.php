@@ -46,7 +46,8 @@ class PanierController extends AbstractController
     
     if (!$cart) {
         $cart = new Cart();
-        $cart->setUsers($this->getUser());
+        $cart->setUsers($this->getUser())
+        ->setUuidCart(uniqid());
         $entityManager->persist($cart);
     }
     

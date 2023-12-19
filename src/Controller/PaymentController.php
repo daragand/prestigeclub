@@ -120,7 +120,8 @@ class PaymentController extends AbstractController
         $order = new Order();
         $order->setAmount($cart->getAmount())
             ->setPaymentDate(new \DateTime())
-            ->setUsers($this->getUser());
+            ->setUsers($this->getUser())
+            ->setUuidOrder(uniqid());
 
         if($cart->getOptionLists()) {
             foreach ($cart->getOptionLists() as $optionList) {

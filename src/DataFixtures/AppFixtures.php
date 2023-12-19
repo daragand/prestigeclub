@@ -325,7 +325,8 @@ class AppFixtures extends Fixture
             
             $objectCart = new Cart();
             $objectCart->setUsers($parent)
-                ->setForfait($objectsForfaits[$faker->numberBetween(0, (count($objectsForfaits) - 1))]);
+                ->setForfait($objectsForfaits[$faker->numberBetween(0, (count($objectsForfaits) - 1))])
+                ->setUuidCart($faker->uuid);
             
 
             //gestion des photos en fonction du forfait
@@ -375,6 +376,8 @@ class AppFixtures extends Fixture
             $objectOrder->setPaymentDate($faker->dateTimeBetween('-1 years', 'now'))
                 ->setOrderStatus($objectsOrderStatus[$faker->numberBetween(0, (count($objectsOrderStatus) - 1))])
                 ->setUsers($parents[$faker->numberBetween(0, (count($parents) - 1))])
+                ->setUuidOrder($faker->uuid)
+                ->setLicencie($objectLicencies[$faker->numberBetween(0, (count($objectLicencies) - 1))])
                 ->setAmount($faker->randomFloat(2, 0, 100))
                 ->setForfait($objectsForfaits[$faker->numberBetween(0, (count($objectsForfaits) - 1))]);
 
