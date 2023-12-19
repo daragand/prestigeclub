@@ -37,6 +37,8 @@ class RegistrationController extends AbstractController
                 )
                 
             )
+            //attribution d'un Uniqid
+            ->setUuidUser(uniqid())
             //attribution du rôle ROLE_USER
             ->setRoles(['ROLE_PARENT'])
             //ajout de la relation du licencié au nouvel utilisateur

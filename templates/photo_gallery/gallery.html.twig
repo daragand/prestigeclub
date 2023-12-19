@@ -101,6 +101,7 @@
 									<h2>COMMANDER</h2>
 									<fieldset class="border p-5 form-check">
 										<legend>Choisissez votre forfait</legend>
+										
 										{% for forfait in forfaits %}
 											<div>
 												<input class="form-check-input trigger-champion" type="radio" id="{{ forfait.name }}" name="forfait" value="{{ forfait.name }}"/>
@@ -153,7 +154,7 @@
 											</div>
 										{% endfor %}
 									</fieldset>
-									<input type="hidden" name="licencie" value="{{ licencie.id }}">
+									<input type="hidden" name="licencie" value="{{ licencie.slug }}">
 									<button  class="ud-btn btn-thm" type="submit">Ajouter au panier</button>
 								</form>
 
