@@ -1,159 +1,86 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello OrderController!{% endblock %}
+{% block title %}Hello OrderController!
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('datatables.net-bs4/css/responsive.dataTables.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
+{% endblock %}
+
 
 {% block body %}
-<div class="row align-items-center justify-content-between pb40">
-            <div class="col-xl-4">
-              <div class="dashboard_title_area">
-                <h2>Liste des commandes</h2>
-                <p class="text">Retrouvez ci-dessous la liste de vos commandes réalisées</p>
-              </div>
-            </div>
-            
-          </div>
-          <div class="row">
-            <div class="col-xl-12">
-              <div class="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
-                <div class="packages_table table-responsive">
-                  <table class="table-style3 table at-savesearch">
-                    <thead class="t-head">
-                      <tr>
-                        <th scope="col">Numéro de commande</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Montant</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody class="t-body">
-                    
-                      <tr>
-                        <th scope="row">
-                          <div>#99 <span class="ms-3">App Services</span></div>
-                        </th>
-                        <td class="vam">April 9, 2023</td>
-                        <td class="vam">$1.200</td>
-                        <td class="vam"><span class="pending-style style1">In Progress</span></td>
-                        <td class="vam">
-                          <a href="" class="table-action fz15 fw500 text-thm2" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><span class="flaticon-website me-2 vam"></span> View</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">
-                          <div>#99 <span class="ms-3">App Services</span></div>
-                        </th>
-                        <td class="vam">April 9, 2023</td>
-                        <td class="vam">$1.200</td>
-                        <td class="vam"><span class="pending-style style2">Completed</span></td>
-                        <td class="vam">
-                          <a href="" class="table-action fz15 fw500 text-thm2" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><span class="flaticon-website me-2 vam"></span> View</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th class="active">
-                          <div>#99 <span class="ms-3">App Services</span></div>
-                        </th>
-                        <td class="vam">April 9, 2023</td>
-                        <td class="vam">$1.200</td>
-                        <td class="vam"><span class="pending-style style2">Completed</span></td>
-                        <td class="vam">
-                          <a href="" class="table-action fz15 fw500 text-thm2" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><span class="flaticon-website me-2 vam"></span> View</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">
-                          <div>#99 <span class="ms-3">App Services</span></div>
-                        </th>
-                        <td class="vam">April 9, 2023</td>
-                        <td class="vam">$1.200</td>
-                        <td class="vam"><span class="pending-style style3">Cancel</span></td>
-                        <td class="vam">
-                          <a href="" class="table-action fz15 fw500 text-thm2" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><span class="flaticon-website me-2 vam"></span> View</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">
-                          <div>#99 <span class="ms-3">App Services</span></div>
-                        </th>
-                        <td class="vam">April 9, 2023</td>
-                        <td class="vam">$1.200</td>
-                        <td class="vam"><span class="pending-style style3">Cancel</span></td>
-                        <td class="vam">
-                          <a href="" class="table-action fz15 fw500 text-thm2" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><span class="flaticon-website me-2 vam"></span> View</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th class="active">
-                          <div>#99 <span class="ms-3">App Services</span></div>
-                        </th>
-                        <td class="vam">April 9, 2023</td>
-                        <td class="vam">$1.200</td>
-                        <td class="vam"><span class="pending-style style2">Completed</span></td>
-                        <td class="vam">
-                          <a href="" class="table-action fz15 fw500 text-thm2" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><span class="flaticon-website me-2 vam"></span> View</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">
-                          <div>#99 <span class="ms-3">App Services</span></div>
-                        </th>
-                        <td class="vam">April 9, 2023</td>
-                        <td class="vam">$1.200</td>
-                        <td class="vam"><span class="pending-style style2">Completed</span></td>
-                        <td class="vam">
-                          <a href="" class="table-action fz15 fw500 text-thm2" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><span class="flaticon-website me-2 vam"></span> View</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">
-                          <div>#99 <span class="ms-3">App Services</span></div>
-                        </th>
-                        <td class="vam">April 9, 2023</td>
-                        <td class="vam">$1.200</td>
-                        <td class="vam"><span class="pending-style style1">In Progress</span></td>
-                        <td class="vam">
-                          <a href="" class="table-action fz15 fw500 text-thm2" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><span class="flaticon-website me-2 vam"></span> View</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">
-                          <div>#99 <span class="ms-3">App Services</span></div>
-                        </th>
-                        <td class="vam">April 9, 2023</td>
-                        <td class="vam">$1.200</td>
-                        <td class="vam"><span class="pending-style style3">Cancel</span></td>
-                        <td class="vam">
-                          <a href="" class="table-action fz15 fw500 text-thm2" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><span class="flaticon-website me-2 vam"></span> View</a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div class="mbp_pagination text-center mt30">
-                    <ul class="page_navigation">
-                      <li class="page-item">
-                        <a class="page-link" href="#"> <span class="fas fa-angle-left"></span></a>
-                      </li>
-                      <li class="page-item"><a class="page-link" href="#">1</a></li>
-                      <li class="page-item active" aria-current="page">
-                        <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                      </li>
-                      <li class="page-item"><a class="page-link" href="#">3</a></li>
-                      <li class="page-item"><a class="page-link" href="#">4</a></li>
-                      <li class="page-item"><a class="page-link" href="#">5</a></li>
-                      <li class="page-item"><a class="page-link" href="#">...</a></li>
-                      <li class="page-item"><a class="page-link" href="#">20</a></li>
-                      <li class="page-item">
-                        <a class="page-link" href="#"><span class="fas fa-angle-right"></span></a>
-                      </li>
-                    </ul>
-                    <p class="mt10 mb-0 pagination_page_count text-center">1 – 20 of 300+ property available</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+	<div class="row align-items-center justify-content-between pb40">
+		<div class="col-xl-4">
+			<div class="dashboard_title_area">
+				<h2>Liste des commandes</h2>
+				<p class="text">Retrouvez ci-dessous la liste de vos commandes réalisées</p>
+			</div>
+		</div>
+
+	</div>
+	<div class="row">
+		<div class="col-xl-12">
+			<div class="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
+				<div class="packages_table table-responsive">
+					<table id="default_order" class="table border   table-style3 text-nowrap" style="width:100%">
+
+						<thead class="t-head">
+							<tr>
+								<th scope="col">Numéro de commande</th>
+								<th scope="col">Date</th>
+								<th scope="col">Montant</th>
+								<th scope="col">Status</th>
+								<th scope="col">Action</th>
+							</tr>
+						</thead>
+						<tbody class="t-body">
+							{% for command in orders %}
+
+								<tr>
+									<th scope="row">
+										<div>#{{command.id}}
+											<span class="ms-3">App Services</span>
+										</div>
+									</th>
+									<td class="vam">{{command.paymentDate|format_datetime('short', 'none', locale='fr')}}</td>
+									<td class="vam">{{command.amount|format_currency('EUR', {rounding_mode: 'floor'})}}</td>
+									{% if command.orderStatus == 'En cours de traitement' %}
+										<td class="vam">
+											<span class="pending-style style1">{{command.orderStatus}}</span>
+										</td>
+									{% elseif command.orderStatus == 'Traitée' or command.orderStatus == 'Finalisée'  %}
+										<td class="vam">
+											<span class="pending-style style2">{{command.orderStatus}}</span>
+										</td>
+									{% else %}
+										<td class="vam">
+											<span class="pending-style style3">{{command.orderStatus}}</span>
+										</td>
+									{% endif %}
+									<td class="vam">
+										<a href="{{path('app_order_details',{'id':command.id})}}" target="_blank" class="table-action fz15 fw500 text-thm2" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+											<i class="fa-regular fa-file-lines"></i>
+											Voir</a>
+									</td>
+								</tr>
+							{% endfor %}
+
+						</tbody>
+					</table>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% block JavaScripts %}
+	<script src="{{ asset('datatables.net/js/jquery.min.js')}}"></script>
+	<script src="{{ asset('datatables.net/js/jquery.dataTables.min.js')}}"></script>
+	<script src="{{ asset('datatables.net/js/datatable-basic.init.js')}}"></script>
 
 
+{% endblock %}
 {% endblock %}

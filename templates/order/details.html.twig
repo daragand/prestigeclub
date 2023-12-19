@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello OrderController!
+{% endblock %}
+
+{% block body %}
+<div class="wrapper ">
+  <div class="preloader"></div>
+  <div class="body_content">
+    <!-- Our Invoice Page -->
+    <section class="our-invoice bgc-thm4">
+      <div class="container wow fadeInUp" data-wow-delay="300ms">
+        <div class="row mb30">
+          <div class="col-lg-12">
+            <div class="float-end">
+              <a href="index.html" class="ud-btn btn-thm invoice_down_print">Imprimer<i class="fa-solid fa-print"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="invoice_table">
+              <div class="wrapper">
+                <div class="row mb20 align-items-center">
+                  <div class="col-lg-7">
+                    <div class="main_logo mb30-md"><img width="300" src="{{ asset('images/logonb.png')}}" alt="logo Prestige Club"></div>
+                  </div>
+                  <div class="col-lg-5">
+                    <div class="invoice_deails">
+                      <h3 class="float-start dark-color">Commande n° </h3>
+                      <h5 class="float-end">{{order.id}}</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt55">
+                  <div class="col-sm-6 col-lg-7">
+                     <div class="invoice_address">
+                      <h4 class="mb20">Prestige Club</h4>
+                      <h6 class="fw500">Allée du Docteur Bourgeois</h6>
+                      <p class="dark-color ff-heading">91150 Etampes</p>
+                    </div>
+                   
+                  </div>
+                  <div class="col-sm-6 col-lg-5">
+                    <div class="invoice_date mb60">
+                      <div class="title mb5 ff-heading dark-color">Date de la commande :</div>
+                      <h6 class="fw500 mb0">{{order.paymentDate|format_datetime('short', 'none', locale='fr')}}</h6>
+                    </div>
+                    <div class="invoice_address">
+                      <h4 class="mb20">Client</h4>
+                      <h6 class="fw500">{{order.users.firstname|capitalize}} {{order.users.lastname|upper}}</h6>
+                      {% if order.users.address %}
+                        
+                      <p class="dark-color ff-heading">{{order.users.address.address}}<br class="d-none d-lg-block">{{order.users.address.zip}} {{order.users.address.city}}.</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt50">
+                  <div class="col-lg-12">
+                    <div class="table-responsive invoice_table_list">
+                      <table class="table table-borderless">
+                        <thead class="thead-light">
+                          <tr class="tblh_row">
+                            <th class="tbleh_title" scope="col">Description</th>
+                            <th class="tbleh_title" scope="col">Prix unitaire</th>
+                            
+                            <th class="tbleh_title" scope="col">Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% if order.forfait %}
+                            <tr class="bdrb1">
+                            <th class="tbl_title" scope="row">{{order.forfait.name}}</th>
+                            <td class="tbl_title">{{order.forfait.price|format_currency('EUR', {rounding_mode: 'floor'})}}</td>
+                           
+                            <td class="tblpr_title">{{order.forfait.price|format_currency('EUR', {rounding_mode: 'floor'})}}</td>
+                          </tr>
+                        {% endif %}
+                        {% if order.optionLists %}
+                        {% for itemOption in order.optionLists %}
+                            <tr class="bdrb1">
+                                <th class="tbl_title" scope="row">{{itemOption.options.name}} - photo : {{itemOption.photos.id}}</th>
+                                <td class="tbl_title">{{itemOption.options.price|format_currency('EUR', {rounding_mode: 'floor'})}}</td>
+                             
+                                <td class="tblpr_title">{{itemOption.options.price|format_currency('EUR', {rounding_mode: 'floor'})}}</td>
+                            </tr>
+                        {% endfor %}
+                        {% endif %}
+                          
+                          <tr>
+                            <th scope="row" class="tblp_title">Montant Total</th>
+                            <td></td>
+                            
+                            <td class="tblp_title">{{order.amount|format_currency('EUR', {rounding_mode: 'floor'})}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="invoice_footer">
+                <div class="row justify-content-center">
+                  <div class="col-auto">
+                    <div class="invoice_footer_content text-center">
+                      <a class="ff-heading" href="https://www.prestigeclubfrance.fr"><i class="fa-solid fa-globe"></i> : www.prestigeclubfrance.fr</a>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <div class="invoice_footer_content text-center">
+                      <a class="ff-heading" href="mailto:prestigeclubfrance@gmail.com"><i class="fa-solid fa-envelopes-bulk"></i> : prestigeclubfrance@gmail.com</a>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <div class="invoice_footer_content text-center">
+                      <a class="ff-heading" href="tel:0750389679"><i class="fa-solid fa-phone"></i> : (+33) 7.50.38.96.79</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+   
+  </div>
+</div>
+{% endblock %}

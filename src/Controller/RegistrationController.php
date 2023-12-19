@@ -38,7 +38,7 @@ class RegistrationController extends AbstractController
                 
             )
             //attribution du rôle ROLE_USER
-            ->setRoles(['ROLE_USER'])
+            ->setRoles(['ROLE_PARENT'])
             //ajout de la relation du licencié au nouvel utilisateur
             ->addLicency($licencieParUuid);
 
@@ -47,7 +47,7 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('app_photo_gallery');
+            return $this->redirectToRoute('app_photos_index');
         }
 
         return $this->render('registration/register.html.twig', [

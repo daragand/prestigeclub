@@ -58,8 +58,8 @@
                     <li class="mb20"><p class="body-color">forfait : {{order.forfait.name}} <span class="float-end">{{order.forfait.price|format_currency('EUR', {rounding_mode: 'floor'})}}</span></p></li>
                     {% endif %}
                     {% if order.optionLists is defined %}
-                      {% for option in order.optionLists %}
-                    <li class="mb20"><p class="body-color">{{option.options.name}} - photo : {{option.photos.id}}  <span class="float-end">{{option.options.price|format_currency('EUR', {rounding_mode: 'floor'})}}</span></p></li>
+                      {% for itemOption in order.optionLists %}
+                    <li class="mb20"><p class="body-color">{{itemOption.options.name}} - photo : {{itemOption.photos.id}}  <span class="float-end">{{itemOption.options.price|format_currency('EUR', {rounding_mode: 'floor'})}}</span></p></li>
                     {% endfor %}
                     {% endif %}
                     
@@ -67,8 +67,9 @@
                   </ul>
                 </div>
               </div>
-          <div class="col-lg-6 pt-5 justify-content-center">
-            <a class="ud-btn btn-thm" href="{{path('app_photos_index')}}">Retour à l'accueil<i class="fa-solid fa-credit-card"></i></a>
+          <div class="d-flex space-between pt-4 justify-content-around">
+            <a class="ud-btn btn-thm" href="{{path('app_photos_index')}}">Retour à l'accueil<i class="fa-solid fa-house"></i></a>
+            <a class="ud-btn btn-thm" href="{{path('app_order')}}">voir les commandes passées<i class="fa-solid fa-tachograph-digital"></i></a>
           </div>
             </div>            
           </div>

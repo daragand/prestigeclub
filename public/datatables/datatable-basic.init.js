@@ -34,3 +34,19 @@ $('#multi_col_order').DataTable({
         orderData: [4, 0]
     }]
 });
+
+/****************************************
+ *       Liste des commandes      *
+ ****************************************/
+$('#multi_col_command').DataTable({
+    columnDefs: [{
+        targets: [0],
+        orderData: [0, 1]
+    }, {
+        targets: [1],
+        orderData: [1, 0]
+    }, {
+        targets: [4],
+        orderData: [4, 0]
+    }]
+});

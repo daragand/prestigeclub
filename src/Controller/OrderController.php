@@ -21,7 +21,7 @@ class OrderController extends AbstractController
        
         return $this->render('order/commandes.html.twig', [
             'controller_name' => 'OrderController',
-            'order' => $order,
+            'orders' => $order,
         ]);
     }
 
@@ -29,6 +29,13 @@ class OrderController extends AbstractController
     public function confirmation(Order $order): Response
     {
         return $this->render('payment/payment_success.html.twig', [
+            'order' => $order,
+        ]);
+    }
+    #[Route('/order/details/{id}', name: 'app_order_details')]
+    public function details(Order $order): Response
+    {
+        return $this->render('order/details.html.twig', [
             'order' => $order,
         ]);
     }
