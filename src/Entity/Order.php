@@ -39,6 +39,9 @@ class Order
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?Forfait $forfait = null;
 
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    private ?Licencie $licencie = null;
+
     public function __construct()
     {
         $this->optionLists = new ArrayCollection();
@@ -137,6 +140,18 @@ class Order
     public function setForfait(?Forfait $forfait): static
     {
         $this->forfait = $forfait;
+
+        return $this;
+    }
+
+    public function getLicencie(): ?Licencie
+    {
+        return $this->licencie;
+    }
+
+    public function setLicencie(?Licencie $licencie): static
+    {
+        $this->licencie = $licencie;
 
         return $this;
     }
