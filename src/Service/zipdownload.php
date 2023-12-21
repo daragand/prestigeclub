@@ -19,6 +19,7 @@ public function __construct( ParameterBagInterface $parameterBag)
 {
     
     $this->parameterBag = $parameterBag;
+   
 
    
 }
@@ -74,11 +75,26 @@ if (!file_exists($folderZip)) {
     //     $zip->close();
     // }
 
-    
+
     //si les photos sont existantes, on les ajoute au zip
     if (count($photos) > 0) {
         $zip->open($zipName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
         
+        //gestion de la photo de groupe
+        if($photoGroupe){
+            foreach($photoGroupe as $key => $itemPhGroupe){
+                $filePhGroupe= $itemPhGroupe->getPhotoGroupFile()->getPathName();
+                //TODO : à supprimer au lancement en ligne
+                $goodFilePath = str_replace('/','\\',$filePhGroupe);
+               if(file_exists($goodFilePath) ){ 
+                $zip->addFile($goodFilePath,'photo_de_Groupe'.$key.'.jpg');
+               }  
+            }
+        }
+
+
+
+
         $fileNames = [];
         foreach ($photos as $key =>$photo) {
             //TODO : au lancement en ligne, retirer le changement de slash par antislash
@@ -86,15 +102,15 @@ if (!file_exists($folderZip)) {
             $goodFilePath = str_replace('/','\\',$filePath); //
             
             array_push($fileNames,$goodFilePath) ;
-            //récupération du chemin du fichier et modiciation du nom du fichier
-            $zip->addFile($goodFilePath,'photo_'.$key.'_'.$photo->getLicencie()->getLastName().'_'.$photo->getLicencie()->getFirstName().'.jpg');
+            //récupération du chemin du fichier et modification du nom du fichier
+            if(file_exists($goodFilePath) ){
+                $zip->addFile($goodFilePath,'photo_'.$key.'_'.$photo->getLicencie()->getLastName().'_'.$photo->getLicencie()->getFirstName().'.jpg');
+            }
+           
         }
         
-        for ($i = 0; $i < $zip->numFiles; $i++) {
-            $filename = $zip->getNameIndex($i);
-            array_push($fileNames,$filename) ;
-        }
-        dd($fileNames);
+        
+        
 
         $zip->close();
     }

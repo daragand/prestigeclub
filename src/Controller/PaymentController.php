@@ -115,7 +115,7 @@ class PaymentController extends AbstractController
     }
 
     #[Route('/order/success/{id}', name: 'app_payment_success')]
-    public function success(Cart $cart, UserRepository $userRepository): RedirectResponse
+    public function success(Cart $cart, UserRepository $userRepository,ZipDownload $zip): RedirectResponse
     {
 
         
@@ -167,13 +167,10 @@ class PaymentController extends AbstractController
             $cart->setUsers(null);
         }
         $this->entityManager->remove($cart);
-
-        
         
         $this->entityManager->flush();
 
-
-        ZipDownload::zipCreate($order);
+        $zip->zipCreate($order);
         
        return $this->redirectToRoute('app_order_confirmation', ['id' => $order->getId()]);
      

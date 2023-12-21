@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Order;
 use App\Repository\OrderRepository;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,5 +40,23 @@ class OrderController extends AbstractController
         return $this->render('order/details.html.twig', [
             'order' => $order,
         ]);
+    }
+    public function downloadPhoto(Order $order,string $zipFile,MailerInterface $mailer)
+    {
+        $mailSender = $this->getParameter('mail_sender');
+        
+        $email = (new TemplatedEmail())
+        ->from($mailSender)
+        ->to($order->getUsers()->getEmail())
+        ->subject('Commande N°'.$order->getId().': lien de téléchargement de vos photos')
+        ->htmlTemplate('mail/telechargement.html.twig')
+        ->context([
+            'zipLink' => $zipFile,
+            'emailContact' => $mailSender,
+            'order' => $order,
+           
+        ]);
+
+        $mailer->send($email);
     }
 }
