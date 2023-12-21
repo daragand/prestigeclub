@@ -29,6 +29,7 @@ public function __construct( ParameterBagInterface $parameterBag)
        $folderZip = $this->parameterBag->get('dossier_zip');
        
        
+       
 if (!file_exists($folderZip)) {
     mkdir($folderZip, 0755, true);
 } else {
@@ -36,7 +37,7 @@ if (!file_exists($folderZip)) {
 }
         
         $zip = new \ZipArchive();
-        $zipName = $folderZip. $order->getId().'_' .$order->getUsers()->getLastname(). '.zip';
+        $zipName = $folderZip. $order->getId().'_' .$order->getUsers()->getLastname().'_' .$order->getUuidOrder(). '.zip';
         
 
         //récupération des photos en fonction du forfait
@@ -79,20 +80,21 @@ if (!file_exists($folderZip)) {
         $zip->open($zipName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
         
         $fileNames = [];
-        foreach ($photos as $photo) {
+        foreach ($photos as $key =>$photo) {
             //TODO : au lancement en ligne, retirer le changement de slash par antislash
             $filePath = $photo->getPhotoFile()->getPathName();
             $goodFilePath = str_replace('/','\\',$filePath); //
             
             array_push($fileNames,$goodFilePath) ;
-            $zip->addFile($goodFilePath);
+            //récupération du chemin du fichier et modiciation du nom du fichier
+            $zip->addFile($goodFilePath,'photo_'.$key.'_'.$photo->getLicencie()->getLastName().'_'.$photo->getLicencie()->getFirstName().'.jpg');
         }
         
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $filename = $zip->getNameIndex($i);
             array_push($fileNames,$filename) ;
         }
-        
+        dd($fileNames);
 
         $zip->close();
     }

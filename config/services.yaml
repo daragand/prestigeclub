@@ -11,7 +11,7 @@ parameters:
     domain: '%env(DOMAIN)%'
     public_key_stripe: '%env(PUBLIC_KEY_STRIPE)%'
     secret_key_stripe: '%env(SECRET_KEY_STRIPE)%'
-    dossier_zip: '%kernel.project_dir%\public\zip'
+    dossier_zip: '%kernel.project_dir%\public\zip\'
 
 services:
     # default configuration for services in *this* file
