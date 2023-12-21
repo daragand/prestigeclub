@@ -80,16 +80,19 @@ if (!file_exists($folderZip)) {
         
         $fileNames = [];
         foreach ($photos as $photo) {
+            //TODO : au lancement en ligne, retirer le changement de slash par antislash
+            $filePath = $photo->getPhotoFile()->getPathName();
+            $goodFilePath = str_replace('/','\\',$filePath); //
             
-            array_push($fileNames,$photo->getPhotoFile()->getPathName()) ;
-            $zip->addFile($photo->getPhotoFile()->getPathName());
+            array_push($fileNames,$goodFilePath) ;
+            $zip->addFile($goodFilePath);
         }
         
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $filename = $zip->getNameIndex($i);
             array_push($fileNames,$filename) ;
         }
-        dd($fileNames);
+        
 
         $zip->close();
     }

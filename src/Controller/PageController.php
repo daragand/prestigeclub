@@ -23,6 +23,7 @@ class PageController extends AbstractController
         $order = $orderRepository->findOneBy(['id' => 74]);
 
         $downloadZip = $zip->zipCreate($order);
+        dd($downloadZip);
 
         return $this->render('page/index.html.twig', [
             'controller_name' => 'PageController',
