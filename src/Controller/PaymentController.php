@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\ZipDownload;
 use Stripe\Stripe;
 use App\Entity\Cart;
 use App\Entity\Order;
@@ -116,11 +117,14 @@ class PaymentController extends AbstractController
     #[Route('/order/success/{id}', name: 'app_payment_success')]
     public function success(Cart $cart, UserRepository $userRepository): RedirectResponse
     {
+
+        
         //création d'une commande depuis le panier
         $order = new Order();
         $order->setAmount($cart->getAmount())
             ->setPaymentDate(new \DateTime())
             ->setUsers($this->getUser())
+            ->setLicencie($cart->getLicencie())
             ->setUuidOrder(uniqid());
 
         if($cart->getOptionLists()) {
@@ -167,7 +171,9 @@ class PaymentController extends AbstractController
         
         
         $this->entityManager->flush();
-        
+
+
+        ZipDownload::zipCreate($order);
         
        return $this->redirectToRoute('app_order_confirmation', ['id' => $order->getId()]);
      

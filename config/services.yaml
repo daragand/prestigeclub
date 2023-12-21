@@ -11,13 +11,20 @@ parameters:
     domain: '%env(DOMAIN)%'
     public_key_stripe: '%env(PUBLIC_KEY_STRIPE)%'
     secret_key_stripe: '%env(SECRET_KEY_STRIPE)%'
+    dossier_zip: '%kernel.project_dir%\public\zip'
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    App\Service\ZipDownload:
+        autowire: true
         
+            
+        
+        
+
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
