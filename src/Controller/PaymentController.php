@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\MailingService;
 use App\Service\ZipDownload;
 use Stripe\Stripe;
 use App\Entity\Cart;
@@ -115,7 +116,12 @@ class PaymentController extends AbstractController
     }
 
     #[Route('/order/success/{id}', name: 'app_payment_success')]
-    public function success(Cart $cart, UserRepository $userRepository,ZipDownload $zip): RedirectResponse
+    public function success(
+        Cart $cart,
+         UserRepository $userRepository,
+         ZipDownload $zip,
+            MailingService $mailingService
+         ): RedirectResponse
     {
 
         
@@ -173,6 +179,9 @@ class PaymentController extends AbstractController
         
         
         $this->entityManager->flush();
+
+        //envoi du mail de téléchargement des photos
+        $mailingService->downloadPhoto($order,$zipFile);
         
        return $this->redirectToRoute('app_order_confirmation', ['id' => $order->getId()]);
      

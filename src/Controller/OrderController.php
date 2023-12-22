@@ -46,28 +46,6 @@ class OrderController extends AbstractController
             'order' => $order,
         ]);
     }
-    #[Route('/order/details/{id}/telechargement', name: 'app_order_download')]
-    public function downloadPhoto(Order $order,string $zipFile,MailerInterface $mailer)
-    {
-        if($order->getZipFile()){
-
-            $mailSender = $this->getParameter('mail_sender');
-            
-            $email = (new TemplatedEmail())
-            ->from($mailSender)
-            ->to($order->getUsers()->getEmail())
-            ->subject('Commande N°'.$order->getId().': lien de téléchargement de vos photos')
-            ->htmlTemplate('mail/telechargement.html.twig')
-            ->context([
-                'zipLink' => $zipFile,
-                'emailContact' => $mailSender,
-                'order' => $order,
-                
-            ]);
-            $mailer->send($email);
-        }else{
-            $this->addFlash('noFile', 'Le fichier ZIP n\'existe pas. N\'hésitez pas à nous contacter si le problème persiste. ');
-        }
-
-    }
+   
+   
 }

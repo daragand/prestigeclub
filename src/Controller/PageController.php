@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
-use App\Repository\OrderRepository;
 use App\Service\ZipDownload;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\MailingService;
+use App\Repository\OrderRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PageController extends AbstractController
 {
@@ -18,12 +20,17 @@ class PageController extends AbstractController
         ]);
     }
     #[Route('/zip', name: 'app_test_zip')]
-    public function zip(OrderRepository $orderRepository,ZipDownload $zip): Response
+    public function zip(OrderRepository $orderRepository,ZipDownload $zip,MailingService $mailingService,EntityManagerInterface $entityManager): Response
     {
         $order = $orderRepository->findOneBy(['id' => 74]);
 
         $downloadZip = $zip->zipCreate($order);
-        dd($downloadZip);
+        $order->setZipFile($downloadZip);
+        $entityManager->persist($order);
+        $entityManager->flush();
+        $mailingService->downloadPhoto($order,$downloadZip);
+
+        
 
         return $this->render('page/index.html.twig', [
             'controller_name' => 'PageController',
