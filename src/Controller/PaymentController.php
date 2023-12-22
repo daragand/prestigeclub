@@ -147,6 +147,8 @@ class PaymentController extends AbstractController
                 $orderStatus = $this->entityManager->getRepository(OrderStatus::class)->findOneBy(['name' => 'Payée']);
                 $order->setOrderStatus($orderStatus);
             }
+            $zipFile = $zip->zipCreate($order);
+        $order->setZipFile($zipFile);
         
        
         //suppression du panier (placement à null les relations) et enregistrement de la commande
@@ -168,9 +170,9 @@ class PaymentController extends AbstractController
         }
         $this->entityManager->remove($cart);
         
+        
+        
         $this->entityManager->flush();
-
-        $zip->zipCreate($order);
         
        return $this->redirectToRoute('app_order_confirmation', ['id' => $order->getId()]);
      

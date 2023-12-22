@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Order;
+use Doctrine\ORM\Query\Parameter;
 use App\Repository\OrderRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
@@ -10,8 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+
 class OrderController extends AbstractController
+
 {
+ 
+    
     #[Route('/order', name: 'app_order')]
     public function index(OrderRepository $orderRepository): Response
     {
@@ -41,22 +46,28 @@ class OrderController extends AbstractController
             'order' => $order,
         ]);
     }
+    #[Route('/order/details/{id}/telechargement', name: 'app_order_download')]
     public function downloadPhoto(Order $order,string $zipFile,MailerInterface $mailer)
     {
-        $mailSender = $this->getParameter('mail_sender');
-        
-        $email = (new TemplatedEmail())
-        ->from($mailSender)
-        ->to($order->getUsers()->getEmail())
-        ->subject('Commande N°'.$order->getId().': lien de téléchargement de vos photos')
-        ->htmlTemplate('mail/telechargement.html.twig')
-        ->context([
-            'zipLink' => $zipFile,
-            'emailContact' => $mailSender,
-            'order' => $order,
-           
-        ]);
+        if($order->getZipFile()){
 
-        $mailer->send($email);
+            $mailSender = $this->getParameter('mail_sender');
+            
+            $email = (new TemplatedEmail())
+            ->from($mailSender)
+            ->to($order->getUsers()->getEmail())
+            ->subject('Commande N°'.$order->getId().': lien de téléchargement de vos photos')
+            ->htmlTemplate('mail/telechargement.html.twig')
+            ->context([
+                'zipLink' => $zipFile,
+                'emailContact' => $mailSender,
+                'order' => $order,
+                
+            ]);
+            $mailer->send($email);
+        }else{
+            $this->addFlash('noFile', 'Le fichier ZIP n\'existe pas. N\'hésitez pas à nous contacter si le problème persiste. ');
+        }
+
     }
 }

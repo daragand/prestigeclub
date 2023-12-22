@@ -45,6 +45,9 @@ class Order
     #[ORM\Column(length: 255)]
     private ?string $uuidOrder = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $zipFile = null;
+
     public function __construct()
     {
         $this->optionLists = new ArrayCollection();
@@ -167,6 +170,18 @@ class Order
     public function setUuidOrder(string $uuidOrder): static
     {
         $this->uuidOrder = $uuidOrder;
+
+        return $this;
+    }
+
+    public function getZipFile(): ?string
+    {
+        return $this->zipFile;
+    }
+
+    public function setZipFile(?string $zipFile): static
+    {
+        $this->zipFile = $zipFile;
 
         return $this;
     }
