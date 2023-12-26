@@ -5,12 +5,14 @@ namespace App\Controller;
 use App\Entity\Order;
 use Doctrine\ORM\Query\Parameter;
 use App\Repository\OrderRepository;
+use Liip\ImagineBundle\Model\Binary;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
 
 class OrderController extends AbstractController
 
@@ -46,6 +48,16 @@ class OrderController extends AbstractController
             'order' => $order,
         ]);
     }
-   
+   #[Route('order/telechargement/{uuidOrder}', name: 'app_order_download')]
+   public function download(Order $order): BinaryFileResponse
+   {
+         $zipFile = $order->getZipFile();
+         $fileName = 'photos_'.$order->getId().'_'.$order->getPaymentDate().'.zip';
+
+         $res = new BinaryFileResponse($zipFile);
+         $res->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $fileName);
+         
+         return $res;
+   }
    
 }
