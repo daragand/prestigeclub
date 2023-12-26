@@ -24,6 +24,7 @@ class MailingService
         if($order->getZipFile()){
 
             $mailSender = $this->parameterBag->get('email_address');
+            $domain = $this->parameterBag->get('domain');
             
             $email = (new TemplatedEmail())
             ->from($mailSender)
@@ -33,7 +34,10 @@ class MailingService
             ->context([
                 'zipLink' => $zipFile,
                 'emailContact' => $mailSender,
-                'order' => $order,
+                'lastName' => $order->getLicencie()->getLastName(),
+                'firstName' => $order->getLicencie()->getFirstName(),
+                'uuidOrder' => $order->getUuidOrder(),
+                'domain' => $domain
                 
             ]);
             $this->mailer->send($email);
