@@ -128,10 +128,15 @@
 												<i class="flaticon-mail text-thm2 pe-2 vam"></i>
 												{{user.email}}</span>
 										</h5>
+										<a class="d-flex align-items-center justify-content-between bdrb1 pb-2" href="{{path('app_forgot_password_request')}}">
+											<span class="text">
+												<i class="fa-solid fa-lock text-thm2 pe-2 vam"></i>
+												modifier le mot de passe</span>
+										</a>
 
 									</div>
 									<div class="d-grid">
-										<a href="page-contact.html" class="ud-btn btn-thm">Modifier<i class="fal fa-arrow-right-long"></i>
+										<a href="{{path('app_profil_edit')}}" class="ud-btn btn-thm">Modifier<i class="fal fa-arrow-right-long"></i>
 										</a>
 									</div>
 								</div>
