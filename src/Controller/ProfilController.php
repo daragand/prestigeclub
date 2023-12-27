@@ -19,6 +19,7 @@ class ProfilController extends AbstractController
         
         return $this->render('profil/index.html.twig', [
             'controller_name' => 'ProfilController',
+            'user' => $user,
         ]);
     }
 }

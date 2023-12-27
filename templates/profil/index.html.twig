@@ -1,360 +1,146 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProfilController!{% endblock %}
+{% block title %}Hello ProfilController!
+{% endblock %}
 
 {% block body %}
-<div class="wrapper ovh">
-  <div class="preloader"></div>
-  
-   <section class="breadcumb-section pt-0">
-      <div class="cta-employee-single freelancer-single-style mx-auto maxw1700 pt120 pt60-sm pb120 pb60-sm bdrs16 position-relative overflow-hidden d-flex align-items-center mx20-lg px30-lg">
-        <img class="left-top-img wow zoomIn" src="images/vector-img/left-top.png" alt="">
-        <img class="right-bottom-img wow zoomIn" src="images/vector-img/right-bottom.png" alt="">
-        <div class="container">
-          <div class="row wow fadeInUp">
-            <div class="col-xl-7">
-              <div class="position-relative">
-                <div class="list-meta d-sm-flex align-items-center">
-                  <a class="position-relative freelancer-single-style" href="">
-                    <img class="rounded-circle w-100 wa-sm mb15-sm" src="images/team/employee-single.png" alt="Freelancer Photo">
-                    <span class="online2"></span>
-                  </a>
-                  <div class="ml20 ml0-xs">
-                    <h5 class="title mb-1">Invision</h5>
-                    <p class="text fz14 mb-2">Lorem Ipsum Dolar Sit Amet</p>
-                    <p class="mb-0 dark-color fz15 fw500 list-inline-item mb5-sm"><i class="fas fa-star vam fz10 review-color me-2"></i> 4.82 94 reviews</p>
-                    <p class="mb-0 dark-color fz15 fw500 list-inline-item ml15 mb5-sm ml0-xs"><i class="flaticon-place vam fz20 me-2"></i> London, UK</p>
-                    <p class="mb-0 dark-color fz15 fw500 list-inline-item ml15 mb5-sm ml0-xs"><i class="flaticon-30-days vam fz20 me-2"></i> Since April 1, 2022</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+	{{ dump(user) }}
+	<div class="wrapper ovh">
+		<div class="preloader"></div>
 
-    <!-- Service Details -->
-    <section class="pt10 pb90 pb30-md">
-      <div class="container">
-        <div class="row wow fadeInUp">
-          <div class="col-lg-8">
-            <div class="service-about">
-              <h4 class="mb20">About Company</h4>
-              <p class="text mb30">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. </p>
-              <p class="text mb30">Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-              <h5 class="mb20 mt60">Who are we?</h5>
-              <p class="text mb30">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</p>
-              <h5 class="mb20 mt60">What do we do?</h5>
-              <p class="text mb30">Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-              <div class="employee-single-slider vam_nav_style slider-1-grid owl-carousel owl-theme mt55 mb60">
-                <div class="item">
-                  <div class="thumb"><img src="images/about/employee-single-1.jpg" alt="" class="w-100 bdrs4"></div>
-                </div>
-                <div class="item">
-                  <div class="thumb"><img src="images/about/employee-single-1.jpg" alt="" class="w-100 bdrs4"></div>
-                </div>
-                <div class="item">
-                  <div class="thumb"><img src="images/about/employee-single-1.jpg" alt="" class="w-100 bdrs4"></div>
-                </div>
-              </div>
-              <div class="row">
-                <h4 class="mb25">Projects</h4>
-                <div class="col-sm-6 col-xl-12">
-                  <div class="job-list-style1 bdr1 d-xl-flex align-items-start">
-                    <div class="icon d-flex align-items-center mb20">
-                      <img class="wa" src="images/team/client-2.png" alt="">
-                      <span class="fav-icon flaticon-star"></span>
-                    </div>
-                    <div class="details ml20 ml0-xl">
-                      <h5>Marketing and Communications Manager</h5>
-                      <h6 class="mb-3 text-thm">Mailchimp</h6>
-                      <p class="list-inline-item mb-0">$125k-$135k Hourly</p>
-                      <p class="list-inline-item mb-0 bdrl1 pl15">1-5 Days</p>
-                      <p class="list-inline-item mb-0 bdrl1 pl15">Expensive</p>
-                      <p class="list-inline-item mb-0 bdrl1 pl15">Remote</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-6 col-xl-12">
-                  <div class="job-list-style1 bdr1 d-xl-flex align-items-start">
-                    <div class="icon d-flex align-items-center mb20">
-                      <img class="wa" src="images/team/client-3.png" alt="">
-                      <span class="fav-icon flaticon-star"></span>
-                    </div>
-                    <div class="details ml20 ml0-xl">
-                      <h5>Senior backend developer</h5>
-                      <h6 class="mb-3 text-thm">Invision</h6>
-                      <p class="list-inline-item mb-0">$125k-$135k Hourly</p>
-                      <p class="list-inline-item mb-0 bdrl1 pl15">1-5 Days</p>
-                      <p class="list-inline-item mb-0 bdrl1 pl15">Expensive</p>
-                      <p class="list-inline-item mb-0 bdrl1 pl15">Remote</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-6 col-xl-12">
-                  <div class="job-list-style1 bdr1 d-xl-flex align-items-start">
-                    <div class="icon d-flex align-items-center mb20">
-                      <img class="wa" src="images/team/client-1.png" alt="">
-                      <span class="fav-icon flaticon-star"></span>
-                    </div>
-                    <div class="details ml20 ml0-xl">
-                      <h5>Senior B2B sales consultant</h5>
-                      <h6 class="mb-3 text-thm">Mailchimp</h6>
-                      <p class="list-inline-item mb-0">$125k-$135k Hourly</p>
-                      <p class="list-inline-item mb-0 bdrl1 pl15">1-5 Days</p>
-                      <p class="list-inline-item mb-0 bdrl1 pl15">Expensive</p>
-                      <p class="list-inline-item mb-0 bdrl1 pl15">Remote</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="product_single_content mt30 mb60">
-                <div class="mbp_pagination_comments">
-                  <div class="row">
-                    <div class="col-lg-12">
-                      <div class="total_review mb30">
-                        <h4>80 Reviews</h4>
-                      </div>
-                      <div class="d-md-flex align-items-center mb30">
-                        <div class="total-review-box d-flex align-items-center text-center mb30-sm">
-                          <div class="wrapper mx-auto">
-                            <div class="t-review mb15">4.96</div>
-                            <h5>Exceptional</h5>
-                            <p class="text mb-0">3,014 reviews</p>
-                          </div>
-                        </div>
-                        <div class="wrapper ml60 ml0-sm">
-                          <div class="review-list d-flex align-items-center mb10">
-                            <div class="list-number">5 Star</div>
-                              <div class="progress">
-                                <div class="progress-bar" style="width: 90%;" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
-                            <div class="value text-end">58</div>
-                          </div>
-                          <div class="review-list d-flex align-items-center mb10">
-                            <div class="list-number">4 Star</div>
-                              <div class="progress">
-                                <div class="progress-bar w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
-                            <div class="value text-end">20</div>
-                          </div>
-                          <div class="review-list d-flex align-items-center mb10">
-                            <div class="list-number">3 Star</div>
-                              <div class="progress">
-                                <div class="progress-bar w-50" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
-                            <div class="value text-end">15</div>
-                          </div>
-                          <div class="review-list d-flex align-items-center mb10">
-                            <div class="list-number">2 Star</div>
-                              <div class="progress">
-                                <div class="progress-bar" style="width: 30%;" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
-                            <div class="value text-end">2</div>
-                          </div>
-                          <div class="review-list d-flex align-items-center mb10">
-                            <div class="list-number">1 Star</div>
-                              <div class="progress">
-                                <div class="progress-bar" style="width: 20%;" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
-                            <div class="value text-end">1</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="mbp_first position-relative d-flex align-items-center justify-content-start mb30-sm">
-                        <img src="images/blog/comments-2.png" class="mr-3" alt="comments-2.png">
-                        <div class="ml20">
-                          <h6 class="mt-0 mb-0">Bessie Cooper</h6>
-                          <div><span class="fz14">12 March 2022</span></div>
-                        </div>
-                      </div>
-                      <p class="text mt20 mb20">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.</p>
-                      <div class="review_cansel_btns d-flex">
-                        <a href="#"><i class="fas fa-thumbs-up"></i>Helpful</a>
-                        <a href="#"><i class="fas fa-thumbs-down"></i>Not helpful</a>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="mbp_first position-relative d-flex align-items-center justify-content-start mt30 mb30-sm">
-                        <img src="images/blog/comments-2.png" class="mr-3" alt="comments-2.png">
-                        <div class="ml20">
-                          <h6 class="mt-0 mb-0">Darrell Steward</h6>
-                          <div><span class="fz14">12 March 2022</span></div>
-                        </div>
-                      </div>
-                      <p class="text mt20 mb20">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.</p>
-                      <div class="review_cansel_btns d-flex pb30">
-                        <a href="#"><i class="fas fa-thumbs-up"></i>Helpful</a>
-                        <a href="#"><i class="fas fa-thumbs-down"></i>Not helpful</a>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="position-relative bdrb1 pb50">
-                        <a href="page-service-single.html" class="ud-btn btn-light-thm">See More<i class="fal fa-arrow-right-long"></i></a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="bsp_reveiw_wrt">
-                <h6 class="fz17">Add a Review</h6>
-                <p class="text">Your email address will not be published. Required fields are marked *</p>
-                <h6>Your rating of this product</h6>
-                <div class="d-flex">
-                  <i class="fas fa-star review-color"></i>
-                  <i class="far fa-star review-color ms-2"></i>
-                  <i class="far fa-star review-color ms-2"></i>
-                  <i class="far fa-star review-color ms-2"></i>
-                  <i class="far fa-star review-color ms-2"></i>
-                </div>
-                <form class="comments_form mt30 mb30-md">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="mb-4">
-                        <label class="fw500 fz16 ff-heading dark-color mb-2">Comment</label>
-                        <textarea class="pt15" rows="6" placeholder="There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text."></textarea>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="mb20">
-                        <label class="fw500 ff-heading dark-color mb-2">Name</label>
-                        <input type="text" class="form-control" placeholder="Ali Tufan">
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="mb20">
-                        <label class="fw500 ff-heading dark-color mb-2">Email</label>
-                        <input type="email" class="form-control" placeholder="creativelayers088">
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb20">
-                        <label class="custom_checkbox fz15 ff-heading">Save my name, email, and website in this browser for the next time I comment.
-                          <input type="checkbox">
-                          <span class="checkmark"></span>
-                        </label>
-                      </div>
-                      <a href="" class="ud-btn btn-thm">Send<i class="fal fa-arrow-right-long"></i></a>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="blog-sidebar ms-lg-auto">
-              <div class="price-widget pt25 widget-mt-minus bdrs8">
-                <h4 class="widget-title">About Me</h4>
-                <div class="category-list mt20">
-                  <a class="d-flex align-items-center justify-content-between bdrb1 pb-2" href="">
-                    <span class="text"><i class="flaticon-menu text-thm2 pe-2 vam"></i>Primary industry</span> <span>Software</span>
-                  </a>
-                  <a class="d-flex align-items-center justify-content-between bdrb1 pb-2" href="">
-                    <span class="text"><i class="flaticon-factory text-thm2 pe-2 vam"></i>Company size</span> <span>501-1.000</span>
-                  </a>
-                  <a class="d-flex align-items-center justify-content-between bdrb1 pb-2" href="">
-                    <span class="text"><i class="flaticon-calendar text-thm2 pe-2 vam"></i>Founded in</span> <span>April 2022</span>
-                  </a>
-                  <a class="d-flex align-items-center justify-content-between bdrb1 pb-2" href="">
-                    <span class="text"><i class="flaticon-call text-thm2 pe-2 vam"></i>Phone</span> <span>382 4632 01 03</span>
-                  </a>
-                  <a class="d-flex align-items-center justify-content-between bdrb1 pb-2" href="">
-                    <span class="text"><i class="flaticon-mail text-thm2 pe-2 vam"></i>Email</span> <span>info@freeio.com</span>
-                  </a>
-                  <a class="d-flex align-items-center justify-content-between mb-3" href="">
-                    <span class="text"><i class="flaticon-place text-thm2 pe-2 vam"></i>Location</span> <span>London, IK</span>
-                  </a>
-                </div>
-                <div class="d-grid">
-                  <a href="page-contact.html" class="ud-btn btn-thm">Contact Me<i class="fal fa-arrow-right-long"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="pt-0 pb90 pb30-md">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="mb30">
-              <h2>3 jobs at Invision</h2>
-              <p class="text">2022 jobs live - 293 added today</p>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-6 col-lg-4 col-xl-3">
-            <div class="job-list-style1 bdr1 bdrs8">
-              <div class="icon d-flex align-items-center mb20">
-                <img class="wa" src="images/team/client-2.png" alt="">
-                <h6 class="mb-0 text-thm ml20">Mailchimp</h6>
-                <span class="fav-icon flaticon-star"></span>
-              </div>
-              <div class="details">
-                <h5 class="mb20">Website Designer Required For Directory Theme</h5>
-                <p class="list-inline-item mb-3">$125k-$135k Hourly</p>
-                <p class="list-inline-item mb-3 bdrl1 pl15">1-5 Days</p>
-                <p class="list-inline-item mb-0 bdrl1 pl15">Expensive</p>
-                <p class="list-inline-item mb-0 bdrl1 pl15">Remote</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-4 col-xl-3">
-            <div class="job-list-style1 bdr1 bdrs8">
-              <div class="icon d-flex align-items-center mb20">
-                <img class="wa" src="images/team/client-1.png" alt="">
-                <h6 class="mb-0 text-thm ml20">Mailchimp</h6>
-                <span class="fav-icon flaticon-star"></span>
-              </div>
-              <div class="details">
-                <h5 class="mb20">Senior B2B sales <br class="d-none d-md-block"> consultant</h5>
-                <p class="list-inline-item mb-3">$125k-$135k Hourly</p>
-                <p class="list-inline-item mb-3 bdrl1 pl15">1-5 Days</p>
-                <p class="list-inline-item mb-0 bdrl1 pl15">Expensive</p>
-                <p class="list-inline-item mb-0 bdrl1 pl15">Remote</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-4 col-xl-3">
-            <div class="job-list-style1 bdr1 bdrs8">
-              <div class="icon d-flex align-items-center mb20">
-                <img class="wa" src="images/team/client-3.png" alt="">
-                <h6 class="mb-0 text-thm ml20">Mailchimp</h6>
-                <span class="fav-icon flaticon-star"></span>
-              </div>
-              <div class="details">
-                <h5 class="mb20">Office assistant/Social media <br class="d-none d-xl-block"> assistant</h5>
-                <p class="list-inline-item mb-3">$125k-$135k Hourly</p>
-                <p class="list-inline-item mb-3 bdrl1 pl15">1-5 Days</p>
-                <p class="list-inline-item mb-0 bdrl1 pl15">Expensive</p>
-                <p class="list-inline-item mb-0 bdrl1 pl15">Remote</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-4 col-xl-3">
-            <div class="job-list-style1 bdr1 bdrs8">
-              <div class="icon d-flex align-items-center mb20">
-                <img class="wa" src="images/team/client-6.png" alt="">
-                <h6 class="mb-0 text-thm ml20">Mailchimp</h6>
-                <span class="fav-icon flaticon-star"></span>
-              </div>
-              <div class="details">
-                <h5 class="mb20">Marketing and Communications <br class="d-none d-xl-block"> Manager</h5>
-                <p class="list-inline-item mb-3">$125k-$135k Hourly</p>
-                <p class="list-inline-item mb-3 bdrl1 pl15">1-5 Days</p>
-                <p class="list-inline-item mb-0 bdrl1 pl15">Expensive</p>
-                <p class="list-inline-item mb-0 bdrl1 pl15">Remote</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    </div>
+		<section class="breadcumb-section pt-0">
+			<div class="cta-employee-single freelancer-single-style mx-auto maxw1700 pt120 pt60-sm pb120 pb60-sm bdrs16 position-relative overflow-hidden d-flex align-items-center mx20-lg px30-lg"></div>
+		</section>
 
-{% endblock %}
+		<!-- Service Details -->
+		<section class="pt10 pb90 pb30-md">
+			<div class="container">
+				<div class="row wow fadeInUp">
+					<div class="col-lg-8">
+						<div class="service-about">
+							<h4 class="mb20">Informations complémentaires</h4>
+							<div class="card">
+								<div class="card-body">
+									<h4 class="card-title">licencié(s)</h4>
+
+									<div class="table-responsive">
+										<table class="table">
+											<thead>
+												<tr>
+													<th scope="col">#</th>
+													<th scope="col">Nom</th>
+													<th scope="col">Prénom</th>
+													<th scope="col">Club</th>
+												</tr>
+											</thead>
+											<tbody>
+												{% if user.licencies %}
+													{% for licencie in user.licencies %}
+
+
+														<tr>
+															<th scope="row">{{licencie.id}}</th>
+															<td>{{licencie.firstname}}</td>
+															<td>{{licencie.lastname}}</td>
+															<td>{{licencie.club.name}}</td>
+														</tr>
+
+													{% endfor %}
+
+												{% endif %}
+
+											</tbody>
+										</table>
+									</div>
+									
+								</div>
+
+							</div>
+							{# autre tableau pour les commandes #}
+							<div class="card mt-4">
+								<div class="card-body">
+									<h4 class="card-title">Commandes</h4>
+
+									<div class="table-responsive">
+										<table class="table">
+											<thead>
+												<tr>
+													<th scope="col">#</th>
+													<th scope="col">Date de commande</th>
+													<th scope="col">Forfait</th>
+													<th scope="col">Licencié</th>
+													<th scope="col">Montant</th>
+												</tr>
+											</thead>
+											<tbody>
+												{% if user.orders %}
+													{% for order in user.orders %}
+
+
+														<tr>
+															<th scope="row">{{order.id}}</th>
+															<td>{{order.paymentDate|format_datetime('short', 'none', locale='fr') }}</td>
+															<td>{{order.forfait.name}}</td>
+
+															<td>{{order.licencie}}
+															</td>
+															<td>{{order.amount |format_currency('EUR', {rounding_mode: 'floor'})}}</td>
+														</tr>
+
+													{% endfor %}
+
+												{% endif %}
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+					{# encart compte #}
+					<div class="col-lg-4">
+						<div class="blog-sidebar ms-lg-auto">
+							<div class="price-widget pt25 widget-mt-minus bdrs8">
+								<h4 class="widget-title">Mon Compte</h4>
+								<div class="category-list mt20">
+									<h5 class="d-flex align-items-center justify-content-between bdrb1 pb-2">
+										<span class="text">
+											<i class="flaticon-menu text-thm2 pe-2 vam"></i>
+											{{user.firstname}}</span>
+									</h5>
+									<h5 class="d-flex align-items-center justify-content-between bdrb1 pb-2">
+										<span class="text">
+											<i class="flaticon-menu text-thm2 pe-2 vam"></i>
+											{{user.lastname}}</span>
+									</h5>
+									<h5 class="d-flex align-items-center justify-content-between bdrb1 pb-2">
+										<span class="text">
+											<i class="flaticon-place text-thm2 pe-2 vam"></i>
+											{{user.address}}
+										</h5>
+
+										<h5 class="d-flex align-items-center justify-content-between bdrb1 pb-2" href="">
+											<span class="text">
+												<i class="flaticon-mail text-thm2 pe-2 vam"></i>
+												{{user.email}}</span>
+										</h5>
+
+									</div>
+									<div class="d-grid">
+										<a href="page-contact.html" class="ud-btn btn-thm">Modifier<i class="fal fa-arrow-right-long"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+		</div>
+
+	{% endblock %}
