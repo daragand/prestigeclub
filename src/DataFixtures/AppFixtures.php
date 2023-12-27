@@ -260,6 +260,7 @@ class AppFixtures extends Fixture
                 ->setFirstname($faker->firstName)
                 ->setLastname($faker->lastName)
                 ->setPassword($faker->password)
+                ->setUuidUser($faker->uuid)
                 ->setAddress($objectAddresses[$faker->numberBetween(0, 99)])
                 ->setRoles($roles[$faker->numberBetween(0, 2)])
                 ;
