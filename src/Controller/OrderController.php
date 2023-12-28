@@ -54,7 +54,7 @@ class OrderController extends AbstractController
          $zipFile = $order->getZipFile();
          $fileName = 'photos_'.$order->getId().'.zip';
 
-         //la réponse ci-dessous permet de télécharger le fichier zip
+         //la réponse ci-dessous permet de télécharger directement le fichier zip. Bien penser à mettre le lien vers cette fonction en _blank.
          $res = new BinaryFileResponse($zipFile);
          $res->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $fileName);
          
