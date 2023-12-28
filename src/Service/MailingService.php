@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\User;
 use App\Entity\Order;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
@@ -42,9 +43,30 @@ class MailingService
             ]);
             $this->mailer->send($email);
         }
+      
 
     }
-
+    public function sendDeleteConfirmation(User $user)
+    {
+        $mailSender = $this->parameterBag->get('email_address');
+        $domain = $this->parameterBag->get('domain');
+        
+        $email = (new TemplatedEmail())
+        ->from($mailSender)
+        ->to($user->getEmail())
+        ->subject('Suppression de votre compte')
+        ->htmlTemplate('mail/deleteuser.html.twig')
+        ->context([
+            'emailContact' => $mailSender,
+            'lastName' => $user->getLastName(),
+            'firstName' => $user->getFirstName(),
+            'uuidUser' => $user->getUuidUser(),
+            'domain' => $domain
+            
+        ]);
+        $this->mailer->send($email);
+    
+    }
 
 
 

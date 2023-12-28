@@ -48,4 +48,16 @@ class ProfilController extends AbstractController
             'formUser' => $formUser->createView(),
         ]);
     }
+    #[Route('/profil/delete/confirmation/{uuidUser}', name: 'app_profil_delete')]
+    public function delete(EntityManagerInterface $entityManager, $uuidUser): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        $user = $this->getUser();
+        $user = $entityManager->getRepository(User::class)->findOneBy(['uuidUser' => $uuidUser]);
+        $entityManager->remove($user);
+        $entityManager->flush();
+        return $this->redirectToRoute('app_logout');
+    }
 }
