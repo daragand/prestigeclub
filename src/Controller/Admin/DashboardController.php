@@ -56,34 +56,74 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        
-        //liste des commandes toutes confondues trié par date de paiement
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        //si l'utilisateur est un admin, on affiche le dashboard admin
+        if ($this->isGranted('ROLE_ADMIN')) {
+           //liste des commandes toutes confondues trié par date de paiement
          $allOrders = $this->orderRepository->findBy([],['paymentDate'=>'DESC']);            //liste des livrets
-            $allLivrets = $this->livretRepository->findAll();
-        //liste et nombres de photos
-            $allPhotos = $this->photoRepository->findAll();
-            $downloadedPhotos = $this->photoRepository->findBy(['downloaded'=>true]);
-            $nbPhotos = count($allPhotos);
+         $allLivrets = $this->livretRepository->findAll();
+     //liste et nombres de photos
+         $allPhotos = $this->photoRepository->findAll();
+         $downloadedPhotos = $this->photoRepository->findBy(['downloaded'=>true]);
+         $nbPhotos = count($allPhotos);
 
-         // liste des utilisateurs Parents ayant passés commandes. GetSingleScalarResult() permet de retourner un seul résultat : le nombre de parents distincts ayant passé commande
-         $parents = $this->orderRepository->createQueryBuilder('o')
-         ->select('COUNT(DISTINCT u.id) as userCount')
-         ->join('o.users', 'u')
-         ->getQuery()
-         ->getSingleScalarResult();
-        
-         
+      // liste des utilisateurs Parents ayant passés commandes. GetSingleScalarResult() permet de retourner un seul résultat : le nombre de parents distincts ayant passé commande
+      $parents = $this->orderRepository->createQueryBuilder('o')
+      ->select('COUNT(DISTINCT u.id) as userCount')
+      ->join('o.users', 'u')
+      ->getQuery()
+      ->getSingleScalarResult();
      
-      
+     return $this->render('Admin/DashboardAdmin.html.twig',[
+         'commandes'=>$allOrders,
+         'livrets'=>$allLivrets,
+         'photos'=>$allPhotos,
+         'downloadedPhotos'=>$downloadedPhotos,
+         'parents'=>$parents,
+         'nbPhotos'=>$nbPhotos
+     ]);
+        }
+
+        //si l'utilisateur est un club, on affiche le dashboard club
+        if ($this->isGranted('ROLE_CLUB')) {
+            $user = $this->userRepository->findOneBy(['email'=>$this->getUser()->getUserIdentifier()]);
+            $club = $user->getClub();
+            $orders = $this->orderRepository->createQueryBuilder('o')
+            ->join('o.licencie.club', 'club')
+            ->where('club = :club')
+            ->setParameter('club', $club)
+            ->getQuery()
+            ->getResult()
+            ;
+            $photos = $this->photoRepository->createQueryBuilder('p')
+            ->join('p.licencie', 'licencie')
+            ->where('licencie.club = :club')
+            ->setParameter('club', $club)
+            ->getQuery()
+            ->getResult();
+            
+            $nbPhotos = count($photos);
+            $downloadedPhotos = $this->photoRepository->findBy(['downloaded'=>true]);
+            $nbDownloadedPhotos = count($downloadedPhotos);
+            $parents = $this->userRepository->createQueryBuilder('u')
+            ->select('COUNT(DISTINCT u.id) as userCount')
+            ->join('u.orders', 'o')
+            ->where('o.club = :club')
+            ->setParameter('club', $club)
+            ->getQuery()
+            ->getSingleScalarResult();
+            return $this->render('admin/DashboardClub.html.twig',[
+                'commandes'=>$orders,
+                'photos'=>$photos,
+                'nbPhotos'=>$nbPhotos,
+                'downloadedPhotos'=>$downloadedPhotos,
+                'nbDownloadedPhotos'=>$nbDownloadedPhotos,
+                'parents'=>$parents
+            ]);
+        }
         
-        return $this->render('Admin/DashboardAdmin.html.twig',[
-            'commandes'=>$allOrders,
-            'livrets'=>$allLivrets,
-            'photos'=>$allPhotos,
-            'downloadedPhotos'=>$downloadedPhotos,
-            'parents'=>$parents,
-            'nbPhotos'=>$nbPhotos
-        ]);
     }
    
 public function configureCrud(): Crud
