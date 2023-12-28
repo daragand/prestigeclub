@@ -97,7 +97,7 @@
 															<td>{{order.licencie}}
 															</td>
 															<td>{{order.amount |format_currency('EUR', {rounding_mode: 'floor'})}}</td>
-															<td><a href="{{path('app_forgot_password_request')}}" class="ud-btn btn-thm">télécharger</a></td>
+															<td><a href="{{path('app_order_download',{'uuidOrder':order.uuidOrder})}}" target="_blank" class="ud-btn btn-thm">télécharger</a></td>
 														</tr>
 
 													{% endfor %}

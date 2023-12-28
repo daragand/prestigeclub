@@ -52,8 +52,9 @@ class OrderController extends AbstractController
    public function download(Order $order): BinaryFileResponse
    {
          $zipFile = $order->getZipFile();
-         $fileName = 'photos_'.$order->getId().'_'.$order->getPaymentDate().'.zip';
+         $fileName = 'photos_'.$order->getId().'.zip';
 
+         //la réponse ci-dessous permet de télécharger le fichier zip
          $res = new BinaryFileResponse($zipFile);
          $res->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $fileName);
          
