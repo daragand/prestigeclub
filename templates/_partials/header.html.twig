@@ -56,16 +56,10 @@
                                             class="text-white">{{ app.user.firstname }}</span> </span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-right user-dd animated flipInY">
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="{{path('app_profil')}}">
                                          Profil</a>
                                
-                                {% if 'ROLE_ADMIN' in app.user.roles %}
-                                    <a class="dropdown-item" href="{{ path('admin') }}">
-
-                                       Admin Dashboard
-                                    </a>
                                 
-                                {% endif %}
                                     <a class="dropdown-item" href={{ path('app_photos_index') }}>
                                         My Reservation</a>
                                     <div class="dropdown-divider"></div>

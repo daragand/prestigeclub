@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Service\MailingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ProfilController extends AbstractController
 {
@@ -48,6 +50,23 @@ class ProfilController extends AbstractController
             'formUser' => $formUser->createView(),
         ]);
     }
+    #[Route('/profil/delete', name: 'app_profil_delete_ask')]
+    public function askDelete(MailingService $mailService):RedirectResponse
+    {
+        /**
+         * Cette fonction permet de demander la suppression du compte
+         */
+        $user = $this->getUser();
+        if($user){
+            $mailService->sendDeleteConfirmation($user);
+            $this->addFlash('danger', 'Un email de validation de suppression de compte vous a été envoyé');
+            return $this->redirectToRoute('app_profil');
+        }else{
+            return $this->redirectToRoute('app_login');
+        }
+
+    }
+    
     #[Route('/profil/delete/confirmation/{uuidUser}', name: 'app_profil_delete')]
     public function delete(EntityManagerInterface $entityManager, $uuidUser): Response
     {

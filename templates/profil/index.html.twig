@@ -11,7 +11,13 @@
 		<section class="breadcumb-section pt-0">
 			<div class="cta-employee-single freelancer-single-style mx-auto maxw1700 pt120 pt60-sm pb120 pb60-sm bdrs16 position-relative overflow-hidden d-flex align-items-center mx20-lg px30-lg"></div>
 		</section>
-
+{% for type, messages in app.flashes %}
+  {% for message in messages %}
+    <div class="alert alert-{{ type }}" role="alert">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endfor %}
 		<!-- Service Details -->
 		<section class="pt10 pb90 pb30-md">
 			<div class="container">
@@ -145,8 +151,7 @@
 									<div class="d-grid">
 										<a href="{{path('app_profil_edit')}}" class="ud-btn btn-thm">Modifier vos informations<i class="fal fa-arrow-right-long"></i>
 										</a>
-										<a href="{{path('app_forgot_password_request')}}" class="ud-btn btn-thm">Changer mot de passe<i class="fa-solid fa-lock"></i>
-										</a>
+										
 									</div>
 								</div>
 							</div>
@@ -158,9 +163,9 @@
 									<div class="d-grid">
 										<a href="{{path('app_forgot_password_request')}}" class="mt-2 ud-btn btn-thm">Changer mot de passe<i class="fa-solid fa-lock"></i>
 										</a>
-										<a href="{{path('app_profil_edit')}}" class="mt-2 ud-btn btn-thm">Supprimer mon compte<i class="fa-solid fa-trash"></i>
+										<a href="{{path('app_profil_delete_ask')}}" class="mt-2 ud-btn btn-thm">Supprimer mon compte<i class="fa-solid fa-trash"></i>
 										</a>
-										<a href="{{path('app_profil_edit')}}" class="mt-2 ud-btn btn-thm">Solliciter mes infos personnelles<i class="fa-solid fa-info"></i>
+										<a href="#" class="mt-2 ud-btn btn-thm">Solliciter mes infos personnelles<i class="fa-solid fa-info"></i>
 										</a>
 									</div>
 								</div>
