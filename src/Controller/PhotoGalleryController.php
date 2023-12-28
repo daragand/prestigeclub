@@ -47,7 +47,7 @@ class PhotoGalleryController extends AbstractController
         /**
          * Si l'utilisateur n'a qu'un seul licencié, je le redirige directement vers la galerie de photos de ce licencié
          */
-        if (!$userLicencies && count($userLicencies)<=1){
+        if (!$userLicencies && count($userLicencies)===1){
            $slug = $userLicencies[0]->getSlug();
               return $this->redirectToRoute('app_photo_gallery', ['slug' => $slug]);
         }

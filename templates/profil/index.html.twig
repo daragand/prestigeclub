@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block body %}
-	{{ dump(user) }}
+	
 	<div class="wrapper ovh">
 		<div class="preloader"></div>
 
@@ -34,7 +34,7 @@
 												</tr>
 											</thead>
 											<tbody>
-												{% if user.licencies %}
+												{% if user.licencies is defined %}
 													{% for licencie in user.licencies %}
 
 
@@ -47,6 +47,11 @@
 
 													{% endfor %}
 
+												{% else %}
+													<tr>
+														<td colspan="4">Aucun licencié associé à votre compte</td>
+													</tr>
+												
 												{% endif %}
 
 											</tbody>
@@ -70,10 +75,11 @@
 													<th scope="col">Forfait</th>
 													<th scope="col">Licencié</th>
 													<th scope="col">Montant</th>
+													<th scope="col">Action</th>
 												</tr>
 											</thead>
 											<tbody>
-												{% if user.orders %}
+												{% if user.orders is defined %}
 													{% for order in user.orders %}
 
 
@@ -85,10 +91,15 @@
 															<td>{{order.licencie}}
 															</td>
 															<td>{{order.amount |format_currency('EUR', {rounding_mode: 'floor'})}}</td>
+															<td><a href="{{path('app_forgot_password_request')}}" class="ud-btn btn-thm">télécharger</a></td>
 														</tr>
 
 													{% endfor %}
 
+												{% else %}
+													<tr>
+														<td colspan="5">Aucune commande</td>
+													</tr>
 												{% endif %}
 
 											</tbody>
@@ -128,24 +139,40 @@
 												<i class="flaticon-mail text-thm2 pe-2 vam"></i>
 												{{user.email}}</span>
 										</h5>
-										<a class="d-flex align-items-center justify-content-between bdrb1 pb-2" href="{{path('app_forgot_password_request')}}">
-											<span class="text">
-												<i class="fa-solid fa-lock text-thm2 pe-2 vam"></i>
-												modifier le mot de passe</span>
-										</a>
+										
 
 									</div>
 									<div class="d-grid">
-										<a href="{{path('app_profil_edit')}}" class="ud-btn btn-thm">Modifier<i class="fal fa-arrow-right-long"></i>
+										<a href="{{path('app_profil_edit')}}" class="ud-btn btn-thm">Modifier vos informations<i class="fal fa-arrow-right-long"></i>
+										</a>
+										<a href="{{path('app_forgot_password_request')}}" class="ud-btn btn-thm">Changer mot de passe<i class="fa-solid fa-lock"></i>
 										</a>
 									</div>
 								</div>
 							</div>
+									
+						<div class="blog-sidebar ms-lg-auto">
+							<div class="price-widget pt2  bdrs8">
+								<h4 class="widget-title">Actions</h4>
+								
+									<div class="d-grid">
+										<a href="{{path('app_forgot_password_request')}}" class="mt-2 ud-btn btn-thm">Changer mot de passe<i class="fa-solid fa-lock"></i>
+										</a>
+										<a href="{{path('app_profil_edit')}}" class="mt-2 ud-btn btn-thm">Supprimer mon compte<i class="fa-solid fa-trash"></i>
+										</a>
+										<a href="{{path('app_profil_edit')}}" class="mt-2 ud-btn btn-thm">Solliciter mes infos personnelles<i class="fa-solid fa-info"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					
 						</div>
 					</div>
 				</div>
 			</section>
 
 		</div>
+					
 
 	{% endblock %}
