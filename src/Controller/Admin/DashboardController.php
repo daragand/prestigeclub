@@ -107,6 +107,11 @@ class DashboardController extends AbstractDashboardController
             ->getQuery()
             ->getResult()
             ;
+
+            $amountTotal = 0;
+            foreach ($orders as $order) {
+                $amountTotal += $order->getAmount();
+            }
             
             $photos = $this->photoRepository->createQueryBuilder('p')
             ->join('p.licencie', 'licencie')
@@ -132,6 +137,7 @@ class DashboardController extends AbstractDashboardController
                 'nbPhotos'=>$nbPhotos,
                 'downloadedPhotos'=>$downloadedPhotos,
                 'nbDownloadedPhotos'=>$nbDownloadedPhotos,
+                'pourcentage'=>$amountTotal*0.1,
                 
             ]);
         }
