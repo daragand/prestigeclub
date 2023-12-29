@@ -12,10 +12,12 @@ use App\Entity\Options;
 use App\Entity\Licencie;
 use App\Entity\OptionList;
 use App\Entity\PhotoGroup;
+use App\Repository\ClubRepository;
 use App\Repository\UserRepository;
 use App\Repository\OrderRepository;
 use App\Repository\PhotoRepository;
 use App\Repository\LivretRepository;
+use App\Repository\LicencieRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -34,6 +36,8 @@ class DashboardController extends AbstractDashboardController
         private LivretRepository $livretRepository,
         private PhotoRepository $photoRepository,
         private UserRepository $userRepository,
+        private ClubRepository $clubRepository,
+        private LicencieRepository $licencieRepository
         )
     {
         
@@ -89,38 +93,46 @@ class DashboardController extends AbstractDashboardController
         //si l'utilisateur est un club, on affiche le dashboard club
         if ($this->isGranted('ROLE_CLUB')) {
             $user = $this->userRepository->findOneBy(['email'=>$this->getUser()->getUserIdentifier()]);
-            $club = $user->getClub();
+            
+            $club = $this->clubRepository->findOneBy(['id'=>intval($user->getClub()[0]->getId())]);
+            
+            /**
+             * Récupération des commandes du club
+             */
             $orders = $this->orderRepository->createQueryBuilder('o')
-            ->join('o.licencie.club', 'club')
-            ->where('club = :club')
-            ->setParameter('club', $club)
+            ->join('o.licencie', 'lic')
+            ->join('lic.club', 'club')
+            ->where('club = :clubId')
+            ->setParameter('clubId', $club->getId())
             ->getQuery()
             ->getResult()
             ;
+            
             $photos = $this->photoRepository->createQueryBuilder('p')
             ->join('p.licencie', 'licencie')
             ->where('licencie.club = :club')
-            ->setParameter('club', $club)
+            ->setParameter('club', $club->getId())
             ->getQuery()
             ->getResult();
+            
+            $licencies= $club->getLicencie();
+            
+
+            
             
             $nbPhotos = count($photos);
             $downloadedPhotos = $this->photoRepository->findBy(['downloaded'=>true]);
             $nbDownloadedPhotos = count($downloadedPhotos);
-            $parents = $this->userRepository->createQueryBuilder('u')
-            ->select('COUNT(DISTINCT u.id) as userCount')
-            ->join('u.orders', 'o')
-            ->where('o.club = :club')
-            ->setParameter('club', $club)
-            ->getQuery()
-            ->getSingleScalarResult();
+            
+            
+            
             return $this->render('admin/DashboardClub.html.twig',[
                 'commandes'=>$orders,
                 'photos'=>$photos,
                 'nbPhotos'=>$nbPhotos,
                 'downloadedPhotos'=>$downloadedPhotos,
                 'nbDownloadedPhotos'=>$nbDownloadedPhotos,
-                'parents'=>$parents
+                
             ]);
         }
         
