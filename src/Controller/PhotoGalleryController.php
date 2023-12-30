@@ -18,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PhotoGalleryController extends AbstractController
 {
-    #[Route('/photos', name: 'app_photos_index')]
+    #[Route('/', name: 'app_photos_index')]
     public function index(LicencieRepository $licencieRepository, UserRepository $userRepository, PhotoRepository $photoRepository): Response
     {
 
