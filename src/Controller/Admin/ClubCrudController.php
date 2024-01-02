@@ -39,7 +39,7 @@ class ClubCrudController extends AbstractCrudController
             TextField::new('logoFile', 'Logo du club')
             ->setFormType(VichFileType::class)
             //ajout d'un template pour afficher les images dans la liste
-            ->setTemplatePath('Admin/photo/custom_logoclub.html.twig'),
+            ->setTemplatePath('admin/photo/custom_logoclub.html.twig'),
             AssociationField::new('address', 'Adresse'),
         ];
     }

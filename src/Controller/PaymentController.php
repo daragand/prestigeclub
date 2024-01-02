@@ -46,7 +46,8 @@ class PaymentController extends AbstractController
 
         
        /**
-        * Lors de la récupération du panier, il semble que le forfait ne veut pas apparaitre. Utilisation donc du get_Reference
+        * Lors de la récupération du panier, il semble que le forfait ne veut pas apparaitre. Utilisation donc du get_Reference.
+        * A terme, il faudra trouver une solution pour que le forfait apparaisse lors de la récupération du panier sans alourdir le code de la sorte.
         */
 
         $forfait = $this->entityManager->getReference(Forfait::class, $cart->getForfait()->getId());
