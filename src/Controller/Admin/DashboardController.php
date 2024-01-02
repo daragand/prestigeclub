@@ -26,6 +26,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -37,7 +39,8 @@ class DashboardController extends AbstractDashboardController
         private PhotoRepository $photoRepository,
         private UserRepository $userRepository,
         private ClubRepository $clubRepository,
-        private LicencieRepository $licencieRepository
+        private LicencieRepository $licencieRepository,
+        private ChartBuilderInterface $chartBuilder
         )
     {
         
@@ -73,20 +76,36 @@ class DashboardController extends AbstractDashboardController
          $downloadedPhotos = $this->photoRepository->findBy(['downloaded'=>true]);
          $nbPhotos = count($allPhotos);
 
+    
       // liste des utilisateurs Parents ayant passés commandes. GetSingleScalarResult() permet de retourner un seul résultat : le nombre de parents distincts ayant passé commande
       $parents = $this->orderRepository->createQueryBuilder('o')
       ->select('COUNT(DISTINCT u.id) as userCount')
       ->join('o.users', 'u')
       ->getQuery()
       ->getSingleScalarResult();
-     
+
+      //graphiques des ventes
+      $chart = $this->chartBuilder->createChart(Chart::TYPE_DOUGHNUT);
+      $chart->setData([
+          'labels' => ['Photos', 'Commandes'],
+          'datasets' => [
+              [
+                  'label' => 'Ventes',
+                  'backgroundColor' => ['#FF6384', '#36A2EB'],
+                  'borderColor' => ['#FF6384', '#36A2EB'],
+                  'data' => [$nbPhotos, count($allOrders)],
+              ],
+          ],
+      ]);
+   
      return $this->render('Admin/DashboardAdmin.html.twig',[
          'commandes'=>$allOrders,
          'livrets'=>$allLivrets,
          'photos'=>$allPhotos,
          'downloadedPhotos'=>$downloadedPhotos,
          'parents'=>$parents,
-         'nbPhotos'=>$nbPhotos
+         'nbPhotos'=>$nbPhotos,
+            'chart'=>$chart,
      ]);
         }
 
@@ -131,6 +150,7 @@ class DashboardController extends AbstractDashboardController
             
             
             
+            
             return $this->render('admin/DashboardClub.html.twig',[
                 'commandes'=>$orders,
                 'photos'=>$photos,
@@ -138,6 +158,7 @@ class DashboardController extends AbstractDashboardController
                 'downloadedPhotos'=>$downloadedPhotos,
                 'nbDownloadedPhotos'=>$nbDownloadedPhotos,
                 'pourcentage'=>$amountTotal*0.1,
+                
                 
             ]);
         }
