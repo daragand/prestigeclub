@@ -44,6 +44,9 @@ class Club
     #[ORM\OneToMany(mappedBy: 'club', targetEntity: Licencie::class, orphanRemoval: true)]
     private Collection $licencie;
 
+    #[ORM\ManyToOne(inversedBy: 'clubs')]
+    private ?Sport $sport = null;
+
     
 
     public function __construct()
@@ -221,6 +224,18 @@ class Club
                 $licencie->setClub(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSport(): ?Sport
+    {
+        return $this->sport;
+    }
+
+    public function setSport(?Sport $sport): static
+    {
+        $this->sport = $sport;
 
         return $this;
     }
