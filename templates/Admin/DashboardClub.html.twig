@@ -3,11 +3,32 @@
 
 {% block main %}
 	<div class="container-fluid">
-    <h1>Dashboard</h1>
-     <!-- *************************************************************** -->
-    <!-- Partie Statistiques -->
-    <!-- *************************************************************** -->
+    <h1>Dashboard de votre club</h1>
+    
 		<div class="row">
+         <!-- *************************************************************** -->
+    <!-- Info Club -->
+    <!-- *************************************************************** -->
+         <div class="col-sm-6 mt-2 mb-4 col-lg-12">
+    <div class="card border-end">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div>
+                    <h2 class="text-dark mb-1 font-weight-medium">{{ club.name }}</h2>
+                    
+                    <h3 class="text-dark mb-1 font-weight-medium">{{ club.sport }}</h3>
+                    <h4 class="text-dark mb-1 font-weight-medium">{{ club.address }}</h4>
+                    
+                </div>
+                <div class="ms-auto mt-md-3 mt-lg-0">
+                    <span class="opacity-7 text-muted">
+                       <i class="fa-solid fa-house-chimney"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
          <!-- *************************************************************** -->
     <!-- Début stats photos -->
     <!-- *************************************************************** -->
@@ -16,12 +37,18 @@
         <div class="card-body">
             <div class="d-flex align-items-center">
                 <div>
-                    <h2 class="text-dark mb-1 font-weight-medium">{{ nbPhotos }}</h2>
-                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Photos</h6>
+                {% if club.sport is not empty %}
+                    
+                    <h2 class="text-dark mb-1 font-weight-medium">{{ club.sport }}</h2>
+                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Sport principal</h6>
+                {% else %}
+                    <h2 class="text-dark mb-1 font-weight-medium">Sport non défini</h2>
+                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Sport principal</h6>
+                {% endif %}
                 </div>
                 <div class="ms-auto mt-md-3 mt-lg-0">
                     <span class="opacity-7 text-muted">
-                        <i data-feather="user-plus"></i>
+                        <i class="fa-solid fa-person-running"></i>
                     </span>
                 </div>
             </div>
@@ -32,15 +59,15 @@
     <!-- Fin stats photos -->
     <!-- *************************************************************** -->
     <!-- *************************************************************** -->
-    <!-- Début stats commandes en cours -->
+    <!-- Début stats des Licenciés -->
     <!-- *************************************************************** -->
     <div class="col-sm-6 col-lg-3">
     <div class="card border-end">
         <div class="card-body">
             <div class="d-flex align-items-center">
                 <div>
-                    <h2 class="text-dark mb-1 font-weight-medium">{{ commandes|filter(com => com.orderStatus == 'En cours de traitement')|length }}</h2>
-                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Commandes en cours</h6>
+                    <h2 class="text-dark mb-1 font-weight-medium">{{ licencies|length }}</h2>
+                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Nombre de licenciés</h6>
                 </div>
                 <div class="ms-auto mt-md-3 mt-lg-0">
                     <span class="opacity-7 text-muted">
@@ -52,19 +79,19 @@
     </div>
 </div>
  <!-- *************************************************************** -->
-    <!-- Fin stats commande en cours-->
+    <!-- Fin stats des licenciés-->
     <!-- *************************************************************** -->
 
      <!-- *************************************************************** -->
-    <!-- Début stats du nombre de photos téléchargées -->
+    <!-- Début stats des groupes -->
     <!-- *************************************************************** -->
     <div class="col-sm-6 col-lg-3">
     <div class="card border-end">
         <div class="card-body">
             <div class="d-flex align-items-center">
                 <div>
-                    <h2 class="text-dark mb-1 font-weight-medium">{{ downloadedPhotos|length }}</h2>
-                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Photos téléchargées</h6>
+                    <h2 class="text-dark mb-1 font-weight-medium">{{ groupes|length }}</h2>
+                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">nombre de Groupes</h6>
                 </div>
                 <div class="ms-auto mt-md-3 mt-lg-0">
                     <span class="opacity-7 text-muted">
@@ -76,10 +103,10 @@
     </div>
 </div>
  <!-- *************************************************************** -->
-    <!-- Fin stats du nombre de photos téléchargées -->
+    <!-- Fin stats Groupes -->
     <!-- *************************************************************** -->
       <!-- *************************************************************** -->
-    <!-- Début stats du nombre des clients (parents) -->
+    <!-- Début stats pourcentage du club -->
     <!-- *************************************************************** -->
     <div class="col-sm-6 col-lg-3">
     <div class="card border-end">
@@ -87,7 +114,7 @@
             <div class="d-flex align-items-center">
                 <div>
                     <h2 class="text-dark mb-1 font-weight-medium">{{ pourcentage|format_currency('EUR', {rounding_mode: 'floor'}) }}</h2>
-                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Somme gagné par le club</h6>
+                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Montant gagné par le club</h6>
                 </div>
                 <div class="ms-auto mt-md-3 mt-lg-0">
                     <span class="opacity-7 text-muted">
@@ -99,7 +126,7 @@
     </div>
 </div>
  <!-- *************************************************************** -->
-    <!-- Fin stats du nombre des clients (parents) -->
+    <!-- Fin stats du pourcentage du club -->
     <!-- *************************************************************** -->
         </div>
           <!-- *************************************************************** -->
@@ -109,37 +136,54 @@
  <!-- *************************************************************** -->
     <!-- Début tableaux des commandes en cours -->
     <!-- *************************************************************** -->
-
+{{ dump(licencies) }}
 <!-- multi-column ordering -->
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Commandes en cours</h4>
-                                <h6 class="card-subtitle">Tant que le téléchargement de la photo ou la réception du livret n'est pas confirmée, la commande reste en cours de traitement</h6>
+                                <h4 class="card-title">Vos licenciés</h4>
+                                
                                 <div class="table-responsive">
                                     <table id="multi_col_order"
                                         class="table border table-striped table-bordered text-nowrap" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>Numéro de commande</th>
-                                                <th>client</th>
-                                                <th>Licencié</th>
-                                                <th>Forfait</th>
-                                                <th>Prix</th>
+                                                <th>Groupes</th>
+                                                <th>Licenciés</th>
+                                                <th>Email</th>
+                                                <th>Commande passée</th>
+                                                <th>Montant</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        {% for cmd in commandes %}
+                                        {% if licencies is empty %}
+                                            <tr>
+                                                <td colspan="5">Aucun licencié associé à votre Club</td>
+                                            </tr>
+                                        {% else %}
+                                        {% for lic in licencies %}
                                        
                                             <tr>
-                                                <td>{{ cmd.id }}</td>
-                                                <td>{{ cmd.users }}</td>
-                                                <td>{{ cmd.users.licencies[0] }}</td>
-                                                <td>{{ cmd.forfait }}</td>
-                                                <td>{{ cmd.amount }}</td>
+                                                <td>{{ lic.groupes }}</td>
+                                                <td>{{ lic }}</td>
+                                                <td>{{ lic.email }}</td>
+                                                {% if lic.orders is not empty %}
+                                                <td>oui</td>
+                                                {% set licAmount = 0 %}
+                                                {% for cmd in lic.orders %}
+                                                    {% set licAmount = licAmount + cmd.amount %}
+                                                {% endfor %}
+                                                <td>{{licAmount|format_currency('EUR', {rounding_mode: 'floor'}) }}</td>
+                                                {% else %}
+                                                <td>non</td>
+                                                <td>0€</td>
+                                                    
+                                                {% endif %}
+                                                
                                             </tr>
                                         {% endfor %}
+                                        {% endif %}
                                             
                                            
                                         </tbody>
@@ -153,126 +197,11 @@
 
 
 <!-- *************************************************************** -->
-    <!-- Fin des tableaux des commandes en cours -->
+    <!-- Fin des tableaux de gestion -->
     <!-- *************************************************************** -->
-                <!-- *************************************************************** -->
-                <!-- Start Sales Charts Section -->
-                <!-- *************************************************************** -->
-                <div class="row mt-4">
-                    <div class="col-lg-4 col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Total Sales</h4>
-                                <div id="campaign-v2" class="mt-2" style="height:283px; width:100%;"></div>
-                                <ul class="list-style-none mb-0">
-                                    <li>
-                                        <i class="fas fa-circle text-primary font-10 me-2"></i>
-                                        <span class="text-muted">Direct Sales</span>
-                                        <span class="text-dark float-end font-weight-medium">$2346</span>
-                                    </li>
-                                    <li class="mt-3">
-                                        <i class="fas fa-circle text-danger font-10 me-2"></i>
-                                        <span class="text-muted">Referral Sales</span>
-                                        <span class="text-dark float-end font-weight-medium">$2108</span>
-                                    </li>
-                                    <li class="mt-3">
-                                        <i class="fas fa-circle text-cyan font-10 me-2"></i>
-                                        <span class="text-muted">Affiliate Sales</span>
-                                        <span class="text-dark float-end font-weight-medium">$1204</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Dernières commandes</h4>
-                                <div class="net-income mt-4 position-relative" style="height:294px;">
-                               
-                                <ul class="list-inline text-center mt-5 mb-2">
-                                    {% for cmd in commandes|slice(0,6) %}
-                                        
-                                    <li class="list-inline-item text-muted fst-italic">{{cmd.users.firstname}} {{cmd.paymentDate|format_datetime('short', 'none', locale='fr')}}</li>
-                                    {% endfor %}
-                                </ul>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title mb-4">Earning by Location</h4>
-                                <div class="" style="height:180px">
-                                    <div id="visitbylocate" style="height:100%"></div>
-                                </div>
-                                <div class="row mb-3 align-items-center mt-1 mt-5">
-                                    <div class="col-4 text-end">
-                                        <span class="text-muted font-14">India</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 text-end">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">28%</span>
-                                    </div>
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-4 text-end">
-                                        <span class="text-muted font-14">UK</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 74%"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 text-end">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">21%</span>
-                                    </div>
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-4 text-end">
-                                        <span class="text-muted font-14">USA</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-cyan" role="progressbar" style="width: 60%"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 text-end">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">18%</span>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center">
-                                    <div class="col-4 text-end">
-                                        <span class="text-muted font-14">China</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: 50%"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 text-end">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">12%</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- *************************************************************** -->
-                <!-- End Sales Charts Section -->
-                <!-- *************************************************************** -->
+                
 
 	</div>
-	{{ dump(commandes) }}
+	
   
 {% endblock %}

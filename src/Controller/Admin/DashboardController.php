@@ -139,14 +139,14 @@ class DashboardController extends AbstractDashboardController
             ->getQuery()
             ->getResult();
             
-            $licencies= $club->getLicencie();
+            
+            
             
 
             
             
             $nbPhotos = count($photos);
-            $downloadedPhotos = $this->photoRepository->findBy(['downloaded'=>true]);
-            $nbDownloadedPhotos = count($downloadedPhotos);
+            
             
             
             
@@ -155,8 +155,9 @@ class DashboardController extends AbstractDashboardController
                 'commandes'=>$orders,
                 'photos'=>$photos,
                 'nbPhotos'=>$nbPhotos,
-                'downloadedPhotos'=>$downloadedPhotos,
-                'nbDownloadedPhotos'=>$nbDownloadedPhotos,
+                'club'=>$club,
+                'licencies'=>$club->getLicencie(),
+                'groupes'=>$club->getGroups(),
                 'pourcentage'=>$amountTotal*0.1,
                 
                 
