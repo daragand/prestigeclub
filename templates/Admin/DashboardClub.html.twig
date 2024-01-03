@@ -136,7 +136,7 @@
  <!-- *************************************************************** -->
     <!-- Début tableaux des commandes en cours -->
     <!-- *************************************************************** -->
-{{ dump(licencies) }}
+
 <!-- multi-column ordering -->
                 <div class="row mt-4">
                     <div class="col-12">
@@ -169,7 +169,22 @@
                                                 <td>{{ lic }}</td>
                                                 <td>{{ lic.email }}</td>
                                                 {% if lic.orders is not empty %}
-                                                <td>oui</td>
+                                                    {% set info = '' %}
+                                                    {# Cette partie ajoute les forfaits de chaque commande ainsi que les options #}
+                                                {% for infoCMD in lic.orders %}
+                                                
+                                                    {% set info = info ~ infoCMD.forfait %}
+                                                    {# ajout des options à info #}
+                                                    {% for liOption in infoCMD.optionLists %}
+                                                        {% set info = info ~ ' ' ~ liOption.name %}
+                                                    {% endfor %}
+                                                {% endfor %}
+                                                <td>{{info}}</td>
+                                                {% set licAmount = 0 %}
+                                                {% for cmd in lic.orders %}
+                                                    {% set licAmount = licAmount + cmd.amount %}
+                                                {% endfor %}
+                                                
                                                 {% set licAmount = 0 %}
                                                 {% for cmd in lic.orders %}
                                                     {% set licAmount = licAmount + cmd.amount %}

@@ -8,6 +8,7 @@ use App\Entity\Photo;
 use App\Entity\Livret;
 use App\Entity\Address;
 use App\Entity\Forfait;
+use App\Entity\Group;
 use App\Entity\Options;
 use App\Entity\Licencie;
 use App\Entity\OptionList;
@@ -181,6 +182,13 @@ public function configureCrud(): Crud
 
     public function configureMenuItems(): iterable
     {
+        if ($this->isGranted('ROLE_CLUB')) {
+            yield MenuItem::section('Tableau de bord', 'fa-solid fa-tachometer-alt')->setCssClass('border-bottom border-2');
+            
+            yield MenuItem::linkToCrud('les Commandes', 'fa-solid fa-table-list', Order::class)->setController(OrderCrudController::class);
+            yield MenuItem::linkToCrud('Licenciés du Club', 'fas fa-users', Licencie::class);
+            yield MenuItem::linkToCrud('Groupes', 'fas fa-people-group', Group::class);
+        }else{
         yield MenuItem::section('Commandes')->setCssClass('border-bottom border-2');
         yield MenuItem::linkToCrud('Toutes les commandes', 'fa-solid fa-table-list', Order::class)->setController(OrderCrudController::class);
         yield MenuItem::linkToCrud('Commandes en cours', 'fa-solid fa-list', Order::class)->setController(OrderToControllCrudController::class);
@@ -205,7 +213,10 @@ public function configureCrud(): Crud
         yield MenuItem::linkToCrud('Options', 'fas fa-cog', Options::class);
         yield MenuItem::linkToCrud('Clubs','fa-solid fa-landmark', Club::class);
         yield MenuItem::linkToCrud('Licenciés', 'fas fa-users', Licencie::class);
+        
+        }
         //section vide pour créer un espace entre les deux menus
+        
         yield MenuItem::section(' ');
         yield MenuItem::linkToLogout('Déconnexion', 'fa-solid fa-sign-out-alt');
        

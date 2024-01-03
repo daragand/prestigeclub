@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 
 class GroupCrudController extends AbstractCrudController
 {
@@ -31,7 +32,8 @@ public function configureCrud(Crud $crud): Crud{
     {
         return [
             IdField::new('id'),
-            TextField::new('title'),
+            TextField::new('name'),
+            AssociationField::new('clubs'),
             
         ];
     }
