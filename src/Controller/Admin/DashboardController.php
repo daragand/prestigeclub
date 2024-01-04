@@ -59,6 +59,9 @@ class DashboardController extends AbstractDashboardController
        
             ->addJsFile('datatables.net/js/jquery.dataTables.min.js')
             ->addJsFile('datatables.net/js/datatable-basic.init.js');
+            
+            
+            
         
     }
     #[Route('/admin', name: 'admin')]
@@ -76,7 +79,10 @@ class DashboardController extends AbstractDashboardController
          $allPhotos = $this->photoRepository->findAll();
          $downloadedPhotos = $this->photoRepository->findBy(['downloaded'=>true]);
          $nbPhotos = count($allPhotos);
-
+//liste des clubs
+         $clubs = $this->clubRepository->findAll();
+         //liste des licenciés
+         $licencies = $this->licencieRepository->findAll();
     
       // liste des utilisateurs Parents ayant passés commandes. GetSingleScalarResult() permet de retourner un seul résultat : le nombre de parents distincts ayant passé commande
       $parents = $this->orderRepository->createQueryBuilder('o')
@@ -107,6 +113,7 @@ class DashboardController extends AbstractDashboardController
          'parents'=>$parents,
          'nbPhotos'=>$nbPhotos,
             'chart'=>$chart,
+            'clubs'=>$clubs,
      ]);
         }
 

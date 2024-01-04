@@ -150,7 +150,46 @@
                     </div>
                 </div>
 
-
+{# tableau des Clubs #}
+<div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Liste des Clubs</h4>
+                                <h6 class="card-subtitle"></h6>
+                                <div class="table-responsive">
+                                     <table id="default_order" class="table border table-striped table-bordered text-nowrap"
+                                        style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Numéro de Clubs</th>
+                                                <th>Clubs</th>
+                                                <th>Ville</th>
+                                                <th>Nombre de Groupes</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for club in clubs %}
+                                       
+                                            <tr>
+                                                <td>{{ club.id }}</td>
+                                                <td>{{ club.name }}</td>
+                                                <td>{{ club.address.city }}</td>
+                                                <td>{{ club.groups|length }}</td>
+                                                <td><a href="#" class="mt-2 ud-btn btn-thm">Supprimer mon compte<i class="fa-solid fa-trash"></i>
+										</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                            
+                                           
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 <!-- *************************************************************** -->
     <!-- Fin des tableaux des commandes en cours -->
@@ -163,15 +202,13 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title">Livrets à gérer</h4>
-                               {% set nbLivret = 0 %}
-                               {% for cmd in commandes %}
-                                
-                                
-                                
-                                
-                                {% if cmd.forfait == 'Prestige' %}
-                                    {% set nbLivret = nbLivret + 1 %}
-                                    <div class="d-flex align-items-start border-left-line pb-3">
+                               
+                            {% set counter = 0 %}
+                            {% for cmd in commandes %}
+                                {% if cmd.forfait == 'Prestige' and cmd.orderStatus == 'En cours de traitement' %}
+                                    {% if counter < 3 %}
+                                        {% set counter = counter + 1 %}
+                                        <div class="d-flex align-items-start border-left-line pb-3">
                                          <div>
                                             <a href="javascript:void(0)" class="btn btn-info btn-circle mb-2 btn-item">
                                                 <i class="fa-solid fa-book"></i>
@@ -186,8 +223,12 @@
                                         </div>
                                     
                                     </div>
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
+                                    
+                                    
+                               
                             </div>
                         </div>
                     </div>
@@ -237,6 +278,11 @@
                 <!-- *************************************************************** -->
                 <!-- End Sales Charts Section -->
                 <!-- *************************************************************** -->
+
+
+
+
+
 
 	</div>
 	

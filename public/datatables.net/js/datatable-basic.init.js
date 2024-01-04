@@ -5,6 +5,7 @@
 // -->File: datatable_basic_init
 /*************************************************************************************/
 $(document).ready( function () {
+    $('#default_order').DataTable()
     $('#multi_col_order').DataTable();
 } );
 /****************************************
