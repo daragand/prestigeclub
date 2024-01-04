@@ -186,8 +186,8 @@ public function configureCrud(): Crud
             yield MenuItem::section('Tableau de bord', 'fa-solid fa-tachometer-alt')->setCssClass('border-bottom border-2');
             
             yield MenuItem::linkToCrud('les Commandes', 'fa-solid fa-table-list', Order::class)->setController(OrderCrudController::class);
-            yield MenuItem::linkToCrud('Licenciés du Club', 'fas fa-users', Licencie::class);
-            yield MenuItem::linkToCrud('Groupes', 'fas fa-people-group', Group::class);
+            yield MenuItem::linkToCrud('Licenciés du Club', 'fas fa-users', Licencie::class)->setController(LicencieClubCrudController::class);
+            yield MenuItem::linkToCrud('Groupes', 'fas fa-people-group', Group::class)->setController(GroupClubCrudController::class);
         }else{
         yield MenuItem::section('Commandes')->setCssClass('border-bottom border-2');
         yield MenuItem::linkToCrud('Toutes les commandes', 'fa-solid fa-table-list', Order::class)->setController(OrderCrudController::class);
