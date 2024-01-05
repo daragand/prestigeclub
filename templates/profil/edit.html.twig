@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier profil
+{% endblock %}
+
+{% block body %}
+	{{ dump(user) }}
+	<div class="wrapper ovh">
+		<div class="preloader"></div>
+		<div class="container  d-flex align-items-center">
+
+
+			<div class="form-signing w-100 m-auto">
+		<h3>Modification de vos informations</h3>
+				{{ form_start(formUser) }}
+				<div class="form-floating mb-2">
+					{{ form_widget(formUser.firstname, {
+                            attr: {
+                                class: 'form-control',
+                            }
+                        }) }}
+					<label for="floatingInput">prénom
+					</label>
+				</div>
+				<!-- END OF firstName INPUT -->
+				<div class="form-floating mb-2">
+					{{ form_widget(formUser.lastname, {
+                            attr: {
+                                class: 'form-control',
+                            }
+                        }) }}
+					<label for="floatingInput">nom
+					</label>
+				</div>
+				<!-- END OF lastName INPUT -->
+				<div class="form-floating mb-2">
+					{{ form_widget(formUser.email, {
+                            attr: {
+                                class: 'form-control',
+                            }
+                        }) }}
+					<label for="floatingInput">email
+					</label>
+				</div>
+				<!-- END OF lastName INPUT -->
+				{{ form_widget(formUser) }}
+				<input type="submit" value="Modifier" class="ud-btn btn-thm">
+				{{ form_end(formUser) }}
+
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

@@ -39,6 +39,15 @@ class Order
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?Forfait $forfait = null;
 
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    private ?Licencie $licencie = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $uuidOrder = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $zipFile = null;
+
     public function __construct()
     {
         $this->optionLists = new ArrayCollection();
@@ -137,6 +146,42 @@ class Order
     public function setForfait(?Forfait $forfait): static
     {
         $this->forfait = $forfait;
+
+        return $this;
+    }
+
+    public function getLicencie(): ?Licencie
+    {
+        return $this->licencie;
+    }
+
+    public function setLicencie(?Licencie $licencie): static
+    {
+        $this->licencie = $licencie;
+
+        return $this;
+    }
+
+    public function getUuidOrder(): ?string
+    {
+        return $this->uuidOrder;
+    }
+
+    public function setUuidOrder(string $uuidOrder): static
+    {
+        $this->uuidOrder = $uuidOrder;
+
+        return $this;
+    }
+
+    public function getZipFile(): ?string
+    {
+        return $this->zipFile;
+    }
+
+    public function setZipFile(?string $zipFile): static
+    {
+        $this->zipFile = $zipFile;
 
         return $this;
     }

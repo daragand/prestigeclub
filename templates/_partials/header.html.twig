@@ -1,4 +1,9 @@
-
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+{% endblock %}
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+{% endblock %}
          <header class="topbar bg-black" data-navbarbg="skin6">
                 <nav class="navbar top-navbar navbar-expand-lg shadow ">
                     <div class="navbar-header" data-logobg="skin6">
@@ -18,12 +23,7 @@
                     <div class="navbar-collapse collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ">
 
-                            <li class="nav-item ">
-                                <a class="nav-link text-white" href="{{ path('app_photos_index') }}" aria-haspopup="true" aria-expanded="false">  <i class="fa-solid fa-house"></i>Home
-                                </a>
-                               
                             
-                            </li>
                             <li class="nav-item ">
                                 <a class="nav-link text-white" href="{{path('app_panier_visualiser')}}" aria-haspopup="true" aria-expanded="false">  <i class="fa-solid fa-cart-shopping"></i>
                                 </a>
@@ -43,38 +43,29 @@
                         <ul class="navbar-nav">
 
                        
+                     
                             <!-- ============================================================== -->
-                            <!-- User profile and search -->
+                            <!-- User profile -->
                             <!-- ============================================================== -->
                             <li class="nav-item dropdown">
-                                {% if app.user %}
+                                {% if app.user  %}
                                 <a class="nav-link dropdown-toggle text-white" href="" data-bs-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                     <i class="fa-solid fa-user"></i>
-                                    <span class="ms-2 d-none d-lg-inline-block"><span>Hello,</span> <span
+                                    <span class="ms-2 d-none d-lg-inline-block"><span>Bonjour</span> <span
                                             class="text-white">{{ app.user.firstname }}</span> </span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-right user-dd animated flipInY">
-                                    <a class="dropdown-item" href="#">
-                                         Profil</a>
-                               
-                                {% if 'ROLE_ADMIN' in app.user.roles %}
-                                    <a class="dropdown-item" href="{{ path('admin') }}">
-
-                                       Admin Dashboard
-                                    </a>
-                                
-                                {% endif %}
-                                    <a class="dropdown-item" href={{ path('app_photos_index') }}>
-                                        My Reservation</a>
-                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{path('app_profil')}}">
+                                         Mon compte</a>
+                                <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{ path('app_logout') }}">
-                                        Logout </a>
+                                        Deconnexion </a>
                                 
                                 {% else %}
                                 <a class="nav-link text-dark" href="{{ path('app_login') }}">
                                     <i class="fa-solid fa-user"></i>
-                                    <span class="ms-2 d-none d-lg-inline-block"> Login&nbsp;</span>
+                                    <span class="ms-2 d-none d-lg-inline-block"> Se connecter</span>
                                 </a>
                                 {% endif %}
                             </li>
@@ -82,5 +73,22 @@
                     </div>
                 </nav>
             </header>
+              <!-- Mobile Nav  -->
+  <div id="page" class="mobilie_header_nav stylehome1">
+    <div class="mobile-menu">
+      <div class="header bdrb1">
+        <div class="menu_and_widgets">
+          <div class="mobile_menu_bar d-flex justify-content-between align-items-center">
+            <a class="mobile_logo" href="#"><img src="images/header-logo-dark.svg" alt=""></a>
+            <div class="right-side text-end">
+              <a class="" href="page-login.html">join</a>
+              <a class="menubar ml30" href="#menu"><img src="images/mobile-dark-nav-icon.svg" alt=""></a>
+            </div>
+          </div>
+        </div>
+        <div class="posr"><div class="mobile_menu_close_btn"><span class="far fa-times"></span></div></div>
+      </div>
+    </div>
+    <!-- /.mobile-menu -->
                                 
                              

@@ -1,5 +1,15 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+{% block stylesheets %}
+	{{ parent() }}
+	{# <link rel="stylesheet" href="{{ asset('gallery/css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('gallery/css/bootstrap-select.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('gallery/css/magnific-popup.css') }}">
+	<link rel="stylesheet" href="{{ asset('gallery/css/style.css') }}"> #}
+
+
+{% endblock %}
+
 
 <div class="body_content">
 
@@ -26,11 +36,11 @@
                   </li>
                   <li class="mb20-sm">
                     <p class="text mb5">Date</p>
-                    <h6 class="mb-0">{{order.paymentDate|format_datetime('short', 'none', locale='fr')}}27/04/2022</h6>
+                    <h6 class="mb-0">{{order.paymentDate|format_datetime('short', 'none', locale='fr')}}</h6>
                   </li>
                   <li class="mb20-sm">
                     <p class="text mb5">Total</p>
-                    <h6 class="mb-0">$2984.10</h6>
+                    <h6 class="mb-0">{{order.amount|format_currency('EUR', {rounding_mode: 'floor'})}}</h6>
                   </li>
                   <li>
                     <p class="text mb5">Mode de paiement</p>
@@ -42,15 +52,25 @@
                 <h4 class="title mb25">Détails de la commande</h4>
                 <div class="od_content">
                   <ul class="p-0 mb-0">
-                    <li class="bdrb1 mb20"><h6>Produits <span class="float-end">Subtotal</span></h6></li>
-                    <li class="mb20"><p class="body-color">Hoodie x2 <span class="float-end">$59.00</span></p></li>
-                    <li class="mb20"><p class="body-color">Seo Books x 1 <span class="float-end">$67.00</span></p></li>
-                    <li class=" bdrb1 mb15"><h6>Subtotal <span class="float-end">$178.00</span></h6></li>
-                    <li class=" bdrb1 mb15"><h6>Shipping <span class="float-end">$178.00</span></h6></li>
-                    <li><h6>Total <span class="float-end">$9,218.00</span></h6></li>
+                    <li class="bdrb1 mb20"><h6>Produits <span class="float-end">Sous-total</span></h6></li>
+                    {% if order.forfait is defined %}
+                      
+                    <li class="mb20"><p class="body-color">forfait : {{order.forfait.name}} <span class="float-end">{{order.forfait.price|format_currency('EUR', {rounding_mode: 'floor'})}}</span></p></li>
+                    {% endif %}
+                    {% if order.optionLists is defined %}
+                      {% for itemOption in order.optionLists %}
+                    <li class="mb20"><p class="body-color">{{itemOption.options.name}} - photo : {{itemOption.photos.id}}  <span class="float-end">{{itemOption.options.price|format_currency('EUR', {rounding_mode: 'floor'})}}</span></p></li>
+                    {% endfor %}
+                    {% endif %}
+                    
+                    <li><h6>Total <span class="float-end">{{order.amount|format_currency('EUR', {rounding_mode: 'floor'})}}</span></h6></li>
                   </ul>
                 </div>
               </div>
+          <div class="d-flex space-between pt-4 justify-content-around">
+            <a class="ud-btn btn-thm" href="{{path('app_photos_index')}}">Retour à l'accueil<i class="fa-solid fa-house"></i></a>
+            <a class="ud-btn btn-thm" href="{{path('app_order')}}">voir les commandes passées<i class="fa-solid fa-tachograph-digital"></i></a>
+          </div>
             </div>            
           </div>
         </div>

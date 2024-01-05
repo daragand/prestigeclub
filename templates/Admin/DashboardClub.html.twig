@@ -1,0 +1,222 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+
+{% block main %}
+	<div class="container-fluid">
+    <h1>Dashboard de votre club</h1>
+    
+		<div class="row">
+         <!-- *************************************************************** -->
+    <!-- Info Club -->
+    <!-- *************************************************************** -->
+         <div class="col-sm-6 mt-2 mb-4 col-lg-12">
+    <div class="card border-end">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div>
+                    <h2 class="text-dark mb-1 font-weight-medium">{{ club.name }}</h2>
+                    
+                    <h3 class="text-dark mb-1 font-weight-medium">{{ club.sport }}</h3>
+                    <h4 class="text-dark mb-1 font-weight-medium">{{ club.address }}</h4>
+                    
+                </div>
+                <div class="ms-auto mt-md-3 mt-lg-0">
+                    <span class="opacity-7 text-muted">
+                       <i class="fa-solid fa-house-chimney"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+         <!-- *************************************************************** -->
+    <!-- Début stats photos -->
+    <!-- *************************************************************** -->
+    <div class="col-sm-6 col-lg-3">
+    <div class="card border-end">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div>
+                {% if club.sport is not empty %}
+                    
+                    <h2 class="text-dark mb-1 font-weight-medium">{{ club.sport }}</h2>
+                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Sport principal</h6>
+                {% else %}
+                    <h2 class="text-dark mb-1 font-weight-medium">Sport non défini</h2>
+                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Sport principal</h6>
+                {% endif %}
+                </div>
+                <div class="ms-auto mt-md-3 mt-lg-0">
+                    <span class="opacity-7 text-muted">
+                        <i class="fa-solid fa-person-running"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ <!-- *************************************************************** -->
+    <!-- Fin stats photos -->
+    <!-- *************************************************************** -->
+    <!-- *************************************************************** -->
+    <!-- Début stats des Licenciés -->
+    <!-- *************************************************************** -->
+    <div class="col-sm-6 col-lg-3">
+    <div class="card border-end">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div>
+                    <h2 class="text-dark mb-1 font-weight-medium">{{ licencies|length }}</h2>
+                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Nombre de licenciés</h6>
+                </div>
+                <div class="ms-auto mt-md-3 mt-lg-0">
+                    <span class="opacity-7 text-muted">
+                        <i data-feather="user-plus"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ <!-- *************************************************************** -->
+    <!-- Fin stats des licenciés-->
+    <!-- *************************************************************** -->
+
+     <!-- *************************************************************** -->
+    <!-- Début stats des groupes -->
+    <!-- *************************************************************** -->
+    <div class="col-sm-6 col-lg-3">
+    <div class="card border-end">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div>
+                    <h2 class="text-dark mb-1 font-weight-medium">{{ groupes|length }}</h2>
+                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">nombre de Groupes</h6>
+                </div>
+                <div class="ms-auto mt-md-3 mt-lg-0">
+                    <span class="opacity-7 text-muted">
+                        <i data-feather="user-plus"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ <!-- *************************************************************** -->
+    <!-- Fin stats Groupes -->
+    <!-- *************************************************************** -->
+      <!-- *************************************************************** -->
+    <!-- Début stats pourcentage du club -->
+    <!-- *************************************************************** -->
+    <div class="col-sm-6 col-lg-3">
+    <div class="card border-end">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div>
+                    <h2 class="text-dark mb-1 font-weight-medium">{{ pourcentage|format_currency('EUR', {rounding_mode: 'floor'}) }}</h2>
+                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Montant gagné par le club</h6>
+                </div>
+                <div class="ms-auto mt-md-3 mt-lg-0">
+                    <span class="opacity-7 text-muted">
+                        <i data-feather="user-plus"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ <!-- *************************************************************** -->
+    <!-- Fin stats du pourcentage du club -->
+    <!-- *************************************************************** -->
+        </div>
+          <!-- *************************************************************** -->
+    <!-- Fin Partie Statistiques -->
+    <!-- *************************************************************** -->
+
+ <!-- *************************************************************** -->
+    <!-- Début tableaux des commandes en cours -->
+    <!-- *************************************************************** -->
+
+<!-- multi-column ordering -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Vos licenciés</h4>
+                                
+                                <div class="table-responsive">
+                                    <table id="multi_col_order"
+                                        class="table border table-striped table-bordered text-nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Groupes</th>
+                                                <th>Licenciés</th>
+                                                <th>Email</th>
+                                                <th>Commande passée</th>
+                                                <th>Montant</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% if licencies is empty %}
+                                            <tr>
+                                                <td colspan="5">Aucun licencié associé à votre Club</td>
+                                            </tr>
+                                        {% else %}
+                                        {% for lic in licencies %}
+                                       
+                                            <tr>
+                                                <td>{{ lic.groupes }}</td>
+                                                <td>{{ lic }}</td>
+                                                <td>{{ lic.email }}</td>
+                                                {% if lic.orders is not empty %}
+                                                    {% set info = '' %}
+                                                    {# Cette partie ajoute les forfaits de chaque commande ainsi que les options #}
+                                                {% for infoCMD in lic.orders %}
+                                                
+                                                    {% set info = info ~ infoCMD.forfait %}
+                                                    {# ajout des options à info #}
+                                                    {% for liOption in infoCMD.optionLists %}
+                                                        {% set info = info ~ ' ' ~ liOption.name %}
+                                                    {% endfor %}
+                                                {% endfor %}
+                                                <td>{{info}}</td>
+                                                {% set licAmount = 0 %}
+                                                {% for cmd in lic.orders %}
+                                                    {% set licAmount = licAmount + cmd.amount %}
+                                                {% endfor %}
+                                                
+                                                {% set licAmount = 0 %}
+                                                {% for cmd in lic.orders %}
+                                                    {% set licAmount = licAmount + cmd.amount %}
+                                                {% endfor %}
+                                                <td>{{licAmount|format_currency('EUR', {rounding_mode: 'floor'}) }}</td>
+                                                {% else %}
+                                                <td>non</td>
+                                                <td>0€</td>
+                                                    
+                                                {% endif %}
+                                                
+                                            </tr>
+                                        {% endfor %}
+                                        {% endif %}
+                                            
+                                           
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+<!-- *************************************************************** -->
+    <!-- Fin des tableaux de gestion -->
+    <!-- *************************************************************** -->
+                
+
+	</div>
+	
+  
+{% endblock %}

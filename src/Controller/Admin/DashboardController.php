@@ -8,14 +8,17 @@ use App\Entity\Photo;
 use App\Entity\Livret;
 use App\Entity\Address;
 use App\Entity\Forfait;
+use App\Entity\Group;
 use App\Entity\Options;
 use App\Entity\Licencie;
 use App\Entity\OptionList;
 use App\Entity\PhotoGroup;
+use App\Repository\ClubRepository;
 use App\Repository\UserRepository;
 use App\Repository\OrderRepository;
 use App\Repository\PhotoRepository;
 use App\Repository\LivretRepository;
+use App\Repository\LicencieRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -24,6 +27,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -34,6 +39,9 @@ class DashboardController extends AbstractDashboardController
         private LivretRepository $livretRepository,
         private PhotoRepository $photoRepository,
         private UserRepository $userRepository,
+        private ClubRepository $clubRepository,
+        private LicencieRepository $licencieRepository,
+        private ChartBuilderInterface $chartBuilder
         )
     {
         
@@ -46,43 +54,124 @@ class DashboardController extends AbstractDashboardController
             ->addCssFile('datatables.net-bs4/css/responsive.dataTables.min.css')
             ->addCssFile('datatables.net-bs4/css/dataTables.bootstrap4.min.css')
             ->addCssFile('datatables.net-bs4/css/dataTables.bootstrap4.css')
-            ->addJsFile('datatables.net-bs4/js/dataTables.bootstrap4.min.js')
-            ->addJsFile('datatables.net-bs4/js/dataTables.bootstrap4.js')
-            ->addJsFile('datatables.net-bs4/js/jquery.dataTables.min.js');
+           
+            ->addJsFile('datatables.net/js/jquery.min.js')
+       
+            ->addJsFile('datatables.net/js/jquery.dataTables.min.js')
+            ->addJsFile('datatables.net/js/datatable-basic.init.js');
+            
+            
+            
+        
     }
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        
-        //liste des commandes toutes confondues
-         $allOrders = $this->orderRepository->findAll();
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        //si l'utilisateur est un admin, on affiche le dashboard admin
+        if ($this->isGranted('ROLE_ADMIN')) {
+           //liste des commandes toutes confondues trié par date de paiement
+         $allOrders = $this->orderRepository->findBy([],['paymentDate'=>'DESC']);            //liste des livrets
+         $allLivrets = $this->livretRepository->findAll();
+     //liste et nombres de photos
+         $allPhotos = $this->photoRepository->findAll();
+         $downloadedPhotos = $this->photoRepository->findBy(['downloaded'=>true]);
+         $nbPhotos = count($allPhotos);
+//liste des clubs
+         $clubs = $this->clubRepository->findAll();
+         //liste des licenciés
+         $licencies = $this->licencieRepository->findAll();
+    
+      // liste des utilisateurs Parents ayant passés commandes. GetSingleScalarResult() permet de retourner un seul résultat : le nombre de parents distincts ayant passé commande
+      $parents = $this->orderRepository->createQueryBuilder('o')
+      ->select('COUNT(DISTINCT u.id) as userCount')
+      ->join('o.users', 'u')
+      ->getQuery()
+      ->getSingleScalarResult();
 
-            //liste des livrets
-            $allLivrets = $this->livretRepository->findAll();
-        //liste et nombres de photos
-            $allPhotos = $this->photoRepository->findAll();
-            $downloadedPhotos = $this->photoRepository->findBy(['downloaded'=>true]);
-            $nbPhotos = count($allPhotos);
+      //graphiques des ventes
+      $chart = $this->chartBuilder->createChart(Chart::TYPE_DOUGHNUT);
+      $chart->setData([
+          'labels' => ['Photos', 'Commandes'],
+          'datasets' => [
+              [
+                  'label' => 'Ventes',
+                  'backgroundColor' => ['#FF6384', '#36A2EB'],
+                  'borderColor' => ['#FF6384', '#36A2EB'],
+                  'data' => [$nbPhotos, count($allOrders)],
+              ],
+          ],
+      ]);
+   
+     return $this->render('Admin/DashboardAdmin.html.twig',[
+         'commandes'=>$allOrders,
+         'livrets'=>$allLivrets,
+         'photos'=>$allPhotos,
+         'downloadedPhotos'=>$downloadedPhotos,
+         'parents'=>$parents,
+         'nbPhotos'=>$nbPhotos,
+            'chart'=>$chart,
+            'clubs'=>$clubs,
+     ]);
+        }
 
-         // liste des utilisateurs Parents ayant passés commandes. GetSingleScalarResult() permet de retourner un seul résultat : le nombre de parents distincts ayant passé commande
-         $parents = $this->orderRepository->createQueryBuilder('o')
-         ->select('COUNT(DISTINCT u.id) as userCount')
-         ->join('o.users', 'u')
-         ->getQuery()
-         ->getSingleScalarResult();
+        //si l'utilisateur est un club, on affiche le dashboard club
+        if ($this->isGranted('ROLE_CLUB')) {
+            $user = $this->userRepository->findOneBy(['email'=>$this->getUser()->getUserIdentifier()]);
+            
+            $club = $this->clubRepository->findOneBy(['id'=>intval($user->getClub()[0]->getId())]);
+            
+            /**
+             * Récupération des commandes du club
+             */
+            $orders = $this->orderRepository->createQueryBuilder('o')
+            ->join('o.licencie', 'lic')
+            ->join('lic.club', 'club')
+            ->where('club = :clubId')
+            ->setParameter('clubId', $club->getId())
+            ->getQuery()
+            ->getResult()
+            ;
+
+            $amountTotal = 0;
+            foreach ($orders as $order) {
+                $amountTotal += $order->getAmount();
+            }
+            
+            $photos = $this->photoRepository->createQueryBuilder('p')
+            ->join('p.licencie', 'licencie')
+            ->where('licencie.club = :club')
+            ->setParameter('club', $club->getId())
+            ->getQuery()
+            ->getResult();
+            
+            
+            
+            
+
+            
+            
+            $nbPhotos = count($photos);
+            
+            
+            
+            
+            
+            return $this->render('admin/DashboardClub.html.twig',[
+                'commandes'=>$orders,
+                'photos'=>$photos,
+                'nbPhotos'=>$nbPhotos,
+                'club'=>$club,
+                'licencies'=>$club->getLicencie(),
+                'groupes'=>$club->getGroups(),
+                'pourcentage'=>$amountTotal*0.1,
+                
+                
+            ]);
+        }
         
-         
-     
-      
-        
-        return $this->render('Admin/DashboardAdmin.html.twig',[
-            'commandes'=>$allOrders,
-            'livrets'=>$allLivrets,
-            'photos'=>$allPhotos,
-            'downloadedPhotos'=>$downloadedPhotos,
-            'parents'=>$parents,
-            'nbPhotos'=>$nbPhotos
-        ]);
     }
    
 public function configureCrud(): Crud
@@ -100,6 +189,13 @@ public function configureCrud(): Crud
 
     public function configureMenuItems(): iterable
     {
+        if ($this->isGranted('ROLE_CLUB')) {
+            yield MenuItem::section('Tableau de bord', 'fa-solid fa-tachometer-alt')->setCssClass('border-bottom border-2');
+            
+            yield MenuItem::linkToCrud('les Commandes', 'fa-solid fa-table-list', Order::class)->setController(OrderCrudController::class);
+            yield MenuItem::linkToCrud('Licenciés du Club', 'fas fa-users', Licencie::class)->setController(LicencieClubCrudController::class);
+            yield MenuItem::linkToCrud('Groupes', 'fas fa-people-group', Group::class)->setController(GroupClubCrudController::class);
+        }else{
         yield MenuItem::section('Commandes')->setCssClass('border-bottom border-2');
         yield MenuItem::linkToCrud('Toutes les commandes', 'fa-solid fa-table-list', Order::class)->setController(OrderCrudController::class);
         yield MenuItem::linkToCrud('Commandes en cours', 'fa-solid fa-list', Order::class)->setController(OrderToControllCrudController::class);
@@ -123,8 +219,13 @@ public function configureCrud(): Crud
         yield MenuItem::linkToCrud('Forfaits', 'fas fa-money-bill-wave', Forfait::class);
         yield MenuItem::linkToCrud('Options', 'fas fa-cog', Options::class);
         yield MenuItem::linkToCrud('Clubs','fa-solid fa-landmark', Club::class);
-        yield MenuItem::linkToCrud('Licenciés', 'fas fa-users', Licencie::class)
-        ;
+        yield MenuItem::linkToCrud('Licenciés', 'fas fa-users', Licencie::class);
+        
+        }
+        //section vide pour créer un espace entre les deux menus
+        
+        yield MenuItem::section(' ');
+        yield MenuItem::linkToLogout('Déconnexion', 'fa-solid fa-sign-out-alt');
        
     }
     

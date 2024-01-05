@@ -57,7 +57,7 @@ public function configureCrud(Crud $crud): Crud
             TextField::new('photoFile', 'Photo')
             ->setFormType(VichFileType::class)
             //ajout d'un template pour afficher les images dans la liste
-            ->setTemplatePath('Admin/photo/custom_image.html.twig')
+            ->setTemplatePath('admin/photo/custom_image.html.twig')
            ,
             
             

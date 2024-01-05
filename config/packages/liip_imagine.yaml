@@ -33,4 +33,18 @@ liip_imagine:
                 thumbnail: 
                     size: [565, 800]
                     mode: outbound 
+        watermark_group:
+            quality: 75
+            format: webp
+            filters:
+                watermark_image:
+                    image: '\public\images\watermark.png'
+                    size: 0.5
+                    position: multiple
+                    alpha: 0.1
+                upscale:
+                    min: [1000, 700]
+                thumbnail: 
+                    size: [565, 800]
+                    mode: outbound 
 

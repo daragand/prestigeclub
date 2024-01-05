@@ -44,7 +44,7 @@ class PhotoGroupCrudController extends AbstractCrudController
             TextField::new('photoGroupFile', 'Photo de Groupe')
             ->setFormType(VichFileType::class)
             //ajout d'un template pour afficher les images dans la liste
-            ->setTemplatePath('Admin/photo/custom_imageGroup.html.twig'),
+            ->setTemplatePath('admin/photo/custom_imageGroup.html.twig'),
             DateField::new('datePublication', 'Date de publication')->hideOnForm(),
             AssociationField::new('groupID', 'Groupe'),
             AssociationField::new('club', 'Club'),

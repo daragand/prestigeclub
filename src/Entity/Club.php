@@ -2,12 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\ClubRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ClubRepository;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ClubRepository::class)]
+#[Vich\Uploadable]
 class Club
 {
     #[ORM\Id]
@@ -21,7 +25,9 @@ class Club
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $logo = null;
 
-   
+    #[Vich\UploadableField(mapping: 'logos', fileNameProperty: 'logo')]
+    #[Assert\File(maxSize: '5M', mimeTypes: ['image/jpeg', 'image/png', 'image/webp'])]
+    private ?File $logoFile = null;
 
     #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'clubs')]
     private Collection $groups;
@@ -37,6 +43,9 @@ class Club
 
     #[ORM\OneToMany(mappedBy: 'club', targetEntity: Licencie::class, orphanRemoval: true)]
     private Collection $licencie;
+
+    #[ORM\ManyToOne(inversedBy: 'clubs')]
+    private ?Sport $sport = null;
 
     
 
@@ -79,7 +88,18 @@ class Club
         return $this;
     }
 
-    
+    //fonction pour le téléchargement de la photo
+    public function getlogoFile(): ?File
+    {
+        return $this->logoFile;
+    }
+    //fonction pour le téléchargement de la photo. On intègre la date de Publication et le booléen downloaded
+    public function setlogoFile(?File $logoFile = null): static
+    {
+        $this->logoFile = $logoFile;
+
+        return $this;
+    }
 
     /**
      * @return Collection<int, Group>
@@ -204,6 +224,18 @@ class Club
                 $licencie->setClub(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSport(): ?Sport
+    {
+        return $this->sport;
+    }
+
+    public function setSport(?Sport $sport): static
+    {
+        $this->sport = $sport;
 
         return $this;
     }

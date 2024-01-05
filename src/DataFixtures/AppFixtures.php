@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Entity\Group;
 use App\Entity\Order;
 use App\Entity\Photo;
+use App\Entity\Sport;
 use App\Entity\Livret;
 use App\Entity\Address;
 use App\Entity\Forfait;
@@ -126,6 +127,43 @@ class AppFixtures extends Fixture
             $manager->persist($objectAddress);
         }
 
+        ///////////////////// Sports ////////////////////////
+        $listSports = [
+            'Athlétisme',
+            'Badminton',
+            'Basketball',
+            'Boxe',
+            'Cyclisme',
+            'Equitation',
+            'Escrime',
+            'Football',
+            'Gymnastique',
+            'Handball',
+            'Hockey',
+            'Judo',
+            'Karaté',
+            'Natation',
+            'Pétanque',
+            'Rugby',
+            'Taekwondo',
+            'Tennis',
+            'Tennis de table',
+            'Tir à l\'arc',
+            'Volleyball',
+        ];
+        
+        $sportObjects = [];
+
+        foreach ($listSports as $sport) {
+            $sportObject = new Sport();
+            $sportObject->setName($sport);
+            array_push($sportObjects, $sportObject);
+            $manager->persist($sportObject);
+        }
+
+
+
+
         /////////////////   Club   ////////////////////////
         $objectClubs = [];
         //ajout de 50 clubs
@@ -133,6 +171,7 @@ class AppFixtures extends Fixture
             $objectClub = new Club();
             $objectClub->setName($faker->company)
                 ->setLogo($faker->imageUrl(640, 480, 'icon du Club'))
+                ->setSport($sportObjects[$faker->numberBetween(0, (count($sportObjects) - 1))])
                 ->setAddress($objectAddresses[$faker->numberBetween(0, 99)]);
             array_push($objectClubs, $objectClub);
             $manager->persist($objectClub);
@@ -260,6 +299,7 @@ class AppFixtures extends Fixture
                 ->setFirstname($faker->firstName)
                 ->setLastname($faker->lastName)
                 ->setPassword($faker->password)
+                ->setUuidUser($faker->uuid)
                 ->setAddress($objectAddresses[$faker->numberBetween(0, 99)])
                 ->setRoles($roles[$faker->numberBetween(0, 2)])
                 ;
@@ -325,7 +365,8 @@ class AppFixtures extends Fixture
             
             $objectCart = new Cart();
             $objectCart->setUsers($parent)
-                ->setForfait($objectsForfaits[$faker->numberBetween(0, (count($objectsForfaits) - 1))]);
+                ->setForfait($objectsForfaits[$faker->numberBetween(0, (count($objectsForfaits) - 1))])
+                ->setUuidCart($faker->uuid);
             
 
             //gestion des photos en fonction du forfait
@@ -375,6 +416,8 @@ class AppFixtures extends Fixture
             $objectOrder->setPaymentDate($faker->dateTimeBetween('-1 years', 'now'))
                 ->setOrderStatus($objectsOrderStatus[$faker->numberBetween(0, (count($objectsOrderStatus) - 1))])
                 ->setUsers($parents[$faker->numberBetween(0, (count($parents) - 1))])
+                ->setUuidOrder($faker->uuid)
+                ->setLicencie($objectLicencies[$faker->numberBetween(0, (count($objectLicencies) - 1))])
                 ->setAmount($faker->randomFloat(2, 0, 100))
                 ->setForfait($objectsForfaits[$faker->numberBetween(0, (count($objectsForfaits) - 1))]);
 

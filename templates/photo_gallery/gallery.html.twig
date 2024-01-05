@@ -38,7 +38,7 @@
 
 									<div class="tab-pane fade" id="pills-item{{phGroup.id}}" role="tabpanel" aria-labelledby="pills-item{{phGroup.id}}-tab">
 										<div class="shop-single-item mb10 bdr1 bdrs8 text-center py-5">
-											<a class="popup-img" href="{{ vich_uploader_asset(phGroup, 'photoGroupFile')|imagine_filter('watermark') }}"><img class="wa" src="{{ vich_uploader_asset(phGroup, 'photoGroupFile')|imagine_filter('scale_photo') }}" alt=""></a>
+											<a class="popup-img" href="{{ vich_uploader_asset(phGroup, 'photoGroupFile')|imagine_filter('watermark_group') }}"><img class="wa" src="{{ vich_uploader_asset(phGroup, 'photoGroupFile')|imagine_filter('scale_photo') }}" alt=""></a>
 										</div>
 									</div>
 								{% endfor %}
@@ -83,7 +83,7 @@
 								</ul>
 							</div>
 							<div class="d-flex ">
-								<img class="me-3" width="60" src="{{ licencie.club.logo }}" alt="">
+								<img class="me-3" width="60" src="{{ vich_uploader_asset(licencie.club,'logoFile') }}" alt="">
 								<div>
 									<h2 class=" mb10">{{ licencie.club.name|upper }}
 										-
@@ -101,6 +101,7 @@
 									<h2>COMMANDER</h2>
 									<fieldset class="border p-5 form-check">
 										<legend>Choisissez votre forfait</legend>
+										
 										{% for forfait in forfaits %}
 											<div>
 												<input class="form-check-input trigger-champion" type="radio" id="{{ forfait.name }}" name="forfait" value="{{ forfait.name }}"/>
@@ -153,7 +154,7 @@
 											</div>
 										{% endfor %}
 									</fieldset>
-									<input type="hidden" name="licencie" value="{{ licencie.id }}">
+									<input type="hidden" name="licencie" value="{{ licencie.slug }}">
 									<button  class="ud-btn btn-thm" type="submit">Ajouter au panier</button>
 								</form>
 

@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Service\MailingService;
+use App\Service\ZipDownload;
 use Stripe\Stripe;
 use App\Entity\Cart;
 use App\Entity\Order;
@@ -44,7 +46,8 @@ class PaymentController extends AbstractController
 
         
        /**
-        * Lors de la récupération du panier, il semble que le forfait ne veut pas apparaitre. Utilisation donc du get_Reference
+        * Lors de la récupération du panier, il semble que le forfait ne veut pas apparaitre. Utilisation donc du get_Reference.
+        * A terme, il faudra trouver une solution pour que le forfait apparaisse lors de la récupération du panier sans alourdir le code de la sorte.
         */
 
         $forfait = $this->entityManager->getReference(Forfait::class, $cart->getForfait()->getId());
@@ -114,13 +117,22 @@ class PaymentController extends AbstractController
     }
 
     #[Route('/order/success/{id}', name: 'app_payment_success')]
-    public function success(Cart $cart, UserRepository $userRepository): RedirectResponse
+    public function success(
+        Cart $cart,
+         UserRepository $userRepository,
+         ZipDownload $zip,
+            MailingService $mailingService
+         ): RedirectResponse
     {
+
+        
         //création d'une commande depuis le panier
         $order = new Order();
         $order->setAmount($cart->getAmount())
             ->setPaymentDate(new \DateTime())
-            ->setUsers($this->getUser());
+            ->setUsers($this->getUser())
+            ->setLicencie($cart->getLicencie())
+            ->setUuidOrder(uniqid());
 
         if($cart->getOptionLists()) {
             foreach ($cart->getOptionLists() as $optionList) {
@@ -142,6 +154,8 @@ class PaymentController extends AbstractController
                 $orderStatus = $this->entityManager->getRepository(OrderStatus::class)->findOneBy(['name' => 'Payée']);
                 $order->setOrderStatus($orderStatus);
             }
+            $zipFile = $zip->zipCreate($order);
+        $order->setZipFile($zipFile);
         
        
         //suppression du panier (placement à null les relations) et enregistrement de la commande
@@ -162,13 +176,15 @@ class PaymentController extends AbstractController
             $cart->setUsers(null);
         }
         $this->entityManager->remove($cart);
-
+        
         
         
         $this->entityManager->flush();
+
+        //envoi du mail de téléchargement des photos
+        $mailingService->downloadPhoto($order,$zipFile);
         
-        
-       return $this->redirectToRoute('app_order_confirmation', ['order' => $order]);
+       return $this->redirectToRoute('app_order_confirmation', ['id' => $order->getId()]);
      
     }
     #[Route('/order/error/{id}', name: 'app_payment_error')]
@@ -179,11 +195,5 @@ class PaymentController extends AbstractController
         return $this->redirectToRoute('app_panier_visualiser');
     }
 
-    #[Route('/order/confirmation/{order}', name: 'app_order_confirmation')]
-    public function confirmation(Order $order): Response
-    {
-        return $this->render('order/confirmation.html.twig', [
-            'order' => $order,
-        ]);
-    }
+    
 }

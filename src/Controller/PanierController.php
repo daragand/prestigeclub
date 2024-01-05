@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+
 use App\Entity\Cart;
 use App\Entity\Forfait;
 use App\Entity\OptionList;
 use App\Repository\CartRepository;
 use App\Repository\ForfaitRepository;
+use App\Repository\LicencieRepository;
 use App\Repository\OptionListRepository;
 use App\Repository\OptionsRepository;
 use App\Repository\PhotoRepository;
@@ -37,16 +39,20 @@ class PanierController extends AbstractController
         OptionsRepository $optionsRepository,
         PhotoRepository $photoRepository,
         CartRepository $cartRepository,
+        UserRepository $userRepository,
+        LicencieRepository $licencieRepository,
         EntityManagerInterface $entityManager
     ): RedirectResponse {
 
         $prods = $request->request->all();
 
+        //on récupère le panier de l'utilisateur (s'il existe
     $cart = $cartRepository->findOneBy(['users' => $this->getUser()]);
     
     if (!$cart) {
         $cart = new Cart();
-        $cart->setUsers($this->getUser());
+        $cart->setUsers($this->getUser())
+        ->setUuidCart(uniqid());
         $entityManager->persist($cart);
     }
     
@@ -74,6 +80,9 @@ class PanierController extends AbstractController
             $cart->setForfait($forfait);
             $amount=($amount + $forfait->getPrice());
           
+        } elseif (strpos($key, 'licencie') !== false) {
+
+            $cart->setLicencie($licencieRepository->findOneBy(['slug' => $value]));
         }
     }
     

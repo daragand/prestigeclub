@@ -150,7 +150,46 @@
                     </div>
                 </div>
 
-
+{# tableau des Clubs #}
+<div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Liste des Clubs</h4>
+                                <h6 class="card-subtitle"></h6>
+                                <div class="table-responsive">
+                                     <table id="default_order" class="table border table-striped table-bordered text-nowrap"
+                                        style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Numéro de Clubs</th>
+                                                <th>Clubs</th>
+                                                <th>Ville</th>
+                                                <th>Nombre de Groupes</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for club in clubs %}
+                                       
+                                            <tr>
+                                                <td>{{ club.id }}</td>
+                                                <td>{{ club.name }}</td>
+                                                <td>{{ club.address.city }}</td>
+                                                <td>{{ club.groups|length }}</td>
+                                                <td><a href="#" class="mt-2 ud-btn btn-thm">Supprimer mon compte<i class="fa-solid fa-trash"></i>
+										</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                            
+                                           
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 <!-- *************************************************************** -->
     <!-- Fin des tableaux des commandes en cours -->
@@ -162,102 +201,76 @@
                     <div class="col-lg-4 col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Total Sales</h4>
-                                <div id="campaign-v2" class="mt-2" style="height:283px; width:100%;"></div>
-                                <ul class="list-style-none mb-0">
-                                    <li>
-                                        <i class="fas fa-circle text-primary font-10 me-2"></i>
-                                        <span class="text-muted">Direct Sales</span>
-                                        <span class="text-dark float-end font-weight-medium">$2346</span>
-                                    </li>
-                                    <li class="mt-3">
-                                        <i class="fas fa-circle text-danger font-10 me-2"></i>
-                                        <span class="text-muted">Referral Sales</span>
-                                        <span class="text-dark float-end font-weight-medium">$2108</span>
-                                    </li>
-                                    <li class="mt-3">
-                                        <i class="fas fa-circle text-cyan font-10 me-2"></i>
-                                        <span class="text-muted">Affiliate Sales</span>
-                                        <span class="text-dark float-end font-weight-medium">$1204</span>
-                                    </li>
-                                </ul>
+                                <h4 class="card-title">Livrets à gérer</h4>
+                               
+                            {% set counter = 0 %}
+                            {% for cmd in commandes %}
+                                {% if cmd.forfait == 'Prestige' and cmd.orderStatus == 'En cours de traitement' %}
+                                    {% if counter < 3 %}
+                                        {% set counter = counter + 1 %}
+                                        <div class="d-flex align-items-start border-left-line pb-3">
+                                         <div>
+                                            <a href="javascript:void(0)" class="btn btn-info btn-circle mb-2 btn-item">
+                                                <i class="fa-solid fa-book"></i>
+                                            </a>
+                                        </div>
+                                        <div class="ms-3 mt-2">
+                                            <h5 class="text-dark font-weight-medium mb-2"> {{cmd.licencie.club}} ({{cmd.licencie}})</h5>
+                                            <p class="font-14 mb-2 text-muted">{{cmd.forfait}} <br> {{cmd.paymentDate|format_datetime('short', 'none', locale='fr')}} - {{cmd.orderStatus}}
+                                                
+                                            </p>
+                              
+                                        </div>
+                                    
+                                    </div>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                                    
+                                    
+                               
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Net Income</h4>
-                                <div class="net-income mt-4 position-relative" style="height:294px;"></div>
-                                <ul class="list-inline text-center mt-5 mb-2">
-                                    <li class="list-inline-item text-muted fst-italic">Sales for this month</li>
-                                </ul>
+                                <h4 class="card-title">Dernières commandes</h4>
+                                 <div class="mt-4 activity">
+                               
+                                
+                                    {% for cmd in commandes|slice(0,3) %}
+                                    <div class="d-flex align-items-start border-left-line pb-3">
+                                         <div>
+                                            <a href="javascript:void(0)" class="btn btn-info btn-circle mb-2 btn-item">
+                                                <i class="fa-solid fa-cart-shopping"></i>
+                                            </a>
+                                        </div>
+                                        <div class="ms-3 mt-2">
+                                            <h5 class="text-dark font-weight-medium mb-2"> {{cmd.licencie.club}} ({{cmd.licencie}})</h5>
+                                            <p class="font-14 mb-2 text-muted">{{cmd.forfait}} <br> {{cmd.paymentDate|format_datetime('short', 'none', locale='fr')}} - {{cmd.orderStatus}}
+                                                
+                                            </p>
+                              
+                                        </div>
+                                    
+                                    </div>
+                                    {% endfor %}
+                                
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title mb-4">Earning by Location</h4>
+                                <h4 class="card-title mb-4">Statistiques</h4>
+                                {{ render_chart(chart) }}
                                 <div class="" style="height:180px">
                                     <div id="visitbylocate" style="height:100%"></div>
                                 </div>
-                                <div class="row mb-3 align-items-center mt-1 mt-5">
-                                    <div class="col-4 text-end">
-                                        <span class="text-muted font-14">India</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 text-end">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">28%</span>
-                                    </div>
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-4 text-end">
-                                        <span class="text-muted font-14">UK</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 74%"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 text-end">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">21%</span>
-                                    </div>
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-4 text-end">
-                                        <span class="text-muted font-14">USA</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-cyan" role="progressbar" style="width: 60%"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 text-end">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">18%</span>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center">
-                                    <div class="col-4 text-end">
-                                        <span class="text-muted font-14">China</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: 50%"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 text-end">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">12%</span>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -266,7 +279,12 @@
                 <!-- End Sales Charts Section -->
                 <!-- *************************************************************** -->
 
+
+
+
+
+
 	</div>
-	{{ dump(commandes) }}
+	
   
 {% endblock %}

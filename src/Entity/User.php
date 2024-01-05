@@ -56,6 +56,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface,\Seriali
     #[ORM\OneToOne(mappedBy: 'users',orphanRemoval: true)]
     private ?Cart $cart = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $uuidUser = null;
+
     
 
     public function __construct()
@@ -310,6 +313,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface,\Seriali
              // see section on salt below
              // $this->salt
          ) = unserialize($serialized);
+     }
+
+     public function getUuidUser(): ?string
+     {
+         return $this->uuidUser;
+     }
+
+     public function setUuidUser(string $uuidUser): static
+     {
+         $this->uuidUser = $uuidUser;
+
+         return $this;
      }
     
 }

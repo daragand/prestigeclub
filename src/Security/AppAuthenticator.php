@@ -44,7 +44,10 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+        $targetPath = $this->getTargetPath($request->getSession(), $firewallName);
+       
+        if (!empty($targetPath)) {
+            
             return new RedirectResponse($targetPath);
         }
         
@@ -56,11 +59,12 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
          */
         $user = $token->getUser();
         
-        if ($user->getRoles()[0] === 'ROLE_USER') {
-            return new RedirectResponse($this->urlGenerator->generate('app_photo_gallery'));
+        if ($user->getRoles()[0] === 'ROLE_PARENT') {
+            return new RedirectResponse($this->urlGenerator->generate('app_photos_index'));
         } elseif ($user->getRoles()[0] === 'ROLE_ADMIN' || $user->getRoles()[0] === 'ROLE_CLUB') {
             return new RedirectResponse($this->urlGenerator->generate('admin'));
         } else {
+           
             return new RedirectResponse($this->urlGenerator->generate('app_login'));
         }
         // For example:

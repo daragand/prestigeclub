@@ -56,12 +56,16 @@ class Licencie
     #[ORM\JoinColumn(nullable: true)]
     private ?Group $groupes = null;
 
+    #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Order::class)]
+    private Collection $orders;
+
     public function __construct()
     {
         
         $this->livrets = new ArrayCollection();
         $this->photos = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->orders = new ArrayCollection();
         
         
     }
@@ -249,6 +253,36 @@ class Licencie
     public function setGroupes(?Group $groupes): static
     {
         $this->groupes = $groupes;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setLicencie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getLicencie() === $this) {
+                $order->setLicencie(null);
+            }
+        }
 
         return $this;
     }

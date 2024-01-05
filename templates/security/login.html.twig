@@ -21,7 +21,7 @@
                     Vous êtes déjà connecté en tant que {{ app.user.userIdentifier }}
                 </h2>
                 <div class="text-center mt-5">
-                {% if 'ROLE_USER' in app.user.roles %}
+                {% if 'ROLE_PARENT' in app.user.roles %}
                     <a href="{{ path('app_photos_index') }}" class="btn btn-dark">Retourner à la page d'accueil</a>
                      <a href="{{ path('app_logout') }}" class="btn btn-outline-danger">Logout</a>
                 {% else %}
@@ -62,5 +62,7 @@
         {% endif %}
 
         
+
+</div>
 </div>
 {% endblock %}

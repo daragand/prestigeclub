@@ -31,6 +31,12 @@ class Cart
     #[ORM\OneToOne(inversedBy: 'cart')]
     private ?User $users = null;
 
+    #[ORM\ManyToOne]
+    private ?Licencie $licencie = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $uuidCart = null;
+
     
 
     public function __construct()
@@ -145,6 +151,30 @@ class Cart
    public function setUsers(?User $users): static
    {
        $this->users = $users;
+
+       return $this;
+   }
+
+   public function getLicencie(): ?Licencie
+   {
+       return $this->licencie;
+   }
+
+   public function setLicencie(?Licencie $licencie): static
+   {
+       $this->licencie = $licencie;
+
+       return $this;
+   }
+
+   public function getUuidCart(): ?string
+   {
+       return $this->uuidCart;
+   }
+
+   public function setUuidCart(string $uuidCart): static
+   {
+       $this->uuidCart = $uuidCart;
 
        return $this;
    }
