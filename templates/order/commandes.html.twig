@@ -37,12 +37,17 @@
 							</tr>
 						</thead>
 						<tbody class="t-body">
+						{% if orders|length == 0 %}
+							<tr colspan="5" >
+							Aucune commande n'a été réalisée
+							</tr>
+						{% else %}
 							{% for command in orders %}
 
 								<tr>
 									<th scope="row">
 										<div>#{{command.id}}
-											<span class="ms-3">App Services</span>
+											
 										</div>
 									</th>
 									<td class="vam">{{command.paymentDate|format_datetime('short', 'none', locale='fr')}}</td>
@@ -66,8 +71,8 @@
 											Voir</a>
 									</td>
 								</tr>
-							{% endfor %}
-
+								{% endfor %}
+							{% endif %}
 						</tbody>
 					</table>
 

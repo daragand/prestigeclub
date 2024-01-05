@@ -25,7 +25,7 @@ class OrderController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-        $order = $orderRepository->findBy(['users' => $this->getUser()]);
+        $order = $orderRepository->findBy(['users' => $this->getUser()], ['paymentDate' => 'DESC']);
 
        
         return $this->render('order/commandes.html.twig', [
