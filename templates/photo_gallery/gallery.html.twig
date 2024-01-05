@@ -28,6 +28,7 @@
 						<div class="shop-single">
 							<div class="tab-content" id="pills-tabContent">
 								{% for photo in photos %}
+								
 									<div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="pills-item{{photo.id}}" role="tabpanel" aria-labelledby="pills-item{{photo.id}}-tab">
 										<div class="shop-single-item mb10 bdr1 bdrs8 text-center py-5">
 											<a class="popup-img" href="{{ vich_uploader_asset(photo, 'photoFile')|imagine_filter('watermark') }}"><img class="wa" src="{{ vich_uploader_asset(photo, 'photoFile')|imagine_filter('scale_photo') }}" alt=""></a>
