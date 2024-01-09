@@ -19,6 +19,7 @@ use App\Repository\OrderRepository;
 use App\Repository\PhotoRepository;
 use App\Repository\LivretRepository;
 use App\Repository\LicencieRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -227,6 +228,52 @@ public function configureCrud(): Crud
         yield MenuItem::section(' ');
         yield MenuItem::linkToLogout('Déconnexion', 'fa-solid fa-sign-out-alt');
        
+    }
+    #[Route('/admin/purge', name: 'admin_purge')]
+    public function purge(EntityManagerInterface $em): Response
+    {
+        /**
+         * Cette fonction consiste à supprimer les fichiers (photos et archives) et les licenciés pour toutes les commandes de plus de 6 mois.
+         */
+
+
+         //vérification de l'utilisateur
+
+        if (!$this->isGranted('ROLE_ADMIN')){
+            $this->addFlash(
+               'error',
+               'Vous n\'avez pas les droits pour accéder à cette fonctionnalité'
+            );
+            return $this->redirectToRoute('admin');
+        }else{
+            //récupération des commandes de plus de 6 mois
+            $orders = $this->orderRepository->createQueryBuilder('o')
+            ->where('o.paymentDate < :date')
+            ->setParameter('date', new \DateTime('-6 months'))
+            ->getQuery()
+            ->getResult();
+            //suppression des fichiers et des licenciés
+            foreach ($orders as $order) {
+               
+                $photos = $order->getPhotos();
+                foreach ($photos as $photo) {
+                    $em->remove($photo);
+                }
+                $licencies = $order->getLicencie();
+                foreach ($licencies as $licencie) {
+                    $em->remove($licencie);
+                }
+                $em->remove($order);
+                $em->flush();
+            }
+            $this->addFlash(
+                'success',
+                'Les commandes de plus de 6 mois ont été supprimées'
+             );
+        }
+
+        
+        return $this->redirectToRoute('admin');
     }
     
 }

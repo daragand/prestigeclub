@@ -60,6 +60,11 @@ class Licencie
     #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Order::class)]
     private Collection $orders;
 
+    #[ORM\Column]
+    private ?\DateTimeInterface $updatedAt = null;
+
+    
+
     public function __construct()
     {
         
@@ -287,4 +292,18 @@ class Licencie
 
         return $this;
     }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    
 }
