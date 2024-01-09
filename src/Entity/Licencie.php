@@ -32,8 +32,6 @@ class Licencie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $slug = null;
 
-    
-
     #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Livret::class, orphanRemoval: true)]
     private Collection $livrets;
 

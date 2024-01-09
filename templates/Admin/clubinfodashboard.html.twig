@@ -1,0 +1,64 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+
+{% block main %}
+{{ dump(club) }}
+	<div class="container-fluid">
+    <h1>Tableau récapitulatif du club : {{ club.name }}</h1>
+    
+   
+ <!-- *************************************************************** -->
+    <!-- Début tableaux du club -->
+    <!-- *************************************************************** -->
+
+<!-- multi-column ordering -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">liste des licenciés</h4>
+                               
+                                <div class="table-responsive">
+                                    <table id="multi_col_order"
+                                        class="table border table-striped table-bordered text-nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Groupes</th>
+                                                <th>Licenciés</th>
+                                                <th>Email</th>
+                                                <th>Commande passée</th>
+                                                <th>Montant</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for lic in licencies %}
+                                       
+                                            <tr>
+                                                <td>{{ lic.id }}</td>
+                                                <td>{{ lic.firstname }} {{lic.lastname}}</td>
+                                                <td>{{ lic.email }}</td>
+                                                {# <td>{{ lic.forfait }}</td> #}
+                                                {# <td>{{ lic.amount }}</td> #}
+                                            </tr>
+                                        {% endfor %}
+                                            
+                                           
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+	</div>
+	
+  
+{% endblock %}

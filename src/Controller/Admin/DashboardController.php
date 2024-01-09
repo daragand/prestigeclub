@@ -42,7 +42,8 @@ class DashboardController extends AbstractDashboardController
         private UserRepository $userRepository,
         private ClubRepository $clubRepository,
         private LicencieRepository $licencieRepository,
-        private ChartBuilderInterface $chartBuilder
+        private ChartBuilderInterface $chartBuilder,
+        private EntityManagerInterface $em
         )
     {
         
@@ -268,29 +269,29 @@ public function configureCrud(): Crud
                                 foreach ($order->getOptionLists() as $optionList) {
                                     
                                     $em->remove($optionList);
-                                    $em->flush();
+                                   
                                 }
                                 
                             }
                             
                             $em->remove($order);
-                            $em->flush();
+                            
                         }
                     }
                 $photos = $licencie->getPhotos();
                 foreach ($photos as $photo) {
                     
                      $em->remove($photo);
-                     $em->flush();
+                  
                 }
-                
+               
                 $livrets = $licencie->getLivrets();
                         if($livrets){
                             foreach ($livrets as $livret) {
                                 
                                 $em->remove($livret);
                                 
-                                $em->flush();
+                               
                             }
                         }
                 }
@@ -303,9 +304,28 @@ public function configureCrud(): Crud
                 'success',
                 'Les commandes de plus de 6 mois ont été supprimées'
              );
+                return $this->redirectToRoute('admin');
         }
 
+        #[Route('/admin/club/{id}', name: 'admin_club_info')]
+    public function info($id): Response
+    {
         
+
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_login');
+        }
+        
+        
+        $club = $this->em->getRepository(Club::class)->findOneBy(['id' => $id]);
+        $licencies = $club->getLicencie();
+        
+        return $this->render('admin/clubinfodashboard.html.twig',[
+            'club' => $club,
+            'licencies' => $licencies,
+        
+        ]);
+    }
         
     }
 
