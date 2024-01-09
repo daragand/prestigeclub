@@ -20,7 +20,7 @@ class OptionList
    
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Photo $photos = null;
 
     #[ORM\ManyToOne(inversedBy: 'optionLists')]

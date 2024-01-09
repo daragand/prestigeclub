@@ -34,7 +34,7 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private ?User $users = null;
 
-    #[ORM\OneToMany(mappedBy: 'orders', targetEntity: OptionList::class)]
+    #[ORM\OneToMany(mappedBy: 'orders', targetEntity: OptionList::class,cascade: ['remove'])]
     private Collection $optionLists;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]

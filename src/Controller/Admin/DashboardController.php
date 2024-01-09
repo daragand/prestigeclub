@@ -247,23 +247,56 @@ public function configureCrud(): Crud
             return $this->redirectToRoute('admin');
         }else{
             //récupération des commandes de plus de 6 mois
-            $orders = $this->orderRepository->createQueryBuilder('o')
-            ->where('o.paymentDate < :date')
+            $oldLicencies = $this->licencieRepository->createQueryBuilder('lic')
+            ->where('lic.updatedAt < :date')
             ->setParameter('date', new \DateTime('-6 months'))
             ->getQuery()
             ->getResult();
+            
+            
             //suppression des fichiers et des licenciés
-            foreach ($orders as $order) {
+            foreach ($oldLicencies as $licencie) {
                
-                $photos = $order->getPhotos();
+                $orders = $licencie->getOrders();
+                    if($orders){
+                        foreach ($orders as $order) {
+                            $zipFile = $order->getZipFile();
+                            if(file_exists($zipFile)){
+                                unlink($zipFile);
+                            }
+                            if($order->getOptionLists()){
+                                foreach ($order->getOptionLists() as $optionList) {
+                                    
+                                    $em->remove($optionList);
+                                    $em->flush();
+                                }
+                                
+                            }
+                            
+                            $em->remove($order);
+                            $em->flush();
+                        }
+                    }
+                $photos = $licencie->getPhotos();
                 foreach ($photos as $photo) {
-                    $em->remove($photo);
+                    
+                     $em->remove($photo);
+                     $em->flush();
                 }
-                $licencies = $order->getLicencie();
-                foreach ($licencies as $licencie) {
-                    $em->remove($licencie);
+                
+                $livrets = $licencie->getLivrets();
+                        if($livrets){
+                            foreach ($livrets as $livret) {
+                                
+                                $em->remove($livret);
+                                
+                                $em->flush();
+                            }
+                        }
                 }
-                $em->remove($order);
+                
+                $em->remove($licencie);
+                
                 $em->flush();
             }
             $this->addFlash(
@@ -273,7 +306,7 @@ public function configureCrud(): Crud
         }
 
         
-        return $this->redirectToRoute('admin');
+        
     }
-    
-}
+
+
