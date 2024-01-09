@@ -229,7 +229,7 @@ class AppFixtures extends Fixture
                 ->setBirthdate($faker->dateTimeBetween('-20 years', '-5 years'))
                 ->setSlug($faker->slug)
                 ->setEmail($faker->email)
-                ->setUpdatedAt($faker->dateTimeBetween('-1 years', 'now'))
+                ->setUpdatedAt(($faker->dateTimeBetween('-9 months', 'now')))
                 ->setClub($objectClubs[$randNumber]);
 
             //selon le nom du club, récupération des groupes correspondants

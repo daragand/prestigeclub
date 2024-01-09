@@ -60,7 +60,7 @@ class Licencie
     #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Order::class)]
     private Collection $orders;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
     

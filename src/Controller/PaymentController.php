@@ -41,7 +41,7 @@ class PaymentController extends AbstractController
             return $this->redirectToRoute('app_panier_visualiser');
         }
 
-        //pour contourner le Lazy Loading, on récupère le forfait en tant que référence
+        //pour contourner le Lazy Loading(objet reconnu que par l'id), on récupère le forfait en tant que référence
         $forfaitName= $cart->getForfait()->getName();
 
         
@@ -133,6 +133,9 @@ class PaymentController extends AbstractController
             ->setUsers($this->getUser())
             ->setLicencie($cart->getLicencie())
             ->setUuidOrder(uniqid());
+
+            //modification de la date du licencié concerné par la commande
+         $order->getLicencie()->setUpdatedAt(new \DateTime());
 
         if($cart->getOptionLists()) {
             foreach ($cart->getOptionLists() as $optionList) {

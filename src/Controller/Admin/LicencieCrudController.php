@@ -84,7 +84,7 @@ class LicencieCrudController extends AbstractCrudController
         //on ajoute la date de publication à la photo
         $entityInstance->setSlug($slug);
         //on ajoute la date de création du licencié sur  notion updatedAt
-        $entityInstance->setUpdatedAt(new DateTimeImmutable());
+        $entityInstance->setUpdatedAt(new \DateTime());
 
         //la méthode ci-dessous permet de préserver les données et de les enregistrer dans la base.
         parent::persistEntity($em, $entityInstance);
