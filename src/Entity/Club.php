@@ -29,7 +29,7 @@ class Club
     #[Assert\File(maxSize: '5M', mimeTypes: ['image/jpeg', 'image/png', 'image/webp'])]
     private ?File $logoFile = null;
 
-    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'clubs')]
+    #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'clubs',cascade: ["persist"])]
     private Collection $groups;
 
     #[ORM\OneToMany(mappedBy: 'club', targetEntity: PhotoGroup::class, orphanRemoval: true)]

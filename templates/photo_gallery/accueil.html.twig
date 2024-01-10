@@ -3,6 +3,15 @@
 
 
 	<div class="container mt-3">
+	{% for type, messages in app.flashes() %}
+    {% for message in messages %}
+        <div class="alert alert-{{ type }}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+
 		<div class="row">
 
 			{% for licencie in licencies %}

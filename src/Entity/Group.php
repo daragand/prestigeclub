@@ -20,7 +20,7 @@ class Group
     #[ORM\Column(length: 70)]
     private ?string $name = null;
 
-    #[ORM\ManyToMany(targetEntity: Club::class, mappedBy: 'groups')]
+    #[ORM\ManyToMany(targetEntity: Club::class, inversedBy: 'clubs' ,cascade: ["persist"])]
     private Collection $clubs;
 
     #[ORM\OneToMany(mappedBy: 'groupID', targetEntity: PhotoGroup::class, orphanRemoval: true)]

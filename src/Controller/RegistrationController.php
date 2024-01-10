@@ -18,7 +18,19 @@ class RegistrationController extends AbstractController
     #[Route('/invitation/{slug}', name: 'app_invitation')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
+        if ($this->getUser()) {
 
+            //récupération du licencié
+            $licencieParUuid = $entityManager->getRepository(Licencie::class)->findOneBy(['slug' => $request->attributes->get('slug')]);
+
+            $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $this->getUser()->getUserIdentifier()]);
+            //ajout de la relation du licencié au nouvel utilisateur
+            $user->addLicency($licencieParUuid);
+            $entityManager->persist($user);
+            $entityManager->flush();
+            $this->addFlash('success', 'Vous êtes déjà connecté et le licencié a été bien ajouté à votre compte.');
+            return $this->redirectToRoute('app_photos_index');
+        }
         //récupération du licencié par son uuid(slug)
         $licencieParUuid = $entityManager->getRepository(Licencie::class)->findOneBy(['slug' => $request->attributes->get('slug')]);
         $user = new User();
@@ -47,7 +59,7 @@ class RegistrationController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
-            // do anything else you need here, like send an email
+            
 
             return $this->redirectToRoute('app_photos_index');
         }

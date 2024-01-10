@@ -47,7 +47,10 @@ public function configureCrud(Crud $crud): Crud{
             IdField::new('id')->hideOnForm(),
             TextField::new('name'),
             
-            AssociationField::new('clubs', 'Clubs')->hideOnIndex(),
+            AssociationField::new('clubs', 'Clubs')
+            ->autocomplete()
+            ->setFormTypeOption('by_reference', true)
+            ,
             
         ];
     }
