@@ -26,7 +26,7 @@ class Photo
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $path = null;
+    private ?string $path = 'default.jpg';
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $datePublication = null;
@@ -44,6 +44,8 @@ class Photo
 
     #[ORM\ManyToMany(targetEntity: Cart::class, inversedBy: 'photos')]
     private Collection $carts;
+
+    
 
     public function __construct()
     {
@@ -79,7 +81,7 @@ class Photo
 
     public function setPath(string $path): static
     {
-        $this->path = $path;
+        $this->path = $path ?: 'default.jpg';
 
         return $this;
     }

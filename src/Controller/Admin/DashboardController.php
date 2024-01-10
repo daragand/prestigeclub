@@ -271,7 +271,7 @@ public function configureCrud(): Crud
                                 foreach ($order->getOptionLists() as $optionList) {
                                     
                                     $em->remove($optionList);
-                                   
+                                    
                                 }
                                 
                             }
@@ -284,7 +284,7 @@ public function configureCrud(): Crud
                 foreach ($photos as $photo) {
                     
                      $em->remove($photo);
-                  
+                    $em->flush();
                 }
                
                 $livrets = $licencie->getLivrets();
@@ -296,11 +296,11 @@ public function configureCrud(): Crud
                                
                             }
                         }
+                        $em->remove($licencie);
+                        
+                        $em->flush();
                 }
                 
-                $em->remove($licencie);
-                
-                $em->flush();
             }
             $this->addFlash(
                 'success',

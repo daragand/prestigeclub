@@ -40,6 +40,7 @@ class ClubCrudController extends AbstractCrudController
             ->setFormType(VichFileType::class)
             //ajout d'un template pour afficher les images dans la liste
             ->setTemplatePath('admin/photo/custom_logoclub.html.twig'),
+            AssociationField::new('sport', 'Sport'),
             AssociationField::new('address', 'Adresse'),
         ];
     }

@@ -135,7 +135,7 @@
                                             <tr>
                                                 <td>{{ cmd.id }}</td>
                                                 <td>{{ cmd.users }}</td>
-                                                <td>{{ cmd.users.licencies[0] }}</td>
+                                                <td>{{ cmd.licencie }}</td>
                                                 <td>{{ cmd.forfait }}</td>
                                                 <td>{{ cmd.amount }}</td>
                                             </tr>
@@ -170,6 +170,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        {% if clubs is defined %}
+                                            
                                         {% for club in clubs %}
                                        
                                             <tr>
@@ -181,6 +183,11 @@
 										</a></td>
                                             </tr>
                                         {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="5">Aucun club n'a été trouvé</td>
+                                            </tr>
+                                        {% endif %}
                                             
                                            
                                         </tbody>
