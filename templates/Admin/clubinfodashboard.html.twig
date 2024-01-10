@@ -4,7 +4,10 @@
 {% block main %}
 {{ dump(club) }}
 	<div class="container-fluid">
-    <h1>Tableau récapitulatif du club : {{ club.name }}</h1>
+    <h1>Tableau récapitulatif du club : {{ club.name }} ({{club.sport}})</h1>
+   <h4>Adresse : {{club.address}}</h4>
+    <h5>Nombre de licenciés : {{ licencies|length }}</h5>
+    <h2></h2>
     
    
  <!-- *************************************************************** -->
@@ -34,11 +37,37 @@
                                         {% for lic in licencies %}
                                        
                                             <tr>
-                                                <td>{{ lic.id }}</td>
+                                                <td>{{ lic.groupes }}</td>
                                                 <td>{{ lic.firstname }} {{lic.lastname}}</td>
                                                 <td>{{ lic.email }}</td>
-                                                {# <td>{{ lic.forfait }}</td> #}
-                                                {# <td>{{ lic.amount }}</td> #}
+                                                {% if lic.orders is not empty %}
+                                                    {% set info = '' %}
+                                                    {# Cette partie ajoute les forfaits de chaque commande ainsi que les options #}
+                                                {% for infoCMD in lic.orders %}
+                                                
+                                                    {% set info = info ~ infoCMD.forfait %}
+                                                    {# ajout des options à info #}
+                                                    {% for liOption in infoCMD.optionLists %}
+                                                        {% set info = info ~ ' ' ~ liOption.name %}
+                                                    {% endfor %}
+                                                {% endfor %}
+                                                <td>{{info}}</td>
+                                                {% set licAmount = 0 %}
+                                                {% for cmd in lic.orders %}
+                                                    {% set licAmount = licAmount + cmd.amount %}
+                                                {% endfor %}
+                                                
+                                                {% set licAmount = 0 %}
+                                                {% for cmd in lic.orders %}
+                                                    {% set licAmount = licAmount + cmd.amount %}
+                                                {% endfor %}
+                                                <td>{{licAmount|format_currency('EUR', {rounding_mode: 'floor'}) }}</td>
+                                                {% else %}
+                                                <td>non</td>
+                                                <td>0€</td>
+                                                    
+                                                {% endif %}
+                                                
                                             </tr>
                                         {% endfor %}
                                             

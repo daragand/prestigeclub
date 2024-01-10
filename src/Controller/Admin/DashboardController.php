@@ -3,12 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Club;
+use App\Entity\Group;
 use App\Entity\Order;
 use App\Entity\Photo;
+use App\Entity\Sport;
 use App\Entity\Livret;
 use App\Entity\Address;
 use App\Entity\Forfait;
-use App\Entity\Group;
 use App\Entity\Options;
 use App\Entity\Licencie;
 use App\Entity\OptionList;
@@ -17,6 +18,7 @@ use App\Repository\ClubRepository;
 use App\Repository\UserRepository;
 use App\Repository\OrderRepository;
 use App\Repository\PhotoRepository;
+use Symfony\UX\Chartjs\Model\Chart;
 use App\Repository\LivretRepository;
 use App\Repository\LicencieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,10 +28,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
-use Symfony\UX\Chartjs\Model\Chart;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -222,6 +223,7 @@ public function configureCrud(): Crud
         yield MenuItem::linkToCrud('Options', 'fas fa-cog', Options::class);
         yield MenuItem::linkToCrud('Clubs','fa-solid fa-landmark', Club::class);
         yield MenuItem::linkToCrud('Licenciés', 'fas fa-users', Licencie::class);
+        yield MenuItem::linkToCrud('Sport','fas fa-futbol', Sport::class);
         
         }
         //section vide pour créer un espace entre les deux menus
