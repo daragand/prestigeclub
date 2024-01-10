@@ -215,15 +215,16 @@ public function configureCrud(): Crud
         yield MenuItem::linkToCrud('Livrets', 'fa-solid fa-file', Livret::class);
         yield MenuItem::linkToCrud('Les Options', 'fas fa-cog', OptionList::class);
        
-        
+        yield MenuItem::section('Clubs')->setCssClass('border-bottom border-2');
+        yield MenuItem::linkToCrud('Clubs','fa-solid fa-landmark', Club::class);
+        yield MenuItem::linkToCrud('Licenciés', 'fas fa-users', Licencie::class);
+        yield MenuItem::linkToCrud('Groupes', 'fas fa-people-group', Group::class);
+        yield MenuItem::linkToCrud('Sport','fas fa-futbol', Sport::class);
 
         yield MenuItem::section('Gestion')->setCssClass('border-bottom border-2');
         yield MenuItem::linkToCrud('Adresses', 'fas fa-map-marker-alt', Address::class);
         yield MenuItem::linkToCrud('Forfaits', 'fas fa-money-bill-wave', Forfait::class);
         yield MenuItem::linkToCrud('Options', 'fas fa-cog', Options::class);
-        yield MenuItem::linkToCrud('Clubs','fa-solid fa-landmark', Club::class);
-        yield MenuItem::linkToCrud('Licenciés', 'fas fa-users', Licencie::class);
-        yield MenuItem::linkToCrud('Sport','fas fa-futbol', Sport::class);
         
         }
         //section vide pour créer un espace entre les deux menus

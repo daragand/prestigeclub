@@ -5,7 +5,9 @@ namespace App\Controller\Admin;
 use App\Entity\Club;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -28,6 +30,16 @@ class ClubCrudController extends AbstractCrudController
             ->setDefaultSort(['id' => 'DESC'])
             ->setEntityLabelInSingular('Club')
             ->setEntityLabelInPlural('Clubs');
+    }
+    public function configureActions(Actions $actions): Actions
+    {
+
+    return $actions
+        ->add(Crud::PAGE_INDEX, Action::DETAIL)
+       //permet de masquer le bouton edit, new et delete dans la page detail pour le Club
+        ->setPermissions([Action::NEW => 'ROLE_ADMIN', 
+        Action::DELETE => 'ROLE_ADMIN',
+         Action::EDIT => 'ROLE_ADMIN']);
     }
 
     
