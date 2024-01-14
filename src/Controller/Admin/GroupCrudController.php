@@ -49,7 +49,7 @@ public function configureCrud(Crud $crud): Crud{
             
             AssociationField::new('clubs', 'Clubs')
             ->autocomplete()
-            ->setFormTypeOption('by_reference', true)
+            
             ,
             
         ];

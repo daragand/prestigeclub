@@ -2,7 +2,7 @@
 
 
 {% block main %}
-{{ dump(club) }}
+
 	<div class="container-fluid">
     <h1>Tableau récapitulatif du club : {{ club.name }} ({{club.sport}})</h1>
    <h4>Adresse : {{club.address}}</h4>
@@ -48,6 +48,7 @@
                                                     {% set info = info ~ infoCMD.forfait %}
                                                     {# ajout des options à info #}
                                                     {% for liOption in infoCMD.optionLists %}
+                                                    
                                                         {% set info = info ~ ' ' ~ liOption.name %}
                                                     {% endfor %}
                                                 {% endfor %}

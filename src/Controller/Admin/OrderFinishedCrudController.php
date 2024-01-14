@@ -23,7 +23,7 @@ class OrderFinishedCrudController extends OrderCrudController
         return parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters)
           ->join('entity.orderStatus', 'orderStatus')  
         ->andWhere('orderStatus.name = :status')
-            ->setParameter('status', 'Traitée')
+            ->setParameter('status', 'Finalisée')
             ->orderBy('entity.id', 'ASC')
             ;
             //ordre croissant pour traiter les anciennes commandes en premier
