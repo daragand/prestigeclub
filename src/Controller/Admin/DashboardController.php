@@ -158,7 +158,8 @@ class DashboardController extends AbstractDashboardController
             
             $nbPhotos = count($photos);
             
-            
+            dd($club->getGroups());
+           
             
             
             
