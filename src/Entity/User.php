@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[UniqueEntity(fields: ['email'], message: 'Un compte existe déjà avec cet email')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface,\Serializable
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -271,12 +271,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface,\Seriali
 
     public function setCart(?Cart $cart): static
     {
-        // unset the owning side of the relation if necessary
+        
         if ($cart === null && $this->cart !== null) {
             $this->cart->setUsers(null);
         }
 
-        // set the owning side of the relation if necessary
+        
         if ($cart !== null && $cart->getUsers() !== $this) {
             $cart->setUsers($this);
         }
@@ -287,36 +287,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface,\Seriali
     }
     public function removeCart(Cart $cart): static
     {
-        // set the owning side to null (unless already changed)
+        
         if ($cart->getUsers() === $this) {
             $cart->setUsers(null);
         }
 
         return $this;
     }
-     /** @see \Serializable::serialize() */
-     public function serialize()
-     {
-         return serialize(array(
-             $this->id,
-             $this->email,
-             $this->password,
-             // see section on salt below
-             // $this->salt,
-         ));
-     }
- 
-     /** @see \Serializable::unserialize() */
-     public function unserialize($serialized)
-     {
-         list (
-             $this->id,
-             $this->email,
-             $this->password,
-             // see section on salt below
-             // $this->salt
-         ) = unserialize($serialized);
-     }
+  
 
      public function getUuidUser(): ?string
      {

@@ -271,7 +271,7 @@ public function configureCrud(): Crud
                             }
                             if($order->getOptionLists()){
                                 foreach ($order->getOptionLists() as $optionList) {
-                                    
+                                    $optionList->setPhotos(null);
                                     $em->remove($optionList);
                                     
                                 }
@@ -285,7 +285,7 @@ public function configureCrud(): Crud
                 $photos = $licencie->getPhotos();
                 foreach ($photos as $photo) {
                     
-                     $em->remove($photo);
+                    $em->remove($photo);
                     $em->flush();
                 }
                

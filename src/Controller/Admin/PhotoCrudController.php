@@ -36,7 +36,7 @@ public function configureCrud(Crud $crud): Crud
         ->setPageTitle('new', 'Ajouter une photo individuelle')
         ->setPageTitle('edit', 'Modifier une photo individuelle')
         ->setPageTitle('detail', 'Détail de la photo individuelle')
-        ->setSearchFields(['name'])
+        ->setSearchFields(['id', 'licencie.firstname','licencie.lastname'])
         ->setDefaultSort(['id' => 'DESC'])
         ->setEntityLabelInSingular('Photo')
         ->setEntityLabelInPlural('Photos');
