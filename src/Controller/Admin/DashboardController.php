@@ -16,6 +16,7 @@ use App\Entity\OptionList;
 use App\Entity\PhotoGroup;
 use App\Repository\ClubRepository;
 use App\Repository\UserRepository;
+use App\Repository\GroupRepository;
 use App\Repository\OrderRepository;
 use App\Repository\PhotoRepository;
 use Symfony\UX\Chartjs\Model\Chart;
@@ -42,6 +43,7 @@ class DashboardController extends AbstractDashboardController
         private PhotoRepository $photoRepository,
         private UserRepository $userRepository,
         private ClubRepository $clubRepository,
+        private GroupRepository $groupRepository,
         private LicencieRepository $licencieRepository,
         private ChartBuilderInterface $chartBuilder,
         private EntityManagerInterface $em
@@ -151,14 +153,19 @@ class DashboardController extends AbstractDashboardController
             ->getResult();
             
             
+            $groupes = $this->groupRepository->createQueryBuilder('g')
+            ->join('g.clubs', 'club')
+            ->where('club = :club')
+            ->setParameter('club', $club->getId())
+            ->getQuery()
+            ->getResult();
             
             
-
             
             
             $nbPhotos = count($photos);
             
-            dd($club->getGroups());
+            
            
             
             
@@ -169,7 +176,7 @@ class DashboardController extends AbstractDashboardController
                 'nbPhotos'=>$nbPhotos,
                 'club'=>$club,
                 'licencies'=>$club->getLicencie(),
-                'groupes'=>$club->getGroups(),
+                'groupes'=>$groupes,
                 'pourcentage'=>$amountTotal*0.1,
                 
                 
@@ -196,7 +203,7 @@ public function configureCrud(): Crud
         if ($this->isGranted('ROLE_CLUB')) {
             yield MenuItem::section('Tableau de bord', 'fa-solid fa-tachometer-alt')->setCssClass('border-bottom border-2');
             
-            yield MenuItem::linkToCrud('les Commandes', 'fa-solid fa-table-list', Order::class)->setController(OrderCrudController::class);
+            yield MenuItem::linkToCrud('les Commandes', 'fa-solid fa-table-list', Order::class)->setController(OrderClubCrudController::class);
             yield MenuItem::linkToCrud('Licenciés du Club', 'fas fa-users', Licencie::class)->setController(LicencieClubCrudController::class);
             yield MenuItem::linkToCrud('Groupes', 'fas fa-people-group', Group::class)->setController(GroupClubCrudController::class);
         }else{
