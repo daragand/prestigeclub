@@ -110,7 +110,7 @@ class DashboardController extends AbstractDashboardController
           ],
       ]);
    
-     return $this->render('Admin/DashboardAdmin.html.twig',[
+     return $this->render('admin/DashboardAdmin.html.twig',[
          'commandes'=>$allOrders,
          'livrets'=>$allLivrets,
          'photos'=>$allPhotos,

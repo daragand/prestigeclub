@@ -8,7 +8,7 @@ parameters:
     licencies_photos_directory: '%kernel.project_dir%/public/uploads/licencies/photos'
     groupes_photos_directory: '%kernel.project_dir%/public/uploads/groupes/photos'
     email_address: '%env(EMAIL_ADDRESS)%'
-    domain: '%env(DOMAIN)%'
+    src_dom: '%env(SRCDOM)%'
     public_key_stripe: '%env(PUBLIC_KEY_STRIPE)%'
     secret_key_stripe: '%env(SECRET_KEY_STRIPE)%'
     dossier_zip: '%kernel.project_dir%\public\zip\'
