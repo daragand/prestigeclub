@@ -30,6 +30,7 @@
 	<link rel="stylesheet" href="{{ asset('gallery/css/bootstrap-select.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('gallery/css/magnific-popup.css') }}">
 	<link rel="stylesheet" href="{{ asset('gallery/css/style.css') }}">
+            
         {% endblock %}
 
         {% block javascripts %}
@@ -54,10 +55,42 @@
     </head>
     <body>
      {% include '_partials/header.html.twig' %}
-      
+     
         {% block body %}
        
         {% endblock %}
         {% include '_partials/footer.html.twig' %}
+       
+         <!-- Menu Mobile -->
+<div class="mobile-menu">
+    <ul class="nav">
+    
+        
+        <li class="nav-item">
+            <a class="nav-link" href="{{path('app_photos_index')}}"><i class="fas fa-home"></i> Accueil</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{path('app_order')}}"><i class="fas fa-shopping-cart"></i> Commandes</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{path('app_profil')}}"><i class="fas fa-user"></i> Profil</a>
+        </li>
+    
+       
+    
+       {% if app.user %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{path('app_logout')}}"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+        </li>
+       {% else %}
+
+       <li class="nav-item">
+            <a class="nav-link" href="{{path('app_login')}}"><i class="fa-solid fa-right-to-bracket"></i> Connexion</a>
+        </li>
+       {% endif %}
+    </ul>
+</div>
+       
+       
     </body>
 </html>

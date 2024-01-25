@@ -41,7 +41,7 @@ class LicencieCrudController extends AbstractCrudController
             ->setPageTitle('new', 'Ajouter un licencié')
             ->setPageTitle('edit', 'Modifier un licencié')
             ->setPageTitle('detail', 'Détail du licencié')
-            ->setSearchFields(['name', 'firstname', 'birthday', 'adress', 'zip', 'city', 'phone', 'email', 'licence', 'certif', 'cotisation', 'forfait', 'group'])
+            ->setSearchFields(['firstname','lastname',  'club.name', 'groupes.name'])
             ->setDefaultSort(['id' => 'DESC'])
             ->setEntityLabelInSingular('Licencié')
             ->setEntityLabelInPlural('Licenciés');
