@@ -195,7 +195,8 @@ public function configureCrud(): Crud
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle("<img src=\"images/logoj.png\" alt=\" Logo de Prestige Club\"/>");
+            ->setTitle("<img src=\"images/logoj.png\" alt=\" Logo de Prestige Club\"/>")
+            ->setFaviconPath('images/logopj.png');
     }
 
     public function configureMenuItems(): iterable

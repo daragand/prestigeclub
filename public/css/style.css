@@ -43,7 +43,7 @@ opacity: 0.3;
 .carousel-control-next {
     right: 10%; /* déplace le bouton vers la droite */
 }
-/* Styles spécifiques pour le menu mobile */
+/* Styles spécifiques pour le menu mobile du côté de l'acquisition pour les parents */
 .mobile-menu {
     position: fixed;
     bottom: 0;
@@ -51,7 +51,7 @@ opacity: 0.3;
     width: 100%;
     background-color: #000 !important;
     padding: 10px 0;
-    display: none; /* Masquer le menu par défaut */
+    display: none; /* Masque le menu par défaut */
 }
 
 .mobile-menu a {
@@ -62,17 +62,26 @@ opacity: 0.3;
 .mobile-menu i {
     margin-right: 5px;
 }
+.nav {
+    display: flex; 
+    justify-content: space-between;
+}
 
+.nav-item {
+    flex: 1; 
+}
 
 .nav-link {
     display: block;
-    padding: 10px;
+    padding: 5px;
+    justify-content: space-between;
     text-align: center;
 }
 
 .nav-link:hover {
-    background-color: #333;
+    background-color: #000;
 }
+
 
 /* Media query pour afficher le menu uniquement sur les écrans de moins de 600px */
 @media (max-width: 600px) {
