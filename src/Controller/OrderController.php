@@ -34,14 +34,14 @@ class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/order/confirmation/{id}', name: 'app_order_confirmation')]
+    #[Route('/order/confirmation/{uuidOrder}', name: 'app_order_confirmation')]
     public function confirmation(Order $order): Response
     {
         return $this->render('payment/payment_success.html.twig', [
             'order' => $order,
         ]);
     }
-    #[Route('/order/details/{id}', name: 'app_order_details')]
+    #[Route('/order/details/{uuidOrder}', name: 'app_order_details')]
     public function details(Order $order): Response
     {
         return $this->render('order/details.html.twig', [

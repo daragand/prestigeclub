@@ -97,7 +97,10 @@
 															<td>{{order.licencie}}
 															</td>
 															<td>{{order.amount |format_currency('EUR', {rounding_mode: 'floor'})}}</td>
-															<td><a href="{{path('app_order_download',{'uuidOrder':order.uuidOrder})}}" target="_blank" class="ud-btn btn-thm">télécharger</a></td>
+															<td>
+															<a href="{{path('app_order_details',{'uuidOrder':order.uuidOrder})}}" target="_blank" class="ud-btn btn-thm">détails</a>
+															<a href="{{path('app_order_download',{'uuidOrder':order.uuidOrder})}}" target="_blank" class="ud-btn btn-thm">télécharger</a>
+															</td>
 														</tr>
 
 													{% endfor %}
