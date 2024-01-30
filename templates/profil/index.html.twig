@@ -86,7 +86,8 @@
 											</thead>
 											<tbody>
 												{% if user.orders is defined %}
-													{% for order in user.orders %}
+												{# récupération des commandes par date de paiement décroissante #}
+													{% for order in user.orders|sort((a, b) => b.paymentDate <=> a.paymentDate) %}
 
 
 														<tr>
