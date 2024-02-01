@@ -142,6 +142,7 @@ class PaymentController extends AbstractController
                 $order->addOptionList($optionList);
             }
         }
+        //ajout du forfait dans la commande depuis le panier
         if($cart->getForfait()) {
             
             $order->setForfait($cart->getForfait());
@@ -149,14 +150,22 @@ class PaymentController extends AbstractController
         /**
          * Pour la gestion du statut de la commande. S'il s'agit d'une commande de forfait Prestige, le statut est automatiquement mis à "en attente de validation"
          */
-         //si c'est un forfait prestige ou qu'une option a été ajoutée
+         //si c'est un forfait prestige ou qu'une option a été ajoutée, le statut est "en cours de traitement" pour gérer le livret
          if($cart->getForfait()->getName() == 'Prestige'||$cart->getOptionLists()){
             $orderStatus = $this->entityManager->getRepository(OrderStatus::class)->findOneBy(['name' => 'En cours de traitement']);
             $order->setOrderStatus($orderStatus);
+            // Pour le forfait prestige, j'ajoute les photos du panier, dans la commande
+                if($cart->getForfait()->getName() == 'Prestige'){
+                    foreach ($cart->getPhotos() as $photo) {
+                        $order->addPhoto($photo);
+                    }
+                }
             }elseif($cart->getForfait()->getName() == 'Champion'){
                 $orderStatus = $this->entityManager->getRepository(OrderStatus::class)->findOneBy(['name' => 'Payée']);
                 $order->setOrderStatus($orderStatus);
             }
+
+ 
             $zipFile = $zip->zipCreate($order);
         $order->setZipFile($zipFile);
         

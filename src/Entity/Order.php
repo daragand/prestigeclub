@@ -49,9 +49,13 @@ class Order
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $zipFile = null;
 
+    #[ORM\ManyToMany(targetEntity: Photo::class, mappedBy: 'orders')]
+    private Collection $photos;
+
     public function __construct()
     {
         $this->optionLists = new ArrayCollection();
+        $this->photos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -183,6 +187,33 @@ class Order
     public function setZipFile(?string $zipFile): static
     {
         $this->zipFile = $zipFile;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Photo>
+     */
+    public function getPhotos(): Collection
+    {
+        return $this->photos;
+    }
+
+    public function addPhoto(Photo $photo): static
+    {
+        if (!$this->photos->contains($photo)) {
+            $this->photos->add($photo);
+            $photo->addOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removePhoto(Photo $photo): static
+    {
+        if ($this->photos->removeElement($photo)) {
+            $photo->removeOrder($this);
+        }
 
         return $this;
     }

@@ -49,11 +49,11 @@ if (!file_exists($folderZip)) {
                     $photos = [];
                     break;
                 case 'Champion':
-                    $photos = $order->getLicencie()->getPhotos()->slice(0, 2);
+                    $photos = $order->getPhotos();
                     $photoGroupe = $order->getLicencie()->getGroupes()->getPhotoGroup();
                     break;
                 case 'Prestige':
-                    $photos = $order->getLicencie()->getPhotos()->slice(0, 4);
+                    $photos = $order->getPhotos();
                     $photoGroupe = $order->getLicencie()->getGroupes()->getPhotoGroup();
                     break;
                 default:

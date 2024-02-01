@@ -55,13 +55,28 @@ class PanierController extends AbstractController
         ->setUuidCart(uniqid());
         $entityManager->persist($cart);
     }
+
+    /**
+     * Dans cette partie, on va parcourir le tableau $prods pour récupérer les informations et les ajouter au panier.
+     * 
+     */
     
+     //on récupère le forfait s'il a été sélectionné
     if (isset($prods['forfait'])) {
         $forfait = $forfaitRepository->findOneBy(['name' => $prods['forfait']]);
     }
+    //création d'un montant à 0 et qui sera incrémenté des montants des options et du forfait
     $amount = 0;
 
     foreach ($prods as $key => $value) {
+
+        /**
+         * Récupération des options. 
+         * On explose la clé pour récupérer l'id de l'option et l'id de la photo.
+         * On crée un objet OptionList et on lui ajoute les options via l'identifiant et les photos.
+         * Par défaut la quantité est à 1.
+         * Ajout de l'objet OptionList au panier.
+         */
         if (strpos($key, 'option') !== false) {
             $itemOption = explode("-", $key);
             $optionList = new OptionList();
@@ -71,6 +86,9 @@ class PanierController extends AbstractController
             $cart->addOptionList($optionList);
             $amount=($amount + $optionList->getOptions()->getPrice());
         } elseif (strpos($key, 'championPh') !== false) {
+            /**
+             * Dans cette partie, on récupère les photos sélectionnées par l'utilisateur dans le cadre du forfait champion puis on les intègre au panier.
+             */
             foreach ($value as $photoId) {
                 $cart->addPhoto($photoRepository->findOneBy(['id' => intval($photoId)]));
             }
@@ -80,9 +98,21 @@ class PanierController extends AbstractController
             $cart->setForfait($forfait);
             $amount=($amount + $forfait->getPrice());
           
+          
         } elseif (strpos($key, 'licencie') !== false) {
-
+            //ajout du licencié au panier.
             $cart->setLicencie($licencieRepository->findOneBy(['slug' => $value]));
+
+            // si le forfait est prestige, on ajoute les 4 premières photos. 
+          // TODO : voir pour placer la gestion des photos selon les forfaits de manière plus dynamique et refactoriser le code. Il manque de clarté.
+        
+          if ($forfait->getName() === 'Prestige') {
+            
+            $photos = $licencieRepository->findOneBy(['slug' => $value])->getPhotos()->slice(0, 4);
+            foreach ($photos as $photo) {
+                $cart->addPhoto($photo);
+            }
+        }
         }
     }
     

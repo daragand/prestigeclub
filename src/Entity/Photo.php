@@ -45,11 +45,15 @@ class Photo
     #[ORM\ManyToMany(targetEntity: Cart::class, inversedBy: 'photos')]
     private Collection $carts;
 
+    #[ORM\ManyToMany(targetEntity: Order::class, inversedBy: 'photos')]
+    private Collection $orders;
+
     
 
     public function __construct()
     {
         $this->carts = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -145,6 +149,30 @@ class Photo
     public function removeCart(Cart $cart): static
     {
         $this->carts->removeElement($cart);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        $this->orders->removeElement($order);
 
         return $this;
     }
