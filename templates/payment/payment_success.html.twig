@@ -31,25 +31,25 @@
               <div class="order_list_raw">
                 <ul class="d-md-flex align-items-center justify-content-md-between p-0 mb-0">
                   <li class="mb20-sm">
-                    <p class="text mb5">Numéro de commande</p>
-                    <h6 class="mb-0">039422</h6>
+                    <p class="text mb5 font-weight-bold">Numéro de commande</p>
+                    <h6 class="mb-0">{{order.id}}</h6>
                   </li>
                   <li class="mb20-sm">
-                    <p class="text mb5">Date</p>
+                    <p class="text mb5 font-weight-bold">Date</p>
                     <h6 class="mb-0">{{order.paymentDate|format_datetime('short', 'none', locale='fr')}}</h6>
                   </li>
                   <li class="mb20-sm">
-                    <p class="text mb5">Total</p>
+                    <p class="text mb5 font-weight-bold">Total</p>
                     <h6 class="mb-0">{{order.amount|format_currency('EUR', {rounding_mode: 'floor'})}}</h6>
                   </li>
                   <li>
-                    <p class="text mb5">Mode de paiement</p>
+                    <p class="text mb5 font-weight-bold">Mode de paiement</p>
                     <h6 class="mb-0">En ligne</h6>
                   </li>
                 </ul>
               </div>
               <div class="order_details default-box-shadow1">
-                <h4 class="title mb25">Détails de la commande</h4>
+                <h4 class="title mb25 font-weight-bold">Détails de la commande</h4>
                 <div class="od_content">
                   <ul class="p-0 mb-0">
                     <li class="bdrb1 mb20"><h6>Produits <span class="float-end">Sous-total</span></h6></li>

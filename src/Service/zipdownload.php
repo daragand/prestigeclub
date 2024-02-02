@@ -38,7 +38,7 @@ if (!file_exists($folderZip)) {
 }
         
         $zip = new \ZipArchive();
-        $zipName = $folderZip. $order->getId().'_' .$order->getUsers()->getLastname().'_' .$order->getUuidOrder(). '.zip';
+        $zipName = $folderZip. uniqid().'_' .$order->getUsers()->getLastname().'_' .$order->getUuidOrder(). '.zip';
         
 
         //récupération des photos en fonction du forfait
@@ -76,8 +76,8 @@ if (!file_exists($folderZip)) {
     // }
 
 
-    //si les photos sont existantes, on les ajoute au zip
-    if (count($photos) > 0) {
+    //si les photos individuelles ou photos de groupes sont existantes, on les ajoute au zip
+    if ($photoGroupe || count($photos) > 0) {
         $zip->open($zipName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
         
         //gestion de la photo de groupe

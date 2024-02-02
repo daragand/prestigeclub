@@ -146,7 +146,7 @@ class PaymentController extends AbstractController
 
             $order->setForfait($cart->getForfait());
         }
-dd($order->getForfait()->getName());
+
         /**
          * Pour la gestion du statut de la commande. S'il s'agit d'une commande de forfait Prestige, le statut est automatiquement mis à "en attente de validation"
          */
@@ -160,8 +160,9 @@ dd($order->getForfait()->getName());
                     $order->addPhoto($photo);
                 }
             }
-        } elseif ($cart->getForfait()->getName() == 'Champion') {
-            dd('Forfait Champion');
+        } 
+        if ($cart->getForfait()->getName() == 'Champion') {
+           
             $orderStatus = $this->entityManager->getRepository(OrderStatus::class)->findOneBy(['name' => 'Payée']);
             $order->setOrderStatus($orderStatus);
 
@@ -169,7 +170,7 @@ dd($order->getForfait()->getName());
             foreach ($cart->getPhotos() as $photo) {
                 $order->addPhoto($photo);
             }
-            dd($order->getPhotos());
+            
         }
 
 
