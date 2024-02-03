@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\ZipDownload;
 use App\Service\MailingService;
 use App\Repository\OrderRepository;
+use App\Repository\PhotoGroupRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,9 +42,21 @@ class PageController extends AbstractController
         ]);
     }
     #[Route('/zip', name: 'app_test_zip')]
-    public function zip(OrderRepository $orderRepository,ZipDownload $zip,MailingService $mailingService,EntityManagerInterface $entityManager): Response
+    public function zip(OrderRepository $orderRepository,ZipDownload $zip,MailingService $mailingService,EntityManagerInterface $entityManager, PhotoGroupRepository $photoGroupRepository): Response
     {
-        $order = $orderRepository->findOneBy(['id' => 74]);
+        $order = $orderRepository->findOneBy(['id' => 48 ]);
+        
+        $photoGroupe = $photoGroupRepository->createQueryBuilder('phg')
+        ->join('phg.club', 'club')
+        ->join('phg.groupID','groupe')
+        ->where('club.id = :clubID')
+        ->andWhere('groupe.id = :groupID')
+        ->setParameter('clubID', $order->getLicencie()->getClub()->getId())
+        ->setParameter('groupID',$order->getLicencie()->getGroupes()->getId() )
+        ->getQuery()
+        ->getResult();
+
+dd($photoGroupe);
 
         $downloadZip = $zip->zipCreate($order);
         $order->setZipFile($downloadZip);
