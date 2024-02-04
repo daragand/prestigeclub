@@ -170,11 +170,25 @@ class PanierController extends AbstractController
             'panier'=>$cartRepository->findOneBy(['users'=>$this->getUser()])
         ]);
     }
-    #[Route('/panier/deleteitem/{item}', name: 'app_panier_deleteitem')]
-    public function deleteItemFromCart(
 
+    /**
+     * La fonction ci-dessous permet la suppression d'une option du panier. Le forfait demeure. Si l'usager veut supprimer le forfait, il lui faudra vider le panier.
+     */
+    #[Route('/panier/deleteitem/{id}', name: 'app_panier_deleteitem')]
+    public function deleteItemFromCart(OptionList $optList,
+CartRepository $cartRepository,EntityManagerInterface $em
     )
     {
+        //récupération du panier
+        $cart = $cartRepository->findOneBy(['users' => $this->getUser()]);
+        //suppression de l'option du panier
+        $cart->removeOptionList($optList);
+
+        //suppression de l'option de la base
+        $em->remove($optList);
+        $em->flush();
+
+
         //TODO : à faire
         return $this->redirectToRoute('app_panier_visualiser');
     }

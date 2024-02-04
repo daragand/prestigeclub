@@ -37,7 +37,7 @@
               <h4 class="title mb30">Récapitulatif de votre commande</h4>
               <div class="checkout_coupon">
                 <ul class="p-0 mb-0">
-                  <li class="bdrb1 mb20"><h6>Produits <span class="float-end">Subtotal</span></h6></li>
+                  <li class="bdrb1 mb20"><h6>Produits <span class="float-end">sous-total</span></h6></li>
                  {% if panier.forfait is defined %}
                   
                   <li class="mb20"><p class="body-color">forfait {{panier.forfait.name}} <span class="float-end">{{panier.forfait.price|format_currency('EUR', {rounding_mode: 'floor'})}} </span></p></li>
@@ -61,19 +61,7 @@
               <div class="order_sidebar_widget mb30 default-box-shadow1">
                 <h4 class="title">Votre commande</h4>
                 <ul class="p-0 mb-0">
-                  <li class="bdrb1 mb20"><h6>Produits <span class="float-end">Subtotal</span></h6></li>
-                 {% if panier.forfait is defined %}
-                  
-                  <li class="mb20"><p class="body-color">forfait {{panier.forfait.name}} <span class="float-end">{{panier.forfait.price|format_currency('EUR', {rounding_mode: 'floor'})}} </span></p></li>
-                 {% endif %}
-                  {% if panier.optionLists is defined %}
-                    {% for itemOption in panier.optionLists %}
-                      
-                  <li class="mb20"><p class="body-color">{{itemOption}} <span class="float-end">{{itemOption.options.price|format_currency('EUR', {rounding_mode: 'floor'})}}</span></p></li>
-                    {% endfor %}
-                  {% endif %}
-                 
-              
+                                
                   <li><h6>Total <span class="float-end">{{panier.amount|format_currency('EUR', {rounding_mode: 'floor'})}}</span></h6></li>
                 </ul>
               </div>
