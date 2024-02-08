@@ -18,7 +18,8 @@ class RegistrationController extends AbstractController
     #[Route('/invitation/{slug}', name: 'app_invitation')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-        if ($this->getUser()) {
+        //Si l'usager est déjà connecté et qu'il dispose d'un role parent, nous ajoutons le licencié directement
+        if ($this->getUser() && $this->isGranted('ROLE_PARENT')) {
 
             //récupération du licencié
             $licencieParUuid = $entityManager->getRepository(Licencie::class)->findOneBy(['slug' => $request->attributes->get('slug')]);

@@ -37,7 +37,8 @@
               <h4 class="title mb30">Récapitulatif de votre commande</h4>
               <div class="checkout_coupon">
                 <ul class="p-0 mb-0">
-                  <li class="bdrb1 mb20"><h6>Produits <span class="float-end">sous-total</span></h6></li>
+                  <li class="bdrb1 mb20"><h6>Produits <span class="float-end">s
+                  ous-total</span></h6></li>
                  {% if panier.forfait is defined %}
                   
                   <li class="mb20"><p class="body-color">forfait {{panier.forfait.name}} <span class="float-end">{{panier.forfait.price|format_currency('EUR', {rounding_mode: 'floor'})}} </span></p></li>

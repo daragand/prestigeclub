@@ -40,7 +40,7 @@ class SecurityController extends AbstractController
     public function loginInvitation(Licencie $licencie,UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
 
-if ($this->getUser()) {
+    if ($this->getUser()) {
 
     //recherche de l'utilisateur connecté et ajout de la relation avec le licencié
     $email = $this->getUser()->getUserIdentifier();
