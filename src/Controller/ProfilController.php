@@ -50,6 +50,23 @@ class ProfilController extends AbstractController
             'formUser' => $formUser->createView(),
         ]);
     }
+    #[Route('/profil/edit/address', name: 'app_profil_edit_address')]
+    public function updateAddress(): Response{
+
+
+
+        return $this->render('profil/address.html.twig', [
+            'controller_name' => 'Adresse',
+            
+        ]);
+    }
+
+
+
+
+
+
+
     #[Route('/profil/delete', name: 'app_profil_delete_ask')]
     public function askDelete(MailingService $mailService):RedirectResponse
     {
