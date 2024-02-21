@@ -10,7 +10,7 @@
 					<div class="col-xl-6 wow fadeInRight" data-wow-delay="300ms">
 						<div class="animate_content text-center text-xl-start">
 							<div class="animate_thumb">
-								<img class="w-100" src="{{ assert('images/icon/error-page-img.svg')}}" alt="error-page-img">
+								<img class="w-100" src="{{ asset('images/icon/error-page-img.svg')}}" alt="error-page-img">
 							</div>
 						</div>
 					</div>
@@ -22,7 +22,7 @@
 							<p class="text fz15 mb20">La page recherchée n'est pas disponible. Essayez à nouveau ou rendez-vous en page d'accueil
 								<br class="d-none d-lg-block">
 								to.</p>
-                                {% if {{ is_granted('ROLE_PARENT') }} %}
+                                {% if ( is_granted('ROLE_PARENT') ) %}
                                     
 							<a href="{{path('app_photos_index')}}" class="ud-btn btn-thm">Retour en page d'accueil<i class="fal fa-arrow-right-long"></i>
                                 {% else %}

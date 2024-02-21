@@ -5,8 +5,63 @@
 
 {% block body %}
 
+<div class="body_content">
+    <!-- Changement d'adresse -->
+    <section class="our-login">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 m-auto wow fadeInUp" data-wow-delay="300ms">
+            <div class="main-title text-center">
+              <h2 class="title">Adresse postale</h2>
+              <p class="paragraph">Mettez à jour votre adresse postale </p>
+            </div>
+          </div>
+        </div>
+        <div class="row wow fadeInRight" data-wow-delay="300ms">
+          <div class="col-xl-6 mx-auto">
+            <div class="log-reg-form search-modal form-style1 bgc-white p50 p30-sm default-box-shadow1 bdrs12">
+              
+              <div class="mb20">
+                <label class="form-label fw600 dark-color">Commencer à taper votre adresse postale</label>
+                <input type="text" id="addressInput" class="form-control"  placeholder="20 rue de la liberté">
+              </div>
+              <div id="suggAddress" class="form-control"></div>
+              <div class="mb15">
+                <label class="form-label fw600 dark-color">Password</label>
+                <input type="text" class="form-control" placeholder="*******">
+              </div>
+              <div class="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb20">
+                <label class="custom_checkbox fz14 ff-heading">Remember me
+                  <input type="checkbox" checked="checked">
+                  <span class="checkmark"></span>
+                </label>
+                <a class="fz14 ff-heading" href="#">Lost your password?</a>
+              </div>
+              <div class="d-grid mb20">
+                <button class="ud-btn btn-thm" type="button">Log In <i class="fal fa-arrow-right-long"></i></button>
+              </div>
+              <div class="hr_content mb20"><hr><span class="hr_top_text">OR</span></div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Footer --> 
+    
+    <a class="scrollToHome" href="#"><i class="fas fa-angle-up"></i></a>
+  </div>
+        
 
 
+
+
+
+
+{% block javascripts %}
+<script src={{ asset('js/customjsPrestige/apiaddress.js') }} defer></script>
+{% endblock %}
 
 
 {% endblock %}

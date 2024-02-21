@@ -24,7 +24,7 @@ class Address
     private ?string $zip = null;
 
     #[ORM\Column(length: 70)]
-    #[Assert\Regex(pattern: '/^[a-zA-ZÀ-ÖØ-öø-ŸŷÂâÊêÎîÔôÛûÄäËëÏïÖöÜüÇç- ]+$')]
+    #[Assert\Regex(pattern: '/^[a-zA-ZÀ-ÖØ-öø-ŸŷÂâÊêÎîÔôÛûÄäËëÏïÖöÜüÇç-]+(?:\s[a-zA-ZÀ-ÖØ-öø-ŸŷÂâÊêÎîÔôÛûÄäËëÏïÖöÜüÇç-]+)*$/')]
     private ?string $city = null;
 
     #[ORM\OneToMany(mappedBy: 'address', targetEntity: User::class)]

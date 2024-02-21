@@ -63,7 +63,8 @@ class DashboardController extends AbstractDashboardController
             ->addJsFile('datatables.net/js/jquery.min.js')
        
             ->addJsFile('datatables.net/js/jquery.dataTables.min.js')
-            ->addJsFile('datatables.net/js/datatable-basic.init.js');
+            ->addJsFile('datatables.net/js/datatable-basic.init.js')
+            ;
             
             
             
@@ -97,18 +98,30 @@ class DashboardController extends AbstractDashboardController
       ->getSingleScalarResult();
 
       //graphiques des ventes
-      $chart = $this->chartBuilder->createChart(Chart::TYPE_DOUGHNUT);
-      $chart->setData([
-          'labels' => ['Photos', 'Commandes'],
-          'datasets' => [
-              [
-                  'label' => 'Ventes',
-                  'backgroundColor' => ['#FF6384', '#36A2EB'],
-                  'borderColor' => ['#FF6384', '#36A2EB'],
-                  'data' => [$nbPhotos, count($allOrders)],
-              ],
-          ],
-      ]);
+    //   $chart = $this->chartBuilder->createChart(Chart::TYPE_DOUGHNUT);
+    //   $chart->setData([
+    //       'labels' => ['Photos', 'Commandes'],
+    //       'datasets' => [
+    //           [
+    //               'label' => 'Ventes',
+    //               'backgroundColor' => ['#FF6384', '#36A2EB'],
+    //               'borderColor' => ['#FF6384', '#36A2EB'],
+    //               'data' => [$nbPhotos, count($allOrders)],
+    //           ],
+    //       ],
+    //   ]);
+    $chart = $this->chartBuilder->createChart(Chart::TYPE_LINE);
+        $chart->setData([
+            'labels' => ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            'datasets' => [
+                [
+                    'label' => 'Sales!',
+                    'backgroundColor' => 'rgb(255, 99, 132)',
+                    'borderColor' => 'rgb(255, 99, 132)',
+                    'data' => [522, 1500, 2250, 2197, 2345, 3122, 3099],
+                ],
+            ],
+        ]);
    
      return $this->render('admin/DashboardAdmin.html.twig',[
          'commandes'=>$allOrders,

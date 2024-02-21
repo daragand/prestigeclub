@@ -10,7 +10,7 @@
 					<div class="col-xl-6 wow fadeInRight" data-wow-delay="300ms">
 						<div class="animate_content text-center text-xl-start">
 							<div class="animate_thumb">
-								<img class="w-100" src="{{ assert('images/icon/error-page-img.svg')}}" alt="error-page-img">
+								<img class="w-100" src="{{ asset('images/icon/error-page-img.svg')}}" alt="error-page-img">
 							</div>
 						</div>
 					</div>
@@ -21,10 +21,10 @@
 							<div class="h2 error_title">Oops!  Vous n'avez pas les accréditations</div>
 							<p class="text fz15 mb20">Vous n'avez pas l'autorisation d'accéder au service dont les droits sont restreints.
 								</p>
-                                {% if {{ is_granted('ROLE_PARENT') }} %}
+                                {% if ( is_granted('ROLE_PARENT') ) %}
                                     
 							<a href="{{path('app_photos_index')}}" class="ud-btn btn-thm">Retour en page d'accueil<i class="fal fa-arrow-right-long"></i>
-                                {% elseif {{ is_granted('ROLE_PARENT') }} %}
+                                {% elseif ( is_granted('ROLE_PARENT') ) %}
 							<a href="{{path('admin')}}" class="ud-btn btn-thm">Retour en page d'accueil<i class="fal fa-arrow-right-long"></i>
                                 {% endif %}
 							</a>
