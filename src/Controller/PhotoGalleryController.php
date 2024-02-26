@@ -90,8 +90,8 @@ class PhotoGalleryController extends AbstractController
         PhotoGroupRepository $photoGroupRepository
         ): Response
     {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
+        if (!$this->isGranted('ROLE_PARENT')) {
+            return $this->redirectToRoute('admin');
         }
 
         

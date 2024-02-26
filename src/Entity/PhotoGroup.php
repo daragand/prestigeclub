@@ -19,7 +19,7 @@ class PhotoGroup
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $path = null;
+    private ?string $path = 'default_group.jpg';
 
     //Photo de groupe provisoire pour charger les images. Non utilisée dans la BDD. Le mapping est disponible dans le fichier config/vich_uploader.yaml
     #[Vich\UploadableField(mapping: 'groupes', fileNameProperty: 'path')]
@@ -47,9 +47,9 @@ class PhotoGroup
         return $this->path;
     }
 
-    public function setPath(string $path): static
+    public function setPath(?string $path): static
     {
-        $this->path = $path;
+        $this->path = $path ?: 'default_group.jpg';
 
         return $this;
     }

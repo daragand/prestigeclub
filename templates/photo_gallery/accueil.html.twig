@@ -3,6 +3,15 @@
 
 
 	<div class="container mt-3">
+	{% for type, messages in app.flashes() %}
+    {% for message in messages %}
+        <div class="alert alert-{{ type }}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+
 		<div class="row">
 
 			{% for licencie in licencies %}
@@ -22,7 +31,7 @@
 								{{ licencie['licencie'].lastname }}</h2>
 							</h2>
 						{% for club in licencie.club %}
-							{{ dump(club) }}
+							
 							<h6>
 								<i class="bi bi-people-fill"></i>
 								{{ club.name }}
@@ -45,6 +54,7 @@
 											<img class="d-flex me-3" src="https://via.placeholder.com/60" alt="icon par défault">
 										{% endif %}
 											<div class="media-body">
+											
 											{% if licencie['groupe'].name is defined %}
 
 												<h6 class="mt-0 mb-1">{{ licencie['groupe'].name }}</h6>

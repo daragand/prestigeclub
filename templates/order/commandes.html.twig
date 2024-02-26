@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello OrderController!
+{% block title %}Commandes
 {% endblock %}
 
 {% block stylesheets %}
@@ -37,12 +37,17 @@
 							</tr>
 						</thead>
 						<tbody class="t-body">
+						{% if orders|length == 0 %}
+							<tr colspan="5" >
+							Aucune commande n'a été réalisée
+							</tr>
+						{% else %}
 							{% for command in orders %}
 
 								<tr>
 									<th scope="row">
 										<div>#{{command.id}}
-											<span class="ms-3">App Services</span>
+											
 										</div>
 									</th>
 									<td class="vam">{{command.paymentDate|format_datetime('short', 'none', locale='fr')}}</td>
@@ -61,13 +66,13 @@
 										</td>
 									{% endif %}
 									<td class="vam">
-										<a href="{{path('app_order_details',{'id':command.id})}}" target="_blank" class="table-action fz15 fw500 text-thm2" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+										<a href="{{path('app_order_details',{'uuidOrder':command.uuidOrder})}}" target="_blank" class="table-action fz15 fw500 text-thm2" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
 											<i class="fa-regular fa-file-lines"></i>
 											Voir</a>
 									</td>
 								</tr>
-							{% endfor %}
-
+								{% endfor %}
+							{% endif %}
 						</tbody>
 					</table>
 

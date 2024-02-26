@@ -11,7 +11,9 @@ use Vich\UploaderBundle\Form\Type\VichFileType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use Symfony\Component\Validator\Constraints\Date;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -34,10 +36,20 @@ public function configureCrud(Crud $crud): Crud
         ->setPageTitle('new', 'Ajouter une photo individuelle')
         ->setPageTitle('edit', 'Modifier une photo individuelle')
         ->setPageTitle('detail', 'Détail de la photo individuelle')
-        ->setSearchFields(['name'])
+        ->setSearchFields(['id', 'licencie.firstname','licencie.lastname'])
         ->setDefaultSort(['id' => 'DESC'])
         ->setEntityLabelInSingular('Photo')
         ->setEntityLabelInPlural('Photos');
+}
+public function configureActions(Actions $actions): Actions
+{
+
+return $actions
+    ->add(Crud::PAGE_INDEX, Action::DETAIL)
+   //permet de masquer le bouton edit, new et delete dans la page detail pour le Club
+    ->setPermissions([Action::NEW => 'ROLE_ADMIN', 
+    Action::DELETE => 'ROLE_ADMIN',
+     Action::EDIT => 'ROLE_ADMIN']);
 }
     
     public function configureFields(string $pageName): iterable

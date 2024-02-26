@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profil utilisateur
+{% block title %}Votre profil utilisateur
 {% endblock %}
 
 {% block body %}
@@ -86,7 +86,8 @@
 											</thead>
 											<tbody>
 												{% if user.orders is defined %}
-													{% for order in user.orders %}
+												{# récupération des commandes par date de paiement décroissante #}
+													{% for order in user.orders|sort((a, b) => b.paymentDate <=> a.paymentDate) %}
 
 
 														<tr>
@@ -97,7 +98,10 @@
 															<td>{{order.licencie}}
 															</td>
 															<td>{{order.amount |format_currency('EUR', {rounding_mode: 'floor'})}}</td>
-															<td><a href="{{path('app_order_download',{'uuidOrder':order.uuidOrder})}}" target="_blank" class="ud-btn btn-thm">télécharger</a></td>
+															<td>
+															<a href="{{path('app_order_details',{'uuidOrder':order.uuidOrder})}}" target="_blank" class="ud-btn btn-thm">détails</a>
+															<a href="{{path('app_order_download',{'uuidOrder':order.uuidOrder})}}" target="_blank" class="ud-btn btn-thm">télécharger</a>
+															</td>
 														</tr>
 
 													{% endfor %}

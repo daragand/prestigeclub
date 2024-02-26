@@ -4,6 +4,7 @@ namespace App\Service;
 use App\Entity\Order;
 use App\Entity\Photo;
 use App\Entity\PhotoGroup;
+use App\Repository\PhotoGroupRepository;
 use Vich\UploaderBundle\Storage\StorageInterface;
 use Vich\UploaderBundle\Storage\FileSystemStorage;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -13,13 +14,14 @@ class ZipDownload
 {
 private StorageInterface $storage;
 private PhotoGroup $photoGroup;
+private PhotoGroupRepository $photoGroupRepository;
 private ParameterBagInterface $parameterBag;
 
-public function __construct( ParameterBagInterface $parameterBag)
+public function __construct( ParameterBagInterface $parameterBag,PhotoGroupRepository $photoGroupRepository)
 {
     
     $this->parameterBag = $parameterBag;
-   
+    $this->photoGroupRepository = $photoGroupRepository;
 
    
 }
@@ -38,23 +40,31 @@ if (!file_exists($folderZip)) {
 }
         
         $zip = new \ZipArchive();
-        $zipName = $folderZip. $order->getId().'_' .$order->getUsers()->getLastname().'_' .$order->getUuidOrder(). '.zip';
+        $zipName = $folderZip. uniqid().'_' .$order->getUsers()->getLastname().'_' .$order->getUuidOrder(). '.zip';
         
+        //récupération de la ou des photo(s) du groupe lié au club. Cette recherche s'assure de ne pas réprendre de photos liés à un autre club ou une autre section du club
+        $photoGroupe = $this->photoGroupRepository->createQueryBuilder('phg')
+        ->join('phg.club', 'club')
+        ->join('phg.groupID','groupe')
+        ->where('club.id = :clubID')
+        ->andWhere('groupe.id = :groupID')
+        ->setParameter('clubID', $order->getLicencie()->getClub()->getId())
+        ->setParameter('groupID',$order->getLicencie()->getGroupes()->getId() )
+        ->getQuery()
+        ->getResult();
 
-        //récupération des photos en fonction du forfait
+        //récupération des photos individuelles en fonction du forfait.Elle permet surtout de ne pas récupérer de photos individuelles si le forfait est de type 'Gratuit'.
+        // TODO : a voir à terme pour une gestion selon le nombre de photos autorisées par le forfait. En plaçant dans l'entité Forfait ne nombre de photos individuelles autorisées, nous pourrons nous en servir comme critère de recherche.
         if($order->getForfait()){
             switch($order->getForfait()->getName()){
                 case 'Gratuite':
-                    $photoGroupe = $order->getLicencie()->getGroupes()->getPhotoGroup();
                     $photos = [];
                     break;
                 case 'Champion':
-                    $photos = $order->getLicencie()->getPhotos()->slice(0, 2);
-                    $photoGroupe = $order->getLicencie()->getGroupes()->getPhotoGroup();
+                    $photos = $order->getPhotos();
                     break;
                 case 'Prestige':
-                    $photos = $order->getLicencie()->getPhotos()->slice(0, 4);
-                    $photoGroupe = $order->getLicencie()->getGroupes()->getPhotoGroup();
+                    $photos = $order->getPhotos();
                     break;
                 default:
                     $photos = [];
@@ -64,20 +74,10 @@ if (!file_exists($folderZip)) {
 
         }
     }
-    
-    
-//ajout de photo de groupe si existant
-    // if($photoGroupe){
-        // $pathGroup = $this->photoGroupe->getPhotoGroupFile();
-       
-    //     $zip->open($zipName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
-    //     $zip->addFile('uploads/photos/' . $photoGroupe->getPhotoGroup(), $photoGroupe->getPhoto());
-    //     $zip->close();
-    // }
 
 
-    //si les photos sont existantes, on les ajoute au zip
-    if (count($photos) > 0) {
+    //si les photos individuelles ou photos de groupes sont existantes, on les ajoute au zip
+    if ($photoGroupe || count($photos) > 0) {
         $zip->open($zipName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
         
         //gestion de la photo de groupe
@@ -108,9 +108,6 @@ if (!file_exists($folderZip)) {
             }
            
         }
-        
-        
-        
 
         $zip->close();
     }

@@ -130,16 +130,24 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        {% if commandes is defined %}
+                                            
                                         {% for cmd in commandes %}
                                        
                                             <tr>
                                                 <td>{{ cmd.id }}</td>
                                                 <td>{{ cmd.users }}</td>
-                                                <td>{{ cmd.users.licencies[0] }}</td>
+                                                <td>{{ cmd.licencie }}</td>
                                                 <td>{{ cmd.forfait }}</td>
                                                 <td>{{ cmd.amount }}</td>
                                             </tr>
                                         {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="5">Aucune commande avec status 'en cours' n'a été trouvée</td>
+                                            </tr>
+                                        
+                                        {% endif %}
                                             
                                            
                                         </tbody>
@@ -170,6 +178,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        {% if clubs is defined %}
+                                            
                                         {% for club in clubs %}
                                        
                                             <tr>
@@ -177,10 +187,15 @@
                                                 <td>{{ club.name }}</td>
                                                 <td>{{ club.address.city }}</td>
                                                 <td>{{ club.groups|length }}</td>
-                                                <td><a href="#" class="mt-2 ud-btn btn-thm">Supprimer mon compte<i class="fa-solid fa-trash"></i>
+                                                <td><a href="{{path('admin_club_info',{'id':club.id})}}" class="mt-2  ud-btn btn-thm">voir<i class="ml-2 fa-solid fa-eye"></i>
 										</a></td>
                                             </tr>
                                         {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="5">Aucun club n'a été trouvé</td>
+                                            </tr>
+                                        {% endif %}
                                             
                                            
                                         </tbody>
@@ -201,7 +216,7 @@
                     <div class="col-lg-4 col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Livrets à gérer</h4>
+                                <h4 class="card-title">Livrets à gérer (commandes en cours )</h4>
                                
                             {% set counter = 0 %}
                             {% for cmd in commandes %}

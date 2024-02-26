@@ -26,7 +26,7 @@ class Photo
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $path = null;
+    private ?string $path = 'default.jpg';
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $datePublication = null;
@@ -45,9 +45,15 @@ class Photo
     #[ORM\ManyToMany(targetEntity: Cart::class, inversedBy: 'photos')]
     private Collection $carts;
 
+    #[ORM\ManyToMany(targetEntity: Order::class, inversedBy: 'photos')]
+    private Collection $orders;
+
+    
+
     public function __construct()
     {
         $this->carts = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,9 +83,9 @@ class Photo
         return $this->path;
     }
 
-    public function setPath(string $path): static
+    public function setPath(?string $path): static
     {
-        $this->path = $path;
+        $this->path = $path ?: 'default.jpg';
 
         return $this;
     }
@@ -143,6 +149,30 @@ class Photo
     public function removeCart(Cart $cart): static
     {
         $this->carts->removeElement($cart);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        $this->orders->removeElement($order);
 
         return $this;
     }

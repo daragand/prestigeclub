@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+
 #[ORM\Entity(repositoryClass: GroupRepository::class)]
 #[ORM\Table(name: '`group`')]
 class Group
@@ -19,7 +20,7 @@ class Group
     #[ORM\Column(length: 70)]
     private ?string $name = null;
 
-    #[ORM\ManyToMany(targetEntity: Club::class, mappedBy: 'groups')]
+    #[ORM\ManyToMany(targetEntity: Club::class, inversedBy: 'clubs' ,cascade: ["persist"])]
     private Collection $clubs;
 
     #[ORM\OneToMany(mappedBy: 'groupID', targetEntity: PhotoGroup::class, orphanRemoval: true)]

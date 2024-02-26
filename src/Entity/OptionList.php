@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\OptionListRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OptionListRepository::class)]
 class OptionList
@@ -19,7 +20,7 @@ class OptionList
    
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Photo $photos = null;
 
     #[ORM\ManyToOne(inversedBy: 'optionLists')]

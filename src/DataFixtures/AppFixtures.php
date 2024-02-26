@@ -229,6 +229,7 @@ class AppFixtures extends Fixture
                 ->setBirthdate($faker->dateTimeBetween('-20 years', '-5 years'))
                 ->setSlug($faker->slug)
                 ->setEmail($faker->email)
+                ->setUpdatedAt(($faker->dateTimeBetween('-9 months', 'now')))
                 ->setClub($objectClubs[$randNumber]);
 
             //selon le nom du club, récupération des groupes correspondants
@@ -309,7 +310,7 @@ class AppFixtures extends Fixture
                 
                 $objectUser->addLicency($objectLicencies[$faker->numberBetween(0, (count($objectLicencies) - 1))]);
             }
-            //s'il s'agit d'un club, je lui ajoute un club
+            //s'il s'agit d'un club, je lui ajoute un club et des groupes
             if (in_array('ROLE_CLUB', $objectUser->getRoles())) {
                 $objectUser->addClub($objectClubs[$faker->numberBetween(0, (count($objectClubs) - 1))]);
             }

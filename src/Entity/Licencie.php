@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LicencieRepository::class)]
 #[Vich\Uploadable]
@@ -30,8 +31,6 @@ class Licencie
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $slug = null;
-
-    
 
     #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Livret::class, orphanRemoval: true)]
     private Collection $livrets;
@@ -58,6 +57,11 @@ class Licencie
 
     #[ORM\OneToMany(mappedBy: 'licencie', targetEntity: Order::class)]
     private Collection $orders;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $updatedAt = null;
+
+    
 
     public function __construct()
     {
@@ -286,4 +290,18 @@ class Licencie
 
         return $this;
     }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    
 }

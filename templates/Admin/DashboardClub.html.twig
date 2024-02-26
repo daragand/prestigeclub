@@ -176,7 +176,7 @@
                                                     {% set info = info ~ infoCMD.forfait %}
                                                     {# ajout des options à info #}
                                                     {% for liOption in infoCMD.optionLists %}
-                                                        {% set info = info ~ ' ' ~ liOption.name %}
+                                                        {% set info = info ~ ' / ' ~ liOption.options.name  ~ ' : ' ~ liOption.photos.id %}
                                                     {% endfor %}
                                                 {% endfor %}
                                                 <td>{{info}}</td>

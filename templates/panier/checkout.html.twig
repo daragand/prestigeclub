@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PanierController!{% endblock %}
+{% block title %}Confirmation commande{% endblock %}
 {% block stylesheets %}
 	{{ parent() }}
 	<link rel="stylesheet" href="{{ asset('gallery/css/bootstrap.min.css') }}">
@@ -13,7 +13,7 @@
 {% block body %}
 
  <div class="body_content">
-    <!-- Blog Section -->
+    
     
     <section class="pt40 pb0">
       <div class="container">
@@ -36,49 +36,9 @@
             <div class="checkout_form">
               <h4 class="title mb30">Récapitulatif de votre commande</h4>
               <div class="checkout_coupon">
-                <form class="form2" id="coupon_form" name="contact_form" method="post">
-                  <div class="row">
-                    <div class="col-sm-6">
-                      <div class="mb25">
-                        <h6 class="mb15">{{app.user.firstname}}</h6>
-                        <input class="form-control" type="text" placeholder="Ali">
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="mb25">
-                        <h6 class="mb15">{{app.user.lastname}}</h6>
-                        <input class="form-control" type="text" placeholder="Tufan">
-                      </div>
-                    </div>
-                    <div class="col-sm-12">
-                      <div class="mb25">
-                        <h6 class="mb15">Company Name</h6>
-                        <input class="form-control" type="text" placeholder="Ali">
-                      </div>
-                    </div>
-                    
-                    
-                   
-                    
-                    
-                    <div class="col-sm-12">
-                      <div class="mb25">
-                        <h4 class="mb15" class="mb15">Additional information</h4>
-                        <h6>Order Notes (optional)</h6>
-                        <textarea name="form_message" class="" rows="7" placeholder="Description"></textarea>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-5 col-lg-4">
-            <div class="shop-sidebar ms-md-auto">
-              <div class="order_sidebar_widget mb30 default-box-shadow1">
-                <h4 class="title">Votre commande</h4>
                 <ul class="p-0 mb-0">
-                  <li class="bdrb1 mb20"><h6>Produits <span class="float-end">Subtotal</span></h6></li>
+                  <li class="bdrb1 mb20"><h6>Produits <span class="float-end">s
+                  ous-total</span></h6></li>
                  {% if panier.forfait is defined %}
                   
                   <li class="mb20"><p class="body-color">forfait {{panier.forfait.name}} <span class="float-end">{{panier.forfait.price|format_currency('EUR', {rounding_mode: 'floor'})}} </span></p></li>
@@ -93,6 +53,18 @@
               
                   <li><h6>Total <span class="float-end">{{panier.amount|format_currency('EUR', {rounding_mode: 'floor'})}}</span></h6></li>
                 </ul>
+                
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5 col-lg-4">
+            <div class="shop-sidebar ms-md-auto">
+              <div class="order_sidebar_widget mb30 default-box-shadow1">
+                <h4 class="title">Votre commande</h4>
+                <ul class="p-0 mb-0">
+                                
+                  <li><h6>Total <span class="float-end">{{panier.amount|format_currency('EUR', {rounding_mode: 'floor'})}}</span></h6></li>
+                </ul>
               </div>
               <div class="payment_widget default-box-shadow1">
                 <h4 class="title">Paiement</h4>
@@ -102,10 +74,7 @@
                     <p class="fz13 mb30">En passant commande, vous acceptez les <a href="#">Conditions générales de vente de Prestige Club</a>. Veuillez consulter notre charte de protection de vos données personnelles.</p>
                   </div>
                   
-                  {# <div class="form-check d-flex align-items-center">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault4">
-                    <label class="form-check-label" for="flexRadioDefault4">Par Carte Bleue</label>
-                  </div> #}
+                  
                 </div>
               </div>
               <div class="d-grid default-box-shadow2">

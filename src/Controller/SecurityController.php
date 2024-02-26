@@ -17,6 +17,7 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // if ($this->getUser()) {
+            
         //     return $this->redirectToRoute('target_path');
         // }
 
@@ -39,9 +40,9 @@ class SecurityController extends AbstractController
     public function loginInvitation(Licencie $licencie,UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
 
-if ($this->getUser()) {
+    if ($this->getUser() && $this->isGranted('ROLE_PARENT')) {
 
-    //recherche de l'utilisateur connecté et ajout de la relation avec le licencié
+    //Si l'utilisateur est déjà connecté,recherche de l'utilisateur connecté et ajout de la relation avec le licencié
     $email = $this->getUser()->getUserIdentifier();
     
     $user = $userRepository->findOneBy(['email' => $email]);
@@ -50,8 +51,11 @@ if ($this->getUser()) {
     $entityManager->flush();
     $this->addFlash('success', 'le licencié a été bien ajouté à votre compte.');
             return $this->redirectToRoute('app_photos_index');
-        }else{
-            return $this->redirectToRoute('app_invitation', ['slug' => $licencie->getSlug()]);
+
+            //si l'utilisateur est déjà connecté et qu'il correspond à un club ou est admin, on le redirige vers la page adéquate.
+        }elseif ($this->getUser() && !$this->isGranted('ROLE_PARENT')){
+            $this->addFlash('error','Vous n\'avez pas les droits pour ajouter un licencié');
+            return $this->redirectToRoute('admin');
         }
         
 

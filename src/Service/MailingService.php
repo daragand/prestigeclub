@@ -19,13 +19,14 @@ class MailingService
         $this->parameterBag = $parameterBag;
 
     }
+    
    
     public function downloadPhoto(Order $order,string $zipFile)
     {
         if($order->getZipFile()){
 
             $mailSender = $this->parameterBag->get('email_address');
-            $domain = $this->parameterBag->get('domain');
+            $domain = $this->parameterBag->get('src_dom');
             
             $email = (new TemplatedEmail())
             ->from($mailSender)
@@ -38,7 +39,7 @@ class MailingService
                 'lastName' => $order->getLicencie()->getLastName(),
                 'firstName' => $order->getLicencie()->getFirstName(),
                 'uuidOrder' => $order->getUuidOrder(),
-                'domain' => $domain
+                'srcdom' => $domain
                 
             ]);
             $this->mailer->send($email);
@@ -49,7 +50,7 @@ class MailingService
     public function sendDeleteConfirmation(User $user)
     {
         $mailSender = $this->parameterBag->get('email_address');
-        $domain = $this->parameterBag->get('domain');
+        $domain = $this->parameterBag->get('src_dom');
         
         $email = (new TemplatedEmail())
         ->from($mailSender)
@@ -61,7 +62,7 @@ class MailingService
             'lastName' => $user->getLastName(),
             'firstName' => $user->getFirstName(),
             'uuidUser' => $user->getUuidUser(),
-            'domain' => $domain
+            'srcdom' => $domain
             
         ]);
         $this->mailer->send($email);

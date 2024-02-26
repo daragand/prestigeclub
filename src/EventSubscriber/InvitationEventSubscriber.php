@@ -55,7 +55,7 @@ class InvitationEventSubscriber implements EventSubscriberInterface
 /**
  * infos utilisateurs
  */
-$domain = $this->parameterBag->get('domain');
+$domain = $this->parameterBag->get('src_dom');
         $uuid = $entity->getSlug();
         $firstName = $entity->getFirstName();
         $lastName = $entity->getLastName();
@@ -71,7 +71,7 @@ $domain = $this->parameterBag->get('domain');
                 'uuid' => $uuid,
                 'emailContact' => $mailSender,
                 'emailLicencie' => $emailLicencie,
-                'domain' => $domain,
+                'srcdom' => $domain,
                 'firstName' => $firstName,
                 'lastName' => $lastName,
                

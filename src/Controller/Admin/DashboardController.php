@@ -3,32 +3,35 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Club;
+use App\Entity\Group;
 use App\Entity\Order;
 use App\Entity\Photo;
+use App\Entity\Sport;
 use App\Entity\Livret;
 use App\Entity\Address;
 use App\Entity\Forfait;
-use App\Entity\Group;
 use App\Entity\Options;
 use App\Entity\Licencie;
 use App\Entity\OptionList;
 use App\Entity\PhotoGroup;
 use App\Repository\ClubRepository;
 use App\Repository\UserRepository;
+use App\Repository\GroupRepository;
 use App\Repository\OrderRepository;
 use App\Repository\PhotoRepository;
+use Symfony\UX\Chartjs\Model\Chart;
 use App\Repository\LivretRepository;
 use App\Repository\LicencieRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
-use Symfony\UX\Chartjs\Model\Chart;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -40,8 +43,10 @@ class DashboardController extends AbstractDashboardController
         private PhotoRepository $photoRepository,
         private UserRepository $userRepository,
         private ClubRepository $clubRepository,
+        private GroupRepository $groupRepository,
         private LicencieRepository $licencieRepository,
-        private ChartBuilderInterface $chartBuilder
+        private ChartBuilderInterface $chartBuilder,
+        private EntityManagerInterface $em
         )
     {
         
@@ -58,7 +63,8 @@ class DashboardController extends AbstractDashboardController
             ->addJsFile('datatables.net/js/jquery.min.js')
        
             ->addJsFile('datatables.net/js/jquery.dataTables.min.js')
-            ->addJsFile('datatables.net/js/datatable-basic.init.js');
+            ->addJsFile('datatables.net/js/datatable-basic.init.js')
+            ;
             
             
             
@@ -92,20 +98,32 @@ class DashboardController extends AbstractDashboardController
       ->getSingleScalarResult();
 
       //graphiques des ventes
-      $chart = $this->chartBuilder->createChart(Chart::TYPE_DOUGHNUT);
-      $chart->setData([
-          'labels' => ['Photos', 'Commandes'],
-          'datasets' => [
-              [
-                  'label' => 'Ventes',
-                  'backgroundColor' => ['#FF6384', '#36A2EB'],
-                  'borderColor' => ['#FF6384', '#36A2EB'],
-                  'data' => [$nbPhotos, count($allOrders)],
-              ],
-          ],
-      ]);
+    //   $chart = $this->chartBuilder->createChart(Chart::TYPE_DOUGHNUT);
+    //   $chart->setData([
+    //       'labels' => ['Photos', 'Commandes'],
+    //       'datasets' => [
+    //           [
+    //               'label' => 'Ventes',
+    //               'backgroundColor' => ['#FF6384', '#36A2EB'],
+    //               'borderColor' => ['#FF6384', '#36A2EB'],
+    //               'data' => [$nbPhotos, count($allOrders)],
+    //           ],
+    //       ],
+    //   ]);
+    $chart = $this->chartBuilder->createChart(Chart::TYPE_LINE);
+        $chart->setData([
+            'labels' => ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            'datasets' => [
+                [
+                    'label' => 'Sales!',
+                    'backgroundColor' => 'rgb(255, 99, 132)',
+                    'borderColor' => 'rgb(255, 99, 132)',
+                    'data' => [522, 1500, 2250, 2197, 2345, 3122, 3099],
+                ],
+            ],
+        ]);
    
-     return $this->render('Admin/DashboardAdmin.html.twig',[
+     return $this->render('admin/DashboardAdmin.html.twig',[
          'commandes'=>$allOrders,
          'livrets'=>$allLivrets,
          'photos'=>$allPhotos,
@@ -148,14 +166,20 @@ class DashboardController extends AbstractDashboardController
             ->getResult();
             
             
+            $groupes = $this->groupRepository->createQueryBuilder('g')
+            ->join('g.clubs', 'club')
+            ->where('club = :club')
+            ->setParameter('club', $club->getId())
+            ->getQuery()
+            ->getResult();
             
             
-
             
             
             $nbPhotos = count($photos);
             
             
+           
             
             
             
@@ -165,7 +189,7 @@ class DashboardController extends AbstractDashboardController
                 'nbPhotos'=>$nbPhotos,
                 'club'=>$club,
                 'licencies'=>$club->getLicencie(),
-                'groupes'=>$club->getGroups(),
+                'groupes'=>$groupes,
                 'pourcentage'=>$amountTotal*0.1,
                 
                 
@@ -184,7 +208,8 @@ public function configureCrud(): Crud
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle("<img src=\"images/logoj.png\" alt=\" Logo de Prestige Club\"/>");
+            ->setTitle("<img src=\"images/logoj.png\" alt=\" Logo de Prestige Club\"/>")
+            ->setFaviconPath('images/logopj.png');
     }
 
     public function configureMenuItems(): iterable
@@ -192,7 +217,7 @@ public function configureCrud(): Crud
         if ($this->isGranted('ROLE_CLUB')) {
             yield MenuItem::section('Tableau de bord', 'fa-solid fa-tachometer-alt')->setCssClass('border-bottom border-2');
             
-            yield MenuItem::linkToCrud('les Commandes', 'fa-solid fa-table-list', Order::class)->setController(OrderCrudController::class);
+            yield MenuItem::linkToCrud('les Commandes', 'fa-solid fa-table-list', Order::class)->setController(OrderClubCrudController::class);
             yield MenuItem::linkToCrud('Licenciés du Club', 'fas fa-users', Licencie::class)->setController(LicencieClubCrudController::class);
             yield MenuItem::linkToCrud('Groupes', 'fas fa-people-group', Group::class)->setController(GroupClubCrudController::class);
         }else{
@@ -212,14 +237,16 @@ public function configureCrud(): Crud
         yield MenuItem::linkToCrud('Livrets', 'fa-solid fa-file', Livret::class);
         yield MenuItem::linkToCrud('Les Options', 'fas fa-cog', OptionList::class);
        
-        
+        yield MenuItem::section('Clubs')->setCssClass('border-bottom border-2');
+        yield MenuItem::linkToCrud('Clubs','fa-solid fa-landmark', Club::class);
+        yield MenuItem::linkToCrud('Licenciés', 'fas fa-users', Licencie::class);
+        yield MenuItem::linkToCrud('Groupes', 'fas fa-people-group', Group::class);
+        yield MenuItem::linkToCrud('Sport','fas fa-futbol', Sport::class);
 
         yield MenuItem::section('Gestion')->setCssClass('border-bottom border-2');
         yield MenuItem::linkToCrud('Adresses', 'fas fa-map-marker-alt', Address::class);
         yield MenuItem::linkToCrud('Forfaits', 'fas fa-money-bill-wave', Forfait::class);
         yield MenuItem::linkToCrud('Options', 'fas fa-cog', Options::class);
-        yield MenuItem::linkToCrud('Clubs','fa-solid fa-landmark', Club::class);
-        yield MenuItem::linkToCrud('Licenciés', 'fas fa-users', Licencie::class);
         
         }
         //section vide pour créer un espace entre les deux menus
@@ -228,5 +255,103 @@ public function configureCrud(): Crud
         yield MenuItem::linkToLogout('Déconnexion', 'fa-solid fa-sign-out-alt');
        
     }
-    
-}
+    #[Route('/admin/purge', name: 'admin_purge')]
+    public function purge(EntityManagerInterface $em): Response
+    {
+        /**
+         * Cette fonction consiste à supprimer les fichiers (photos et archives) et les licenciés pour toutes les commandes de plus de 6 mois.
+         */
+
+
+         //vérification de l'utilisateur
+
+        if (!$this->isGranted('ROLE_ADMIN')){
+            $this->addFlash(
+               'error',
+               'Vous n\'avez pas les droits pour accéder à cette fonctionnalité'
+            );
+            return $this->redirectToRoute('admin');
+        }else{
+            //récupération des commandes de plus de 6 mois
+            $oldLicencies = $this->licencieRepository->createQueryBuilder('lic')
+            ->where('lic.updatedAt < :date')
+            ->setParameter('date', new \DateTime('-6 months'))
+            ->getQuery()
+            ->getResult();
+            
+            
+            //suppression des fichiers et des licenciés
+            foreach ($oldLicencies as $licencie) {
+               
+                $orders = $licencie->getOrders();
+                    if($orders){
+                        foreach ($orders as $order) {
+                            $zipFile = $order->getZipFile();
+                            if(file_exists($zipFile)){
+                                unlink($zipFile);
+                            }
+                            if($order->getOptionLists()){
+                                foreach ($order->getOptionLists() as $optionList) {
+                                    $optionList->setPhotos(null);
+                                    $em->remove($optionList);
+                                    
+                                }
+                                
+                            }
+                            
+                            $em->remove($order);
+                            
+                        }
+                    }
+                $photos = $licencie->getPhotos();
+                foreach ($photos as $photo) {
+                    
+                    $em->remove($photo);
+                    $em->flush();
+                }
+               
+                $livrets = $licencie->getLivrets();
+                        if($livrets){
+                            foreach ($livrets as $livret) {
+                                
+                                $em->remove($livret);
+                                
+                               
+                            }
+                        }
+                        $em->remove($licencie);
+                        
+                        $em->flush();
+                }
+                
+            }
+            $this->addFlash(
+                'success',
+                'Les commandes de plus de 6 mois ont été supprimées'
+             );
+                return $this->redirectToRoute('admin');
+        }
+
+        #[Route('/admin/club/{id}', name: 'admin_club_info')]
+    public function info($id): Response
+    {
+        
+
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_login');
+        }
+        
+        
+        $club = $this->em->getRepository(Club::class)->findOneBy(['id' => $id]);
+        $licencies = $club->getLicencie();
+        
+        return $this->render('admin/clubinfodashboard.html.twig',[
+            'club' => $club,
+            'licencies' => $licencies,
+        
+        ]);
+    }
+        
+    }
+
+

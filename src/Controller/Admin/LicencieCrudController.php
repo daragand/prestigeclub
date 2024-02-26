@@ -15,7 +15,9 @@ use Vich\UploaderBundle\Form\Type\VichFileType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use Symfony\Component\Validator\Constraints\Date;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -39,12 +41,21 @@ class LicencieCrudController extends AbstractCrudController
             ->setPageTitle('new', 'Ajouter un licencié')
             ->setPageTitle('edit', 'Modifier un licencié')
             ->setPageTitle('detail', 'Détail du licencié')
-            ->setSearchFields(['name', 'firstname', 'birthday', 'adress', 'zip', 'city', 'phone', 'email', 'licence', 'certif', 'cotisation', 'forfait', 'group'])
+            ->setSearchFields(['firstname','lastname',  'club.name', 'groupes.name'])
             ->setDefaultSort(['id' => 'DESC'])
             ->setEntityLabelInSingular('Licencié')
             ->setEntityLabelInPlural('Licenciés');
     }
+    public function configureActions(Actions $actions): Actions
+    {
 
+    return $actions
+        ->add(Crud::PAGE_INDEX, Action::DETAIL)
+       //permet de masquer le bouton edit, new et delete dans la page detail pour le Club
+        ->setPermissions([Action::NEW => 'ROLE_ADMIN', 
+        Action::DELETE => 'ROLE_ADMIN',
+         Action::EDIT => 'ROLE_ADMIN']);
+    }
 
     public function configureFields(string $pageName): iterable
     {
@@ -83,6 +94,8 @@ class LicencieCrudController extends AbstractCrudController
 
         //on ajoute la date de publication à la photo
         $entityInstance->setSlug($slug);
+        //on ajoute la date de création du licencié sur  notion updatedAt
+        $entityInstance->setUpdatedAt(new \DateTime());
 
         //la méthode ci-dessous permet de préserver les données et de les enregistrer dans la base.
         parent::persistEntity($em, $entityInstance);

@@ -6,6 +6,7 @@ use App\Repository\AddressRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
 class Address
@@ -19,9 +20,11 @@ class Address
     private ?string $address = null;
 
     #[ORM\Column(length: 5)]
+    #[Assert\Regex(pattern: '/^[0-9]{5}$/')]
     private ?string $zip = null;
 
     #[ORM\Column(length: 70)]
+    #[Assert\Regex(pattern: '/^[a-zA-ZÀ-ÖØ-öø-ŸŷÂâÊêÎîÔôÛûÄäËëÏïÖöÜüÇç-]+(?:\s[a-zA-ZÀ-ÖØ-öø-ŸŷÂâÊêÎîÔôÛûÄäËëÏïÖöÜüÇç-]+)*$/')]
     private ?string $city = null;
 
     #[ORM\OneToMany(mappedBy: 'address', targetEntity: User::class)]

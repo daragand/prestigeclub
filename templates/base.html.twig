@@ -2,15 +2,15 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        <title>{% block title %}Prestige Club - accueil{% endblock %}</title>
+         <link rel="icon" type="image/x-icon" href="{{ asset('images/logopj.ico') }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
 <link rel="stylesheet" href={{ asset('css/bootstrap.min.css') }}>
             <link rel="stylesheet" href={{ asset('css/ace-responsive-menu.css') }}>
-            <link rel="stylesheet" href={{ asset('css/menu.css') }}>
+            {# <link rel="stylesheet" href={{ asset('css/menu.css') }}> #}
             <link rel="stylesheet" href={{ asset('css/fontawesome.css') }}>
             <link rel="stylesheet" href={{ asset('css/flaticon.css') }}>
             <link rel="stylesheet" href={{ asset('css/bootstrap-select.min.css') }}>
@@ -30,6 +30,9 @@
 	<link rel="stylesheet" href="{{ asset('gallery/css/bootstrap-select.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('gallery/css/magnific-popup.css') }}">
 	<link rel="stylesheet" href="{{ asset('gallery/css/style.css') }}">
+
+    <!-- Favicon -->
+           
         {% endblock %}
 
         {% block javascripts %}
@@ -54,9 +57,45 @@
     </head>
     <body>
      {% include '_partials/header.html.twig' %}
+     
         {% block body %}
        
         {% endblock %}
+        <a class="scrollToHome" href="#">
+		<i class="fas fa-angle-up"></i>
+	</a>
         {% include '_partials/footer.html.twig' %}
+       
+         <!-- Menu Mobile -->
+<div class="mobile-menu">
+    <ul class="nav">
+    
+        
+        <li class="nav-item">
+            <a class="nav-link" href="{{path('app_photos_index')}}"><i class="fas fa-home"></i></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{path('app_order')}}"><i class="fas fa-shopping-cart"></i></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{path('app_profil')}}"><i class="fas fa-user"></i></a>
+        </li>
+    
+       
+    
+       {% if app.user %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{path('app_logout')}}"><i class="fas fa-sign-out-alt"></i></a>
+        </li>
+       {% else %}
+
+       <li class="nav-item">
+            <a class="nav-link" href="{{path('app_login')}}"><i class="fa-solid fa-right-to-bracket"></i> </a>
+        </li>
+       {% endif %}
+    </ul>
+</div>
+       
+       
     </body>
 </html>

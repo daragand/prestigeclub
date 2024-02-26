@@ -38,13 +38,15 @@ class GroupClubCrudController extends GroupCrudController
         $club= $user->getClub();
         
         $clubId = $club[0]->getId();
+        
        
         
         return parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters)
-          ->join('entity.clubs', 'club')  
-        ->andWhere('club.id = :clubId')
+            ->join('entity.clubs', 'club')
+            ->andWhere('club.id = :clubId')
             ->setParameter('clubId', $clubId)
             ->orderBy('entity.id', 'ASC')
+            
             ;
             //ordre croissant pour traiter les anciennes commandes en premier
     }
